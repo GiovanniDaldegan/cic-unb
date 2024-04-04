@@ -1,4 +1,4 @@
-# A ("Wrong Answer")
+# A
 
 input()
 arr1 = [int(i) for i in input().split()]
@@ -10,16 +10,20 @@ arr1.sort()
 arr2.sort()
 
 i = j = 0
-while j < len(arr1):
-    if arr2[i] != arr1[j] and missing.count(arr2[i]) == 0:
-        missing.append(arr2[i])
+while i < len(arr2):
+    if missing.count(arr2[i]) == 0:
+        if j == len(arr1):
+            missing.append(arr2[i])
+        elif arr2[i] != arr1[j]:
+            missing.append(arr2[i])
+        else:
+            j += 1
+        
+        i += 1
     else:
-        j += 1
-    
-    i += 1
+        i += 1
 
 print(*missing)
-
 # B
 
 n = int(input())
@@ -39,3 +43,16 @@ for i in range(n):
             break
         if j == m:
             print("NO")
+
+# C
+
+def bin_search(n, arr, left=0, right=0, freq=0, low=0, upper=0):
+    l = len(arr[left:right]) // 2
+
+    if n < arr[left:right][l]:
+        return bin_search(n, arr, left=left, right=l)
+    elif n > arr[left:right][l]:
+        return bin_search(n, arr, left=l, right=right)
+    else:
+        arr.pop(l)
+        return bin_search
