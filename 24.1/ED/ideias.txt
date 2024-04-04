@@ -1,0 +1,13 @@
+# Sem 3 | ED vJudge | Sem 3 C - binary search | Algoritmo de busca binária que retorna um sub array apenas com o número desejado
+# (incompleto)
+
+def bin_subarr_search(n, arr):
+    l = len(arr) // 2
+
+    if n < arr[l]:
+        return bin_subarr_search(n, arr[:l])
+    elif n > arr[l]:
+        return bin_subarr_search(n, arr[l:])
+    else:
+        if n < arr[l // 2]:
+            return bin_subarr_search(n, arr[l])
