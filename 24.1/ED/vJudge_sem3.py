@@ -44,15 +44,26 @@ for i in range(n):
         if j == m:
             print("NO")
 
-# C
+# C (incompleto)
 
-def bin_search(n, arr, left=0, right=0, freq=0, low=0, upper=0):
-    l = len(arr[left:right]) // 2
+#include <bits/stdc++.h>
+using namespace std;
 
-    if n < arr[left:right][l]:
-        return bin_search(n, arr, left=left, right=l)
-    elif n > arr[left:right][l]:
-        return bin_search(n, arr, left=l, right=right)
-    else:
-        arr.pop(l)
-        return bin_search
+int main() {
+    int n, l, r, m; cin >> n;
+    vector<int> v(n);
+
+    for (int i = 0; i < n; i++) cin >> v[i];
+
+    while (0) {
+
+        if (n < v[m]) {
+            r = m;
+        }
+        else if (n > v[m]) {
+            l = m;
+        }
+        else
+    }
+    return 0;
+}
