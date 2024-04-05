@@ -50,20 +50,47 @@ for i in range(n):
 using namespace std;
 
 int main() {
-    int n, l, r, m; cin >> n;
+    int n, l, r, m, k; cin >> n;
+    bool done = 0;
     vector<int> v(n);
 
     for (int i = 0; i < n; i++) cin >> v[i];
 
-    while (0) {
+    cin >> k;
 
-        if (n < v[m]) {
+    l = 0; r = n - 1;
+
+    while (!done) {
+        m = (r - l) / 2;
+
+        cout << l << ' ' << r << '\n';
+
+        if (l == r && v[l] != k) {
+            cout << -1 << ' ' << -1 << ' ' << 0 << '\n';
+            done = 1;
+        }
+
+        if (k < v[m]) {
             r = m;
         }
-        else if (n > v[m]) {
+        else if (k > v[m]) {
             l = m;
         }
-        else
+        else {
+            while (v[m - 1] == k) {
+                m--;
+                l = m;
+            }
+            m = n / 2;
+            
+            while (v[m + 1] == k) {
+                m++;
+                r = m;
+            }
+
+            cout << l << ' ' << r << ' ' << r - l + 1 << '\n';
+            done = 1;
+        }
     }
     return 0;
 }
