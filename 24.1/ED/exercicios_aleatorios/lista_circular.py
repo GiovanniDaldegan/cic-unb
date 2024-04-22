@@ -1,4 +1,6 @@
 # jogo de batatinha quente
+# minha primeira implementação de uma lista duplamente encadeada ;) 
+
 
 class pessoa():
 	def __init__(self, nome:str):
