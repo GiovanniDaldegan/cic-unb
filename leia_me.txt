@@ -1,0 +1,11 @@
+Requisitos para compilação:
+- g++
+- make
+- catch2
+
+Requisitos para testes:
+- cpplint
+- cppcheck
+- valgrind
+
+Para compilar, execute "make" neste diretório.
