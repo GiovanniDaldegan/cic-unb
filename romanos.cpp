@@ -31,6 +31,9 @@ int romanos_para_decimal(const char * num_romano) {
 		else if (*(num_romano + offset) == int(*"M")) {
 			resultado += 1000;
 		}
+		else {
+			return -1;
+		}
 
 		offset++;
 	}
