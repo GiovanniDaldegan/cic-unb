@@ -59,14 +59,9 @@ TEST_CASE("Numeros romanos - algarismo negativo invalido", "[valor_alg][negativo
 	REQUIRE(romanos_para_decimal("LC") == -1);
 }
 
-/*
 TEST_CASE("Numeros romanos - numero invalido de algarismos negativos", "[valor_alg][rep_limite][negativo]") {
 	REQUIRE(romanos_para_decimal("IIV") == -1);
 	REQUIRE(romanos_para_decimal("XXL") == -1);
-	REQUIRE(romanos_para_decimal("") == -1);
-	REQUIRE(romanos_para_decimal("") == -1);
-	REQUIRE(romanos_para_decimal("") == -1);
-	REQUIRE(romanos_para_decimal("") == -1);
-	REQUIRE(romanos_para_decimal("") == -1);
+	REQUIRE(romanos_para_decimal("XXC") == -1);
+	REQUIRE(romanos_para_decimal("CCM") == -1);
 }
-*/
