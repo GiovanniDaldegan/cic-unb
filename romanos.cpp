@@ -75,7 +75,7 @@ int romanos_para_decimal(const char * num_romano) {
 		else {
 			if (checa_negativo(num_romano + offset)) {
 				// set repetir 1 vez ou o próximo algarismo for mais que 10 vezes maior que ele
-				if (conta_rep > 1 || 10 < valor_alg(*(num_romano + offset + 1)) / valor_alg(algarismo)) {
+				if (conta_rep > 0 || 10 < valor_alg(*(num_romano + offset + 1)) / valor_alg(algarismo)) {
 					return -1;
 				}
 			}
