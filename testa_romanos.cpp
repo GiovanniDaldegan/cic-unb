@@ -37,3 +37,10 @@ TEST_CASE("Numeros romanos - numero invalido de algarismos repetidos") {
 	REQUIRE(romanos_para_decimal("CCCC") == -1);
 	REQUIRE(romanos_para_decimal("DD") == -1);
 }
+
+/*
+TEST_CASE("Numeros romanos - ordem invalida de algarismos") {
+	REQUIRE(romanos_para_decimal("") == -1);
+
+}
+*/
