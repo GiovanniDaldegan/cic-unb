@@ -1,8 +1,8 @@
 #define CATCH_CONFIG_MAIN
 #include "romanos.hpp"
-// #include <iostream>
+#include <iostream>
 
-// using namespace std;
+using namespace std;
 
 int valor_alg(const char alg) {
 	switch(alg) {
@@ -29,11 +29,14 @@ int checa_negativo(const char* numero) {
 
 // checa se o algarismo é metade de X, C ou M
 int checa_metade(const char alg) {
-	if ((valor_alg(alg) * 10) % 50 == 0) {
-		return 1;
-	}
-	else {
-		return 0;
+	switch (valor_alg(alg)) {
+		case 5:
+		case 50:
+		case 500:
+			return 1;
+
+		default:
+			return 0;
 	}
 }
 
@@ -57,16 +60,29 @@ int romanos_para_decimal(const char * num_romano) {
 			conta_rep++;
 		}
 
-		
-		// se o algarismo for metade de X, C ou M e repetir, o número é inválido
+		// se for V, L ou D
 		if (checa_metade(algarismo)) {
+			// se repetir, o número é inválido
 			if (conta_rep > 0) {
 				return -1;
 			}
+			// se for negativo, o número é inválido
+			if (checa_negativo(num_romano + offset)) {
+				return -1;
+			}
 		}
-		// se o algarismo for I, X, C ou M e repetir 3 vezes, o número é inálido
-		if (conta_rep > 2) {
-			return -1;
+		// se for I, X, C ou M
+		else {
+			if (checa_negativo(num_romano + offset)) {
+				// set repetir 1 vez ou o próximo algarismo for mais que 10 vezes maior que ele
+				if (conta_rep > 1 || 10 < valor_alg(*(num_romano + offset + 1)) / valor_alg(algarismo)) {
+					return -1;
+				}
+			}
+			// se aparecer 3 vezes, é inálido
+			if (conta_rep > 2) {
+				return -1;
+			}
 		}
 
 		alg_ultimo = algarismo;
