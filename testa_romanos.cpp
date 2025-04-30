@@ -22,7 +22,7 @@ TEST_CASE("Numeros romanos - numeros com mais de um algarismo", "[require]") {
 }
 
 
-TEST_CASE( "Numeros romanos - algarismos inválidos", "[romanos]" ) {
+TEST_CASE( "Numeros romanos - algarismos invalidos", "[romanos]" ) {
     REQUIRE(romanos_para_decimal("G") == -1);
     REQUIRE(romanos_para_decimal("i") == -1);
     REQUIRE(romanos_para_decimal("#") == -1);

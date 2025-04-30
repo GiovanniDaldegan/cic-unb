@@ -1,32 +1,39 @@
 #include "romanos.hpp"
+#include <iostream>
 
-int romanos_para_decimal(char const * num_romano) {
+using namespace std;
+
+int romanos_para_decimal(const char * num_romano) {
 
     int resultado = 0;
+	char algarismos[] = "MDCLXVI";
 
-    for (int i_char = 0; i_char < sizeof(num_romano); i_char++) {
-        if (char(num_romano[i_char]) == int(*"I")) {
-            resultado++;
-        }
-        else if (char(num_romano[i_char]) == int(*"V")) {
-            resultado += 5;
-        }
-        else if (char(num_romano[i_char]) == int(*"X")) {
-            resultado += 10;
-        }
-        else if (char(num_romano[i_char]) == int(*"L")) {
-            resultado += 50;
-        }
-        else if (char(num_romano[i_char]) == int(*"C")) {
-            resultado += 100;
-        }
-        else if (char(num_romano[i_char]) == int(*"D")) {
-            resultado += 500;
-        }
-        else if (char(num_romano[i_char]) == int(*"M")) {
-            resultado += 1000;
-        }
+	int offset = 0;
+	while (*(num_romano + offset) != '\0') {
+		if (*(num_romano + offset) == int(*"I")) {
+			resultado++;
+		}
+		else if (*(num_romano + offset) == int(*"V")) {
+			resultado += 5;
+		}
+		else if (*(num_romano + offset) == int(*"X")) {
+			resultado += 10;
+		}
+		else if (*(num_romano + offset) == int(*"L")) {
+			resultado += 50;
+		}
+		else if (*(num_romano + offset) == int(*"C")) {
+			resultado += 100;
+		}
+		else if (*(num_romano + offset) == int(*"D")) {
+			resultado += 500;
+		}
+		else if (*(num_romano + offset) == int(*"M")) {
+			resultado += 1000;
+		}
 
-    }
+		offset++;
+	}
+
     return resultado;
 }
