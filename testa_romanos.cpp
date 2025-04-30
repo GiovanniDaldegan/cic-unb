@@ -22,10 +22,18 @@ TEST_CASE("Numeros romanos - numeros com mais de um algarismo", "[require]") {
 }
 
 
-TEST_CASE( "Numeros romanos - algarismos invalidos", "[romanos]" ) {
+TEST_CASE("Numeros romanos - algarismos invalidos", "[romanos]" ) {
     REQUIRE(romanos_para_decimal("G") == -1);
     REQUIRE(romanos_para_decimal("i") == -1);
     REQUIRE(romanos_para_decimal("#") == -1);
 	REQUIRE(romanos_para_decimal("Í") == -1);
 }
 
+TEST_CASE("Numeros romanos - numero invalido de algarismos repetidos") {
+	REQUIRE(romanos_para_decimal("IIII") == -1);
+	REQUIRE(romanos_para_decimal("VVVI") == -1);
+	REQUIRE(romanos_para_decimal("XXXX") == -1);
+	REQUIRE(romanos_para_decimal("LL") == -1);
+	REQUIRE(romanos_para_decimal("CCCC") == -1);
+	REQUIRE(romanos_para_decimal("DD") == -1);
+}
