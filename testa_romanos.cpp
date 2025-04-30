@@ -2,7 +2,7 @@
 #include "catch.hpp"
 #include "romanos.hpp"
 
-TEST_CASE("Numeros romanos - algarismos unicos", "[require]") {
+TEST_CASE("Numeros romanos - algarismos unicos", "[valor_alg]") {
 	REQUIRE(romanos_para_decimal("I") == 1);
 	REQUIRE(romanos_para_decimal("V") == 5);
 	REQUIRE(romanos_para_decimal("X") == 10);
@@ -12,7 +12,7 @@ TEST_CASE("Numeros romanos - algarismos unicos", "[require]") {
 	REQUIRE(romanos_para_decimal("M") == 1000);
 }
 
-TEST_CASE("Numeros romanos - numeros com mais de um algarismo", "[require]") {
+TEST_CASE("Numeros romanos - numeros com mais de um algarismo", "[valor_alg]") {
 	REQUIRE(romanos_para_decimal("II") == 2);
 	REQUIRE(romanos_para_decimal("VII") == 7);
 	REQUIRE(romanos_para_decimal("XVI") == 16);
@@ -22,14 +22,14 @@ TEST_CASE("Numeros romanos - numeros com mais de um algarismo", "[require]") {
 }
 
 
-TEST_CASE("Numeros romanos - algarismos invalidos", "[romanos]" ) {
+TEST_CASE("Numeros romanos - algarismos invalidos", "[valor_alg]" ) {
 	REQUIRE(romanos_para_decimal("G") == -1);
 	REQUIRE(romanos_para_decimal("i") == -1);
 	REQUIRE(romanos_para_decimal("#") == -1);
 	REQUIRE(romanos_para_decimal("Í") == -1);
 }
 
-TEST_CASE("Numeros romanos - numero invalido de algarismos repetidos") {
+TEST_CASE("Numeros romanos - numero invalido de algarismos repetidos", "[valor_alg][rep_limite]") {
 	REQUIRE(romanos_para_decimal("IIII") == -1);
 	REQUIRE(romanos_para_decimal("VVVI") == -1);
 	REQUIRE(romanos_para_decimal("XXXX") == -1);
@@ -39,7 +39,7 @@ TEST_CASE("Numeros romanos - numero invalido de algarismos repetidos") {
 }
 
 
-TEST_CASE("Numeros romanos - algarismos negativos") {
+TEST_CASE("Numeros romanos - algarismos negativos", "[valor_alg][negativo]") {
 	REQUIRE(romanos_para_decimal("IV") == 4);
 	REQUIRE(romanos_para_decimal("IX") == 9);
 	REQUIRE(romanos_para_decimal("XL") == 40);
@@ -49,7 +49,7 @@ TEST_CASE("Numeros romanos - algarismos negativos") {
 	REQUIRE(romanos_para_decimal("CDXCIV") == 494);
 }
 
-TEST_CASE("Numeros romanos - algarismo negativo invalido") {
+TEST_CASE("Numeros romanos - algarismo negativo invalido", "[valor_alg][negativo]") {
 	REQUIRE(romanos_para_decimal("VX") == -1);
 	REQUIRE(romanos_para_decimal("IC") == -1);
 	REQUIRE(romanos_para_decimal("ID") == -1);
@@ -60,7 +60,7 @@ TEST_CASE("Numeros romanos - algarismo negativo invalido") {
 }
 
 /*
-TEST_CASE("Numeros romanos - numero invalido de algarismos negativos") {
+TEST_CASE("Numeros romanos - numero invalido de algarismos negativos", "[valor_alg][rep_limite][negativo]") {
 	REQUIRE(romanos_para_decimal("IIV") == -1);
 	REQUIRE(romanos_para_decimal("XXL") == -1);
 	REQUIRE(romanos_para_decimal("") == -1);

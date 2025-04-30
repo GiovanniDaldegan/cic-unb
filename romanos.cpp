@@ -1,8 +1,8 @@
 #define CATCH_CONFIG_MAIN
 #include "romanos.hpp"
-#include <iostream>
+// #include <iostream>
 
-using namespace std;
+// using namespace std;
 
 int valor_alg(const char alg) {
 	switch(alg) {
@@ -17,6 +17,7 @@ int valor_alg(const char alg) {
 	}
 }
 
+// checa se o algarismo precede outro maior que ele
 int checa_negativo(const char* numero) {
 	if (valor_alg(*numero) < valor_alg(*(numero + 1))) {
 		return 1;
@@ -26,43 +27,49 @@ int checa_negativo(const char* numero) {
 	}
 }
 
+// checa se o algarismo é metade de X, C ou M
+int checa_metade(const char alg) {
+	if ((valor_alg(alg) * 10) % 50 == 0) {
+		return 1;
+	}
+	else {
+		return 0;
+	}
+}
+
 int romanos_para_decimal(const char * num_romano) {
     int resultado = 0;
-	char alg_ultimo;
-	int conta_rep = 0;
+	char algarismo, alg_ultimo;
 
-	int offset = 0;
+	int offset = 0, conta_rep = 0;
 	while (*(num_romano + offset) != '\0') {
-		// checa se é um algarismo válido
-		if (valor_alg(*(num_romano + offset)) == -1) {
+		algarismo = *(num_romano + offset);
+
+		// checa se o primeiro algarismo é válido
+		if (valor_alg(algarismo) == -1) {
 			return -1;
 		}
 
-		// soma se for positivo, subtrai se for negativo
-		if (checa_negativo(num_romano + offset)) {
-			resultado -= valor_alg(*(num_romano + offset));
-		}
-		else {
-			resultado += valor_alg(*(num_romano + offset));
-		}
+		resultado += (1 - 2 * checa_negativo(num_romano + offset)) * valor_alg(algarismo);
 
-		// conta quantas vezes o algarismo se repete em bloco
-		if (*(num_romano + offset) == alg_ultimo) {
+		// conta quantas vezes o algarismo se repete consecutivamente
+		if (algarismo == alg_ultimo) {
 			conta_rep++;
 		}
 
-		// se o algarismo for da forma 5 * (1 + 10 * x) e repetir, o número é inválido
-		if ((valor_alg(alg_ultimo) * 10) % 50 == 0) {
+		
+		// se o algarismo for metade de X, C ou M e repetir, o número é inválido
+		if (checa_metade(algarismo)) {
 			if (conta_rep > 0) {
 				return -1;
 			}
 		}
-		// se o algarismo for da forma 1 * (1 + 10 * x) e repetir 3 vezes, o número é inálido
-		else if (conta_rep > 2) {
+		// se o algarismo for I, X, C ou M e repetir 3 vezes, o número é inálido
+		if (conta_rep > 2) {
 			return -1;
 		}
 
-		alg_ultimo = *(num_romano + offset);
+		alg_ultimo = algarismo;
 		offset++;
 	}
 
