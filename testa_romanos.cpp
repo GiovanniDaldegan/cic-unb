@@ -38,9 +38,13 @@ TEST_CASE("Numeros romanos - numero invalido de algarismos repetidos") {
 	REQUIRE(romanos_para_decimal("DD") == -1);
 }
 
-/*
-TEST_CASE("Numeros romanos - ordem invalida de algarismos") {
-	REQUIRE(romanos_para_decimal("") == -1);
 
+TEST_CASE("Numeros romanos - algarismos negativos") {
+	REQUIRE(romanos_para_decimal("IV") == 4);
+	REQUIRE(romanos_para_decimal("IX") == 9);
+	REQUIRE(romanos_para_decimal("XL") == 40);
+	REQUIRE(romanos_para_decimal("XLIV") == 44);
+	REQUIRE(romanos_para_decimal("XCIX") == 99);
+	REQUIRE(romanos_para_decimal("CMXCIX") == 999);
+	REQUIRE(romanos_para_decimal("CDXCIV") == 494);
 }
-*/
