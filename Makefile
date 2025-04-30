@@ -13,14 +13,14 @@ cpplint: testa_romanos.cpp romanos.cpp romanos.hpp
 	cpplint --filter=-readability/utf8 --exclude=catch.hpp *.hpp *.cpp	# --filter foi aplicado para permitir 
 										# caracteres Unicode nos testes
 gcov: testa_romanos.cpp romanos.cpp romanos.hpp 
-	g++ -std=c++11 -Wall -fprofile-arcs -ftest-coverage -c romanos.cpp
-	g++ -std=c++11 -Wall -fprofile-arcs -ftest-coverage romanos.o testa_romanos.cpp -o testa_romanos
+	g++ -std=c++20 -Wall -fprofile-arcs -ftest-coverage -c romanos.cpp
+	g++ -std=c++20 -Wall -fprofile-arcs -ftest-coverage romanos.o testa_romanos.cpp -o testa_romanos
 	./testa_romanos
 	gcov *.cpp
 
 debug: testa_romanos.cpp romanos.cpp romanos.hpp 
-	g++ -std=c++11 -Wall -g -c romanos.cpp
-	g++ -std=c++11 -Wall -g romanos.o testa_romanos.cpp -o testa_romanos
+	g++ -std=c++20 -Wall -g -c romanos.cpp
+	g++ -std=c++20 -Wall -g romanos.o testa_romanos.cpp -o testa_romanos
 	gdb testa_romanos
 
 
@@ -34,8 +34,8 @@ romanos.o: romanos.cpp romanos.hpp
 	g++ -std=c++20 -Wall -c romanos.cpp
 
 testa_romanos: testa_romanos.cpp romanos.cpp romanos.hpp romanos.o
-	g++ -std=c++11 -Wall romanos.o testa_romanos.cpp -o testa_romanos
+	g++ -std=c++20 -Wall romanos.o testa_romanos.cpp -o testa_romanos
 
 clean:
-	rm -rf *.o *.exe *.gc* 
+	rm -rf *.o *.exe *.gc* testa_romanos
 

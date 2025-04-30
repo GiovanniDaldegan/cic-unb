@@ -1,11 +1,16 @@
 Requisitos para compilação:
-- g++
+- G++20
 - make
-- catch2
 
-Requisitos para testes:
+Requisitos para verificação (estática, dinâmica e de estilo):
 - cpplint
 - cppcheck
 - valgrind
+
+Requisitos para verificação de cobertura:
+- gcov
+
+Requisitos para depuração:
+-gdb
 
 Para compilar, execute "make" neste diretório.
