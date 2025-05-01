@@ -14,7 +14,7 @@ int valor_alg(const char alg) {
     case *"C": return 100;
     case *"D": return 500;
     case *"M": return 1000;
-    default:                     return -1;
+    default:   return -1;
   }
 }
 
@@ -63,19 +63,15 @@ int romanos_para_decimal(const char * num_romano) {
       conta_rep = 0;
     }
 
-    // se for V, L ou D
-    if (checa_metade(algarismo)) {
-      // se repetir, o número é inválido
+    if (checa_metade(algarismo)) {                  // se for V, L ou D
       if (conta_rep > 0) {
         return -1;
       }
-      // se for negativo, o número é inválido
       if (checa_negativo(num_romano + offset)) {
         return -1;
       }
-    } else {    // se for I, X, C ou M
+    } else {                                        // se for I, X, C ou M
       if (checa_negativo(num_romano + offset)) {
-        // se repetir ou próximo algarismo for mais que 10 vezes maior que ele
         if (conta_rep > 0) {
           return -1;
         }
@@ -83,7 +79,6 @@ int romanos_para_decimal(const char * num_romano) {
           return -1;
         }
       }
-      // se aparecer 3 vezes, é inálido
       if (conta_rep > 2) {
         return -1;
       }
