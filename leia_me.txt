@@ -1,5 +1,5 @@
 Requisitos para compilação:
-- G++20
+- G++11
 - make
 
 Requisitos para verificação (estática, dinâmica e de estilo):
@@ -11,6 +11,6 @@ Requisitos para verificação de cobertura:
 - gcov
 
 Requisitos para depuração:
--gdb
+- gdb
 
-Para compilar, execute "make" neste diretório.
+Para compilar e executar o teste do código, execute "make" neste diretório.
