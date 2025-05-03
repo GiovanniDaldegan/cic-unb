@@ -1,2 +1,2 @@
 # cic-unb
-Repo pra guardar os códigos e projetos desenvolvidos durante o curso. Início: 2023.2.
+Coleção dos projetos, exercícios e outros códigos que desenvolvi na minha graduação em Ciência da Computação na UnB mas que não precisam de repositórios próprios. Início: 2023.2.
