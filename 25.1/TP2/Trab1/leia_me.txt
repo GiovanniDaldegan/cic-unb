@@ -1,0 +1,16 @@
+Requisitos para compilação:
+- G++11
+- make
+
+Requisitos para verificação (estática, dinâmica e de estilo):
+- cpplint
+- cppcheck
+- valgrind
+
+Requisitos para verificação de cobertura:
+- gcov
+
+Requisitos para depuração:
+- gdb
+
+Para compilar e executar o teste do código, execute "make" neste diretório.
