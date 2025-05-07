@@ -42,36 +42,42 @@ class Palavra {
     System.arraycopy(letras, 0, nova_letras, 0, letras.length);
     nova_letras[letras.length+1] = letra;
     
-    letras = nova_letras;
+    this.letras = nova_letras;
   }
 
   public void RmLetra(Letra letra) {
-   Letra[] nova_letras = new Letra[letras.length-1];
+    RmLetra(letra, letras.length);
+  }
 
-    int i = 0;
-    do {
-      if (letra == letras[i]) {
-        System.out.println("RAPAZ 1");
+  public void RmLetra(Letra letra, int contagem) {
+    if (letras.length == 0) return;
 
-        letras[i] = null;
-        System.arraycopy(letras, 0, nova_letras, 0, i);
-        System.arraycopy(letras, i+1, nova_letras, i, letras.length -(i+1));
-      }
-      i++;
+    int conta_letra = 0;
+
+    for (int i = 0; i < letras.length; i++) {
+      if (letras[i] != letra || contagem == 0) {
+        letras[i-conta_letra] = letras[i];
+      } else {
+        conta_letra++;
+        contagem--;
+      } 
     }
-    while (i < letras.length && letra != letras[i]);
 
-    letras = nova_letras;
+    Letra[] nova_letras = new Letra[letras.length - conta_letra];
+    System.arraycopy(letras, 0, nova_letras, 0, letras.length - conta_letra);
+    this.letras = nova_letras;
   }
 
   public void RmLetra(int index) {
+    if (letras.length < index - 1) {
+      return;
+    }
     Letra[] nova_letras = new Letra[letras.length-1];
     letras[index] = null;
 
-    System.out.println("RAPAZ 2");
     System.arraycopy(letras, 0, nova_letras, 0, index);
     System.arraycopy(letras, index+1, nova_letras, index, letras.length -(index+1));
-    letras = nova_letras;
+    this.letras = nova_letras;
   }
 
   public void Imprimir() {
@@ -112,16 +118,26 @@ public class Java {
         { "1 0 0 0 0 0 1",
           "0 1 0 0 0 1 0",
           "0 0 1 0 1 0 0",
-          "0 0 0 1 0 0 0" }
+          "0 0 0 1 0 0 0" });
+
+    Letra L = new Letra(4, 'L', new String[] {
+      "1 0 0",
+      "1 0 0",
+      "1 0 0",
+      "1 1 1" }
     );
 
-    Letra L = new Letra();
-    Letra I = new Letra();
+    Letra I = new Letra(4, 'I', new String[] {
+      "1 1 1",
+      "0 1 0",
+      "0 1 0",
+      "1 1 1"}
+    );
 
-    Palavra java = new Palavra(4, J, A, V, A, L, I);
+    Palavra java = new Palavra(4, J, A, V, A, L, L, I);
 
     java.Imprimir();
-    java.RmLetra('L');
+    java.RmLetra(L);
     java.Imprimir();
     java.RmLetra(4);
 
