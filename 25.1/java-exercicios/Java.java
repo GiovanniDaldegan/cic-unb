@@ -40,8 +40,26 @@ class Palavra {
     Letra[] nova_letras = new Letra[letras.length+1];
 
     System.arraycopy(letras, 0, nova_letras, 0, letras.length);
-    nova_letras[letras.length+1] = letra;
+    nova_letras[letras.length] = letra;
     
+    this.letras = nova_letras;
+  }
+
+  public void InsLetra(Letra letra, int indice) {
+    if (indice >= letras.length) return;
+
+    int inserido = 0;
+    Letra[] nova_letras = new Letra[letras.length+1];
+
+    for (int i = 0; i < letras.length + 1; i++) {
+      if (indice == i) {
+        nova_letras[i] = letra;
+        inserido = 1;
+      } else {
+        nova_letras[i] = letras[i-inserido];
+      }
+    }
+
     this.letras = nova_letras;
   }
 
@@ -68,15 +86,14 @@ class Palavra {
     this.letras = nova_letras;
   }
 
-  public void RmLetra(int index) {
-    if (letras.length < index - 1) {
-      return;
-    }
-    Letra[] nova_letras = new Letra[letras.length-1];
-    letras[index] = null;
+  public void RmLetra(int indice) {
+    if (letras.length < indice - 1) return;
 
-    System.arraycopy(letras, 0, nova_letras, 0, index);
-    System.arraycopy(letras, index+1, nova_letras, index, letras.length -(index+1));
+    Letra[] nova_letras = new Letra[letras.length-1];
+
+    System.arraycopy(letras, 0, nova_letras, 0, indice);
+    System.arraycopy(letras, indice+1, nova_letras, indice, letras.length -(indice+1));
+    
     this.letras = nova_letras;
   }
 
@@ -100,32 +117,29 @@ class Palavra {
 public class Java {
   public static void main(String[] args) {
 
-    Letra J = new Letra(4, 'J', new String[]
-        { "0 0 0 1 1",
-          "0 0 0 0 1",
-          "1 0 0 0 1",
-          "0 1 1 1 0" }
-    );
+    Letra J = new Letra(4, 'J', new String[] {
+      "0 0 0 1 1",
+      "0 0 0 0 1",
+      "1 0 0 0 1",
+      "0 1 1 1 0" });
 
-    Letra A = new Letra(4, 'A', new String[]
-        { "0 0 0 1 0 0 0",
-          "0 0 1 0 1 0 0",
-            "0 1 1 1 1 1 0",
-          "1 0 0 0 0 0 1" }
-    );
+    Letra A = new Letra(4, 'A', new String[] {
+      "0 0 0 1 0 0 0",
+      "0 0 1 0 1 0 0",
+      "0 1 1 1 1 1 0",
+      "1 0 0 0 0 0 1" });
 
-    Letra V = new Letra(4, 'V', new String[]
-        { "1 0 0 0 0 0 1",
-          "0 1 0 0 0 1 0",
-          "0 0 1 0 1 0 0",
-          "0 0 0 1 0 0 0" });
+    Letra V = new Letra(4, 'V', new String[] {
+      "1 0 0 0 0 0 1",
+      "0 1 0 0 0 1 0",
+      "0 0 1 0 1 0 0",
+      "0 0 0 1 0 0 0" });
 
     Letra L = new Letra(4, 'L', new String[] {
       "1 0 0",
       "1 0 0",
       "1 0 0",
-      "1 1 1" }
-    );
+      "1 1 1" });
 
     Letra I = new Letra(4, 'I', new String[] {
       "1 1 1",
@@ -134,12 +148,29 @@ public class Java {
       "1 1 1"}
     );
 
+    Letra N = new Letra(4, 'N', new String[] {
+      "1 0 0 1",
+      "1 1 0 1",
+      "1 0 1 1",
+      "1 0 0 1" }
+    );
+
+    Letra W = new Letra(4, 'W', new String[] {
+      "1 0 0 0 0 0 1",
+      "1 0 0 1 0 0 1",
+      "0 1 0 1 0 1 0",
+      "0 0 1 0 1 0 0" });
+
     Palavra java = new Palavra(4, J, A, V, A, L, L, I);
 
     java.Imprimir();
     java.RmLetra(L);
     java.Imprimir();
+
     java.RmLetra(4);
+    java.RmLetra(V, 1);
+    java.AddLetra(N);
+    java.InsLetra(W, 2);
 
     java.Imprimir();
    }
