@@ -6,7 +6,7 @@ app.config["SECRET_KEY"] = "secret!"
 socketio = SocketIO(app)
 
 class Message:
-    def __init__(self, author:str, content, timeStamp:int=None):
+    def __init__(self, author:str, content, timeStamp=None):
         self.author = author
         self.content = content
         self.timeStamp = timeStamp
@@ -21,16 +21,16 @@ class Client:
 class ChatRoom:
     def __init__(self, name:str):
         self.id = "id0"
-        self.name = name
-        self.clients = []
-        self.messages = []
+        self.name : str = name
+        self.clients = [] # elemento deve ser uma referência a elemento de clients
+        self.messages : list[Message] = []
 
     def addClient(self, client:Client):
         self.clients.append(client)
 
     def removeClient(self, client_id):
         client_index = -1
-        for client_index in range(self.clients):
+        for client_index in range(len(self.clients)):
             if self.clients[client_index].id == client_id:
                 break
         self.clients.pop(client_index)
@@ -39,8 +39,8 @@ class ChatRoom:
         self.messages.append(message)
 
 
-chatrooms : dict[str, ChatRoom]
-clients : dict[str, Client]
+chatrooms : dict[str, ChatRoom] = {}
+clients : dict[str, Client] = {}
 
 
 def getClient(client_id:str) -> Client:
@@ -55,6 +55,16 @@ def listRooms() -> list[tuple[str, int]]:
         roomInfo.append( (room.name, len(room.clients)) )
     return roomInfo
 
+def emitGetRooms():
+    emit("get_rooms", listRooms())
+
+# temp
+def printROOOOMS():
+    for i in chatrooms.values():
+        print("> ", i.name)
+        for j in i.clients:
+            print("  -", j.name)
+
 
 @app.route("/")
 def index():
@@ -68,42 +78,60 @@ def index():
 
 @socketio.on("register")
 def register_client(data):
-    newClient = Client(data["name"])
+    newClient = Client(data["client_name"])
     clients[newClient.id] = newClient
 
-    emit("get_rooms", listRooms())
+    emitGetRooms() # TODO: checar se manda apenas para o cliente específico
     print(f"\"{newClient.name}\" foi registrado!")
 
 
 @socketio.on("create_room")
 def createRoom(data):
-    newRoom = ChatRoom(data["name"])
+    # TODO: criar sala somente se não houver outra com o nome escolhido
+    newRoom = ChatRoom(data["room_name"])
     chatrooms[newRoom.id] = newRoom
 
-    emit("get_rooms", listRooms())
+    emitGetRooms()
     print(f"Sala \"{newRoom.name}\" criada!")
+    printROOOOMS()
+
+
+@socketio.on("delete_room")
+def deleteRoom(data):
+    # TODO: deletar sala somente se ela existir e não houver clientes nela
+    name = chatrooms[data["room_id"]].name
+    del chatrooms[data["room_id"]]
+
+    emitGetRooms()
+    print(f"Sala \"{name}\" deletada")
+    printROOOOMS()
 
 
 @socketio.on("enter_room")
 def load_room(data):
-    getChatRoom(data["room_id"]).addClient(getClient(data["client_id"]))
+    # TODO: entrar em sala somente se ela existir e cliente não estiver em nenhuma sala
+    # TODO: determinar o id do client pela sua conexão, o socketio deve fornecer algo assim
+    getChatRoom(data["room_id"]).addClient(getClient("12345")) #getClient(data["client_id"])) 
 
-    emit("load_room", {"n_clients" : len(getChatRoom(data["room_id"])["clients"]),
-                       "chatHistory" : getChatRoom(data["room_id"])["messages"]})
-    print(f"\"{getClient(data["client_id"])}\" entrou na sala \"{getChatRoom(data["room_id"])}\"")
+    emit("load_room", {"n_clients" : len(getChatRoom(data["room_id"]).clients),
+                       "chatHistory" : getChatRoom(data["room_id"]).messages})
+    print(f"\"{getClient("12345")}\" entrou na sala \"{getChatRoom(data["room_id"])}\"")
+    printROOOOMS()
 
 
 @socketio.on("leave_room")
 def leave_room(data):
+    # TODO: sair da sala somente se sala existir e o cliente estiver nela
     getChatRoom(data["room_id"]).removeClient(getClient(data["client_id"]))
 
-    emit("get_rooms", listRooms())
+    emitGetRooms()
     print(f"\"{getClient(data["client_id"])}\" saiu da sala \"{getChatRoom(data["room_id"])}\"")
-
+    printROOOOMS()
 
 
 @socketio.on("send_message")
 def on_client_message(data):
+    # TODO: 
     getChatRoom(data["room_id"]).addMessage(data["message"])
     
     # TODO: send to all clients in chatroom
@@ -111,4 +139,4 @@ def on_client_message(data):
     print(f"\"{getClient(data["client_id"])}\"")
 
 if __name__ == "__main__":
-    socketio.run(app)#, debug=True)
+    socketio.run(app, debug=True) # type: ignore

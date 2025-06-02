@@ -12,6 +12,8 @@
 
             // registro do cliente
             const client = {name : "cleber" };
+            const room = {room_id : ""}; // NOTE: ao entrar na sala, registrar o id dela
+
             //socketio.emit("register");
 
             socketio.on("get_rooms", (rooms) => {
@@ -25,11 +27,11 @@
             });
             document.getElementById("create_room").addEventListener("click", () => {
                 console.log("CRE");
-                socketio.emit("create_room", {name : "sessão gratuita de psicanálise"});
+                socketio.emit("create_room", {room_name : "sessão gratuita de psicanálise"});
             });
             document.getElementById("enter_room").addEventListener("click", () => {
                 console.log("ENT");
-                socketio.emit("enter_room", {room_id : "<id>"});
+                socketio.emit("enter_room", {room_id : "id0"});
             });
             document.getElementById("send_message").addEventListener("click", () => {
                 console.log("SND");
