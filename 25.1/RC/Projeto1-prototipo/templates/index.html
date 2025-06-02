@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>CLIENTEEEE</title>
+</head>
+<body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
+    <script type="text/javascript" charset="utf-8">
+        window.onload = function() {
+            var socketio = io("http://127.0.0.1:5000"); // 
+
+            // registro do cliente
+            const client = {name : "cleber" };
+            //socketio.emit("register");
+
+            socketio.on("get_rooms", (rooms) => {
+                console.log("Salas disponíveis:");
+                rooms.forEach((element) => console.log(`${element[0]}, ${element[1]} conectados`));
+            });
+
+            document.getElementById("register").addEventListener("click", () => {
+                console.log("REG");
+                socketio.emit("register", {client_name : client.name});
+            });
+            document.getElementById("create_room").addEventListener("click", () => {
+                console.log("CRE");
+                socketio.emit("create_room", {name : "sessão gratuita de psicanálise"});
+            });
+            document.getElementById("enter_room").addEventListener("click", () => {
+                console.log("ENT");
+                socketio.emit("enter_room", {room_id : "<id>"});
+            });
+            document.getElementById("send_message").addEventListener("click", () => {
+                console.log("SND");
+                socketio.emit("send_message", {client_name : client.name, content : "EU TE AMO"});
+            });
+
+            // criar sala
+            //socketio.emit("create_room", {name : "sessão gratuita de psicanálise"})
+
+            //socketio.send("enter_room", {id : "<id>", client_id : "123"});
+
+            socketio.on("load_room", (roomInfo) => {
+                console.log(`pessoas na sala: ${roomInfo["n_clients"]}`);
+                roomInfo["chatHistory"].forEach((element) => {console.log(element);})
+            });
+
+            /*
+            socket.on("connect", function() {
+                socket.emit("new_client", {data: "Tô conectado. Alô mamãe!"});
+            });
+            */
+            
+        }
+        
+    </script>
+
+    <p>Caralho q foda. Olá, Mundo!</p>
+
+    <button id="register" >Registrar</button>
+    <button id="create_room" >Criar sala</button>
+    <button id="enter_room" >Entrar na sala</button>
+    <button id="send_message" >Enviar</button>
+    
+
+    <div class="chat">
+
+    </div>
+
+</body>
+</html>
