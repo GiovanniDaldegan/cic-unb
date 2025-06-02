@@ -44,8 +44,8 @@
             //socketio.send("enter_room", {id : "<id>", client_id : "123"});
 
             socketio.on("load_room", (roomInfo) => {
-                console.log(`pessoas na sala: ${roomInfo["n_clients"]}`);
-                roomInfo["chatHistory"].forEach((element) => {console.log(element);})
+                console.log(`Sala: ${roomInfo["name"]}\nPessoas nessa sala: ${roomInfo["clients"].length}`);
+                roomInfo["messages"].forEach((element) => {console.log(element);})
             });
 
             /*
@@ -58,8 +58,6 @@
         
     </script>
 
-    <p>Caralho q foda. Olá, Mundo!</p>
-
     <button id="register" >Registrar</button>
     <button id="create_room" >Criar sala</button>
     <button id="enter_room" >Entrar na sala</button>
@@ -67,7 +65,7 @@
     
 
     <div class="chat">
-
+        <!-- <span></span> -->
     </div>
 
 </body>

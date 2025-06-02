@@ -15,13 +15,13 @@ class Message:
 class Client:
     def __init__(self, name:str):
         self.id = "12345"
-        self.name = name
-
+        self.name :str = name
+        self.room_id = ""
 
 class ChatRoom:
     def __init__(self, name:str):
         self.id = "id0"
-        self.name : str = name
+        self.name :str = name
         self.clients = [] # elemento deve ser uma referência a elemento de clients
         self.messages : list[Message] = []
 
@@ -39,8 +39,8 @@ class ChatRoom:
         self.messages.append(message)
 
 
-chatrooms : dict[str, ChatRoom] = {}
-clients : dict[str, Client] = {}
+chatrooms :dict[str, ChatRoom] = {}
+clients :dict[str, Client] = {}
 
 
 def getClient(client_id:str) -> Client:
@@ -55,10 +55,18 @@ def listRooms() -> list[tuple[str, int]]:
         roomInfo.append( (room.name, len(room.clients)) )
     return roomInfo
 
+def getRoomInfo(room_id):
+    room = getChatRoom(room_id)
+    return {
+        "name" : room.name,
+        "clients" : [i.name for i in room.clients],
+        "messages" : room.messages
+    }
+
 def emitGetRooms():
     emit("get_rooms", listRooms())
 
-# temp
+# TEMP
 def printROOOOMS():
     for i in chatrooms.values():
         print("> ", i.name)
@@ -99,7 +107,7 @@ def createRoom(data):
 @socketio.on("delete_room")
 def deleteRoom(data):
     # TODO: deletar sala somente se ela existir e não houver clientes nela
-    name = chatrooms[data["room_id"]].name
+    name = getChatRoom(data["room_id"]).name
     del chatrooms[data["room_id"]]
 
     emitGetRooms()
@@ -112,28 +120,31 @@ def load_room(data):
     # TODO: entrar em sala somente se ela existir e cliente não estiver em nenhuma sala
     # TODO: determinar o id do client pela sua conexão, o socketio deve fornecer algo assim
     getChatRoom(data["room_id"]).addClient(getClient("12345")) #getClient(data["client_id"])) 
+    getClient("12345").room_id = data["room_id"]
 
-    emit("load_room", {"n_clients" : len(getChatRoom(data["room_id"]).clients),
-                       "chatHistory" : getChatRoom(data["room_id"]).messages})
-    print(f"\"{getClient("12345")}\" entrou na sala \"{getChatRoom(data["room_id"])}\"")
+    emit("load_room", getRoomInfo(data["room_id"]))
+    print(f"\"{getClient("12345").name}\" entrou na sala \"{getChatRoom(data["room_id"]).name}\"")
     printROOOOMS()
 
 
 @socketio.on("leave_room")
-def leave_room(data):
+def leaveRoom(data):
     # TODO: sair da sala somente se sala existir e o cliente estiver nela
-    getChatRoom(data["room_id"]).removeClient(getClient(data["client_id"]))
+    # getChatRoom(getClient("CLIENTE Q ATIVOU EVENTO").room_id).removeClient()
+    client = getClient("12345")
+    getChatRoom(client.room_id).removeClient(client.id)
 
     emitGetRooms()
-    print(f"\"{getClient(data["client_id"])}\" saiu da sala \"{getChatRoom(data["room_id"])}\"")
+    print(f"\"{client.name}\" saiu da sala \"{getChatRoom(client.room_id)}\"")
+    getClient(client.id).room_id = "" # client.leaveRoom()
     printROOOOMS()
 
 
 @socketio.on("send_message")
-def on_client_message(data):
+def onClientMessage(data):
     # TODO: 
     getChatRoom(data["room_id"]).addMessage(data["message"])
-    
+
     # TODO: send to all clients in chatroom
     emit("get_message", data["message"], broadcast=True)
     print(f"\"{getClient(data["client_id"])}\"")
