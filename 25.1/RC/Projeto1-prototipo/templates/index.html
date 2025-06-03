@@ -18,49 +18,46 @@
 
             socketio.on("get_rooms", (rooms) => {
                 console.log("Salas disponíveis:");
-                rooms.forEach((element) => console.log(`${element[0]}, ${element[1]} conectados`));
+                rooms.forEach((element) => console.log(`${element[0]}, ${element[1].length} conectados`));
+                console.log();
             });
 
+            socketio.on("load_room", (roomData) => {
+                console.log(`Sala: ${roomData["name"]}\nPessoas nessa sala: ${roomData["clients"].length}\nMensagens:`);
+                roomData["messages"].forEach((element) => {console.log(`[${element[0]}]: ${element[1]} - ${element[2]}`);});
+            });
+
+            socketio.on("get_message", (msg) => {
+                console.log(`Olha a mensagem! ${msg}`);
+            });
+
+
             document.getElementById("register").addEventListener("click", () => {
-                console.log("REG");
                 socketio.emit("register", {client_name : client.name});
             });
             document.getElementById("create_room").addEventListener("click", () => {
-                console.log("CRE");
                 socketio.emit("create_room", {room_name : "sessão gratuita de psicanálise"});
             });
             document.getElementById("enter_room").addEventListener("click", () => {
-                console.log("ENT");
                 socketio.emit("enter_room", {room_id : "id0"});
             });
             document.getElementById("send_message").addEventListener("click", () => {
-                console.log("SND");
-                socketio.emit("send_message", {client_name : client.name, content : "EU TE AMO"});
+                socketio.emit("send_message", {content : "EU TE AMO"});
             });
-
-            // criar sala
-            //socketio.emit("create_room", {name : "sessão gratuita de psicanálise"})
-
-            //socketio.send("enter_room", {id : "<id>", client_id : "123"});
-
-            socketio.on("load_room", (roomInfo) => {
-                console.log(`Sala: ${roomInfo["name"]}\nPessoas nessa sala: ${roomInfo["clients"].length}`);
-                roomInfo["messages"].forEach((element) => {console.log(element);})
+            document.getElementById("leave_room").addEventListener("click", () => {
+                socketio.emit("leave_room");
             });
-
-            /*
-            socket.on("connect", function() {
-                socket.emit("new_client", {data: "Tô conectado. Alô mamãe!"});
+            document.getElementById("delete_room").addEventListener("click", () => {
+                socketio.emit("delete_room", {room_id : "id0"});
             });
-            */
-            
         }
-        
     </script>
 
     <button id="register" >Registrar</button>
     <button id="create_room" >Criar sala</button>
+    <button id="delete_room" >Deletar sala</button>
     <button id="enter_room" >Entrar na sala</button>
+    <button id="leave_room" >Sair da sala</button>
     <button id="send_message" >Enviar</button>
     
 

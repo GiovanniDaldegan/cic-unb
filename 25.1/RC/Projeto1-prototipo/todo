@@ -1,10 +1,10 @@
 # TODOs
 
-- [room_management] guardar em que sala o cliente está e definir que todas as suas ações serão realizadas nessa sala
-- [listener] implementar todas as condições para cada operação
 - [listener] conseguir identificar um cliente na chamada do listener, para referenciá-lo pelo client_id
 - [listener] descobrir se uma função (emitGetRooms) chamada num listener se comporta normalmente
 - [emit] descobrir como faz um emit pra um cliente específico (sem ser trivialmente pelo listener) ou para todos os clientes presentes numa sala
 - [docs] escrever a definição das estruturas e variáveis do servidor e do cliente
 
 # Feito
+- [listener] implementar todas as condições para cada operação
+- [room_management] guardar em que sala o cliente está e definir que todas as suas ações serão realizadas nessa sala
