@@ -186,11 +186,12 @@ TEST_CASE("Jogador vence na linha")
   REQUIRE(verifica_velha(jogo) == 1);
  }
 
-/*
-** TESTE 8
- *
+/** TESTE 8
+ */
 TEST_CASE("Jogador vence na coluna")
 {
+  int jogo[3][3];
+
   inicia_jogo(jogo);
   insere_movimento(jogo, 1, 1, 1); // 2 1 0
   insere_movimento(jogo, 0, 1, 1); // 0 1 0
@@ -202,6 +203,21 @@ TEST_CASE("Jogador vence na coluna")
 
 
   inicia_jogo(jogo);
+  insere_movimento(jogo, 0, 0, 2); // 2 1 0
+  insere_movimento(jogo, 1, 0, 2); // 2 1 1
+  insere_movimento(jogo, 2, 0, 2); // 2 0 0
+
+  insere_movimento(jogo, 0, 1, 1);
+  insere_movimento(jogo, 1, 1, 1);
+  insere_movimento(jogo, 1, 2, 1);
+  REQUIRE(verifica_velha(jogo) == 2);
+}
+
+/** TESTE 9
+ *
+TESTE_CASE("Jogador vence na diagonal")
+{
+  inicia_jogo(jogo);
   insere_movimento(jogo, 0, 0, 1); // 1 0 2
   insere_movimento(jogo, 1, 1, 1); // 0 1 0
   insere_movimento(jogo, 2, 2, 1); // 2 0 1
@@ -209,8 +225,6 @@ TEST_CASE("Jogador vence na coluna")
   insere_movimento(jogo, 2, 0, 2);
   insere_movimento(jogo, 0, 2, 2);
   REQUIRE(verifica_velha(jogo) == 1);
-
-  
 }
 */
 
