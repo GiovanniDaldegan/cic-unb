@@ -66,8 +66,8 @@ TEST_CASE("1 movimento inválido")
 TEST_CASE("2 movimentos válidos")
 {
   int jogo[3][3];
-  inicia_jogo(jogo);
 
+  inicia_jogo(jogo);
   insere_movimento(jogo, 0, 0, 1);
   insere_movimento(jogo, 0, 1, 2);
   REQUIRE(verifica_velha(jogo) == -1);
@@ -83,16 +83,27 @@ TEST_CASE("2 movimentos válidos")
   REQUIRE(verifica_velha(jogo) == -1);
 }
 
-/*
-TEST_CASE("1 movimento válido, n movimento inválido")
-{
-  int jogo[3][3] = {{1, 1, 0},
-                    {0, 0, 0},
-                    {0, 0, 0}};
-  REQUIRE(verifica_velha() == -2);
 
-  jogo = {{1, 0, 0},
-          {0, 0, 1},
-          {0, 0, 0}};
+TEST_CASE("1 movimento válido, n movimentos inválidos")
+{
+  int jogo[3][3];
+
+  inicia_jogo(jogo);
+  insere_movimento(jogo, 0, 0, 1);
+  insere_movimento(jogo, 0, 1, 1);
+  REQUIRE(verifica_velha(jogo) == -2);
+
+  inicia_jogo(jogo);
+  insere_movimento(jogo, 0, 0, 1);
+  insere_movimento(jogo, 0, 1, 1);
+  insere_movimento(jogo, 0, 2, 1);
+  REQUIRE(verifica_velha(jogo) == -2);
+
+  inicia_jogo(jogo);
+  insere_movimento(jogo, 0, 0, 1);
+  insere_movimento(jogo, 0, 1, 2);
+  insere_movimento(jogo, 1, 1, 2);
+  REQUIRE(verifica_velha(jogo) == -2);
 }
-*/
+
+// TODO: melhorar os títulos e adicionar descrições aos testes
