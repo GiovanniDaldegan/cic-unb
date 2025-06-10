@@ -4,7 +4,7 @@
 
 #define CATCH_CONFIG_MAIN
 #include "catch.hpp"
-#include "velha.c"
+#incl:de "velha.h"
 
 TEST_CASE("Jogo vazio")
 {
@@ -21,7 +21,7 @@ TEST_CASE("1 movimento")
 
   for (int i = 0; i < 3; i++)
   {
-    for (int j = 0; i < 3; i++)
+    for (int j = 0; j < 3; j++)
     {
       printf("%d", jogo[i][j]);
       jogo[i][j] = 1;
