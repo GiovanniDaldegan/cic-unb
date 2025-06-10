@@ -3,21 +3,37 @@
  */
 
 #define CATCH_CONFIG_MAIN
+#include <stdio.h>
 #include "catch.hpp"
 #include "velha.h"
 
+int jogo_vazio[3][3] = {{0, 0, 0},
+                        {0, 0, 0},
+                        {0, 0, 0}};
+
+void inicia_jogo(int jogo[3][3])
+{
+  memcpy(jogo, jogo_vazio, sizeof(int) * 3 * 3);
+}
+
+void insere_movimento(int jogo[3][3], int lin, int col, int jogador)
+{
+  if (lin >=0 && lin < 3 && col >= 0 && col < 3)
+    jogo[lin][col] = jogador;
+}
+
+
+/* TESTES */
+
 TEST_CASE("Jogo vazio")
 {
-  int jogo[3][3] = {{0, 0, 0},
-                    {0, 0, 0},
-                    {0, 0, 0}};
-
-  REQUIRE(verifica_velha(jogo) == -1);
+  REQUIRE(verifica_velha(jogo_vazio) == -1);
 }
 
 TEST_CASE("1 movimento válido")
 {
-  int jogo[3][3] = {{0}};
+  int jogo[3][3];
+  inicia_jogo(jogo);
 
   for (int i = 0; i < 3; i++)
   {
