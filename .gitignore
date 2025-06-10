@@ -1,5 +1,7 @@
 *.out
 *.o
+testa_velha
+
 Doxyfile
 docs/*
 

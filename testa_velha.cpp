@@ -4,7 +4,7 @@
 
 #define CATCH_CONFIG_MAIN
 #include "catch.hpp"
-#incl:de "velha.h"
+#include "velha.h"
 
 TEST_CASE("Jogo vazio")
 {
@@ -15,7 +15,7 @@ TEST_CASE("Jogo vazio")
   REQUIRE(verifica_velha(jogo) == -1);
 }
 
-TEST_CASE("1 movimento")
+TEST_CASE("1 movimento válido")
 {
   int jogo[3][3] = {{0}};
 
@@ -23,12 +23,25 @@ TEST_CASE("1 movimento")
   {
     for (int j = 0; j < 3; j++)
     {
-      printf("%d", jogo[i][j]);
       jogo[i][j] = 1;
       REQUIRE(verifica_velha(jogo) == -1);
       jogo[i][j] = 0;
     }
-    printf("\n");
   }
 
+}
+
+TEST_CASE("1 movimento inválido")
+{
+  int jogo[3][3] = {{0}};
+
+  for (int i = 0; i < 3; i++)
+    {
+      for (int j = 0; j < 3; j++)
+      {
+        jogo[i][j] = 2;
+        REQUIRE(verifica_velha(jogo) == -2);
+        jogo[i][j] = 0;
+      }
+    }
 }
