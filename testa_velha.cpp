@@ -137,7 +137,7 @@ TEST_CASE("Número de jogador inválido")
 
 /** TESTE 7
  */
-TEST_CASE("Jogador 1 vence na linha")
+TEST_CASE("Jogador vence na linha")
 {
   int jogo[3][3];
 
@@ -159,7 +159,18 @@ TEST_CASE("Jogador 1 vence na linha")
   insere_movimento(jogo, 0, 2, 2);
   insere_movimento(jogo, 1, 1, 2);
   REQUIRE(verifica_velha(jogo) == 1);
-}
+
+
+  inicia_jogo(jogo);
+  insere_movimento(jogo, 1, 0, 2); // 1 1 0
+  insere_movimento(jogo, 1, 1, 2); // 2 2 2
+  insere_movimento(jogo, 1, 2, 2); // 1 0 0
+
+  insere_movimento(jogo, 0, 0, 1);
+  insere_movimento(jogo, 0, 1, 1);
+  insere_movimento(jogo, 2, 0, 1);
+  REQUIRE(verifica_velha(jogo) == 2);
+ }
 
 /*
 TEST_CASE("Jogador vence na coluna")
