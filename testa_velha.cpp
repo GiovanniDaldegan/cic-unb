@@ -170,9 +170,25 @@ TEST_CASE("Jogador vence na linha")
   insere_movimento(jogo, 0, 1, 1);
   insere_movimento(jogo, 2, 0, 1);
   REQUIRE(verifica_velha(jogo) == 2);
+
+
+  inicia_jogo(jogo);
+  insere_movimento(jogo, 0, 0, 1); // 1 1 1
+  insere_movimento(jogo, 0, 1, 1); // 1 2 2
+  insere_movimento(jogo, 0, 2, 1); // 2 1 2
+  insere_movimento(jogo, 1, 0, 1); 
+  insere_movimento(jogo, 2, 1, 1); 
+
+  insere_movimento(jogo, 1, 1, 2); 
+  insere_movimento(jogo, 1, 2, 2); 
+  insere_movimento(jogo, 2, 0, 2);
+  insere_movimento(jogo, 2, 2, 2);
+  REQUIRE(verifica_velha(jogo) == 1);
  }
 
 /*
+** TESTE 8
+ *
 TEST_CASE("Jogador vence na coluna")
 {
   inicia_jogo(jogo);
@@ -195,18 +211,6 @@ TEST_CASE("Jogador vence na coluna")
   REQUIRE(verifica_velha(jogo) == 1);
 
   
-  inicia_jogo(jogo);
-  insere_movimento(jogo, 0, 0, 1); // 1 1 1
-  insere_movimento(jogo, 0, 1, 1); // 1 2 2
-  insere_movimento(jogo, 0, 2, 1); // 2 1 2
-  insere_movimento(jogo, 1, 0, 1); 
-  insere_movimento(jogo, 2, 1, 1); 
-
-  insere_movimento(jogo, 1, 1, 2); 
-  insere_movimento(jogo, 1, 2, 2); 
-  insere_movimento(jogo, 2, 0, 2);
-  insere_movimento(jogo, 2, 2, 2);
-  REQUIRE(verifica_velha(jogo) == 1);
 }
 */
 
