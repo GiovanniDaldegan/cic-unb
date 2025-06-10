@@ -214,9 +214,11 @@ TEST_CASE("Jogador vence na coluna")
 }
 
 /** TESTE 9
- *
-TESTE_CASE("Jogador vence na diagonal")
+ */
+TEST_CASE("Jogador vence na diagonal")
 {
+  int jogo[3][3];
+
   inicia_jogo(jogo);
   insere_movimento(jogo, 0, 0, 1); // 1 0 2
   insere_movimento(jogo, 1, 1, 1); // 0 1 0
@@ -225,8 +227,19 @@ TESTE_CASE("Jogador vence na diagonal")
   insere_movimento(jogo, 2, 0, 2);
   insere_movimento(jogo, 0, 2, 2);
   REQUIRE(verifica_velha(jogo) == 1);
+
+
+  inicia_jogo(jogo);
+  insere_movimento(jogo, 0, 2, 2); // 1 1 2
+  insere_movimento(jogo, 1, 1, 2); // 0 2 0
+  insere_movimento(jogo, 2, 0, 2); // 2 0 1
+
+  insere_movimento(jogo, 0, 0, 1);
+  insere_movimento(jogo, 0, 1, 1);
+  insere_movimento(jogo, 2, 2, 1);
+  REQUIRE(verifica_velha(jogo) == 2);
 }
-*/
+
 
 // TODO: teste x - os dois jogadores vencem
 // TODO: melhorar os títulos e adicionar descrições aos testes
