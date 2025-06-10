@@ -8,6 +8,9 @@ int verifica_velha(int jogo[3][3])
   {
     for (int j = 0; j < 3; j++)
     {
+      if (jogo[i][j] < 0 || jogo[i][j] > 2)
+        return -2;
+
       if (jogo[i][j] == 1)
         jogadas1++;
       else if (jogo[i][j] == 2)
