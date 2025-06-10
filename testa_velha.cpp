@@ -25,11 +25,15 @@ void insere_movimento(int jogo[3][3], int lin, int col, int jogador)
 
 /* TESTES */
 
+/** TESTE 1
+ */
 TEST_CASE("Jogo vazio")
 {
   REQUIRE(verifica_velha(jogo_vazio) == -1);
 }
 
+/** TESTE 2
+ */
 TEST_CASE("1 movimento válido")
 {
   int jogo[3][3];
@@ -47,6 +51,8 @@ TEST_CASE("1 movimento válido")
 
 }
 
+/** TESTE 3
+ */
 TEST_CASE("1 movimento inválido")
 {
   int jogo[3][3];
@@ -63,6 +69,8 @@ TEST_CASE("1 movimento inválido")
   }
 }
 
+/** TESTE 4
+ */
 TEST_CASE("2 movimentos válidos")
 {
   int jogo[3][3];
@@ -83,7 +91,8 @@ TEST_CASE("2 movimentos válidos")
   REQUIRE(verifica_velha(jogo) == -1);
 }
 
-
+/** TESTE 5
+ */
 TEST_CASE("1 movimento válido, n movimentos inválidos")
 {
   int jogo[3][3];
@@ -105,5 +114,28 @@ TEST_CASE("1 movimento válido, n movimentos inválidos")
   insere_movimento(jogo, 1, 1, 2);
   REQUIRE(verifica_velha(jogo) == -2);
 }
+
+/** TESTE 6
+ */
+TEST_CASE("Número de jogador inválido")
+{
+  int jogo[3][3];
+
+  inicia_jogo(jogo);
+  insere_movimento(jogo, 0, 0, -1);
+  REQUIRE(verifica_velha(jogo) == -2);
+
+  inicia_jogo(jogo);
+  insere_movimento(jogo, 0, 0, 1);
+  insere_movimento(jogo, 0, 0, 3);
+  REQUIRE(verifica_velha(jogo) == -2);
+
+  inicia_jogo(jogo);
+  insere_movimento(jogo, 0, 0, 1);
+  insere_movimento(jogo, 1, 1, 2);
+  insere_movimento(jogo, 2, 2, 12312312);
+  REQUIRE(verifica_velha(jogo) == -2);
+}
+
 
 // TODO: melhorar os títulos e adicionar descrições aos testes
