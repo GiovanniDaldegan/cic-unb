@@ -15,11 +15,9 @@ int verifica_velha(int jogo[3][3])
     }
   }
 
-  if (jogadas1 >= jogadas2)
-    return -1;
-  else
+  if (jogadas2 > jogadas1 || jogadas1 > jogadas2 + 1)
     return -2;
-  
+
   return -1;
 }
 
