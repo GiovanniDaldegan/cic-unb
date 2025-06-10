@@ -14,3 +14,21 @@ TEST_CASE("Jogo vazio")
 
   REQUIRE(verifica_velha(jogo) == -1);
 }
+
+TEST_CASE("1 movimento")
+{
+  int jogo[3][3] = {{0}};
+
+  for (int i = 0; i < 3; i++)
+  {
+    for (int j = 0; i < 3; i++)
+    {
+      printf("%d", jogo[i][j]);
+      jogo[i][j] = 1;
+      REQUIRE(verifica_velha(jogo) == -1);
+      jogo[i][j] = 0;
+    }
+    printf("\n");
+  }
+
+}
