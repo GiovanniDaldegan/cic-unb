@@ -49,7 +49,8 @@ TEST_CASE("1 movimento válido")
 
 TEST_CASE("1 movimento inválido")
 {
-  int jogo[3][3] = {{0}};
+  int jogo[3][3];
+  inicia_jogo(jogo);
 
   for (int i = 0; i < 3; i++)
   {
@@ -64,20 +65,22 @@ TEST_CASE("1 movimento inválido")
 
 TEST_CASE("2 movimentos válidos")
 {
-  int jogo1[3][3] = {{1, 2, 0},
-                     {0, 0, 0},
-                     {0, 0, 0}};
-  REQUIRE(verifica_velha(jogo1) == -1);
+  int jogo[3][3];
+  inicia_jogo(jogo);
 
-  int jogo2[3][3] = {{2, 0, 0},
-                     {1, 0, 0},
-                     {0, 0, 0}};
-  REQUIRE(verifica_velha(jogo2) == -1);
+  insere_movimento(jogo, 0, 0, 1);
+  insere_movimento(jogo, 0, 1, 2);
+  REQUIRE(verifica_velha(jogo) == -1);
 
-  int jogo3[3][3] = {{2, 0, 0},
-                     {0, 0, 0},
-                     {0, 0, 1}};
-  REQUIRE(verifica_velha(jogo3) == -1);
+  inicia_jogo(jogo);
+  insere_movimento(jogo, 1, 0, 1);
+  insere_movimento(jogo, 0, 0, 2);
+  REQUIRE(verifica_velha(jogo) == -1);
+
+  inicia_jogo(jogo);
+  insere_movimento(jogo, 2, 2, 1);
+  insere_movimento(jogo, 0, 0, 2);
+  REQUIRE(verifica_velha(jogo) == -1);
 }
 
 /*
