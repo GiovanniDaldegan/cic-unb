@@ -25,32 +25,33 @@ int verifica_velha(int jogo[3][3])
     return -2;
 
 
-  int cont_lin = 0; // refatoração, unir em um array 1x2
-  int num_anterior_lin = 0;
-
+  // arrays de checacem de vitória
+  //  [0][*] contadores de repetição (1 por linha/coluna/diagonal)
+  //  [1][*] número que se repete (1 por linha/coluna/diagonal)
+  //  [*][0] linha/coluna 1 ou diagonal principal
+  //  [*][1] linha/coluna 2 ou diagonal secundária
+  //  [*][2] linha/coluna 3
+  int cont_lin[2][3] = {{0}};
   int cont_col[2][3] = {{0}};
-  
   int cont_diag[2][2] = {{0}};
 
   for (int i = 0; i < 3; i++)
   {
-    cont_lin = 0; num_anterior_lin = 0;
-
     for (int j = 0; j < 3; j++)
     {
       // checa vitória na linha
-      if (jogo[i][j] == num_anterior_lin)
+      if (jogo[i][j] == cont_lin[1][i])
       {
-        cont_lin++;
+        cont_lin[0][i]++;
       }
       else
       {
-        cont_lin = 0;
-        num_anterior_lin = jogo[i][j];
+        cont_lin[0][i] = 0;
+        cont_lin[1][i]= jogo[i][j];
       }
 
-      if (cont_lin == 2 && num_anterior_lin != 0)
-        return num_anterior_lin;
+      if (cont_lin[0][i] == 2 && cont_lin[1][i] != 0)
+        return cont_lin[1][i];
 
 
       // checa vitória na coluna
