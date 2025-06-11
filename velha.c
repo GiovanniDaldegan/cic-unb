@@ -106,10 +106,21 @@ int verifica_velha(int jogo[3][3])
   if (cont_diag[0][1] == 2 && cont_diag[1][1] != 0)
     vitorias[cont_diag[1][1] - 1]++;
 
+
   if (vitorias[0] == 1)
+  {
+    // jogo impossível: vitória dupla
+    if(vitorias[1] == 1)
+      return -2;
+
+    // jogador 1 vence
     return 1;
+  }
   else if (vitorias[1] == 1)
+  {
+    // jogador 2 vence
     return 2;
+  }
 
   return -1;
 }
