@@ -4,7 +4,7 @@
 
 int* conta_jogadas(int jogo[3][3])
 {
-  int* jogadas = (int*) calloc(2, sizeof(int));
+  int* jogadas = (int*) calloc(3, sizeof(int));
 
   for (int i = 0; i < 3; i++)
   {
@@ -15,12 +15,11 @@ int* conta_jogadas(int jogo[3][3])
       {
         jogadas[0] = -1;
         jogadas[1] = -1;
+        jogadas[2] = -1;
+        break;
       }
 
-      if (jogo[i][j] == 1)
-        jogadas[0]++;
-      else if (jogo[i][j] == 2)
-        jogadas[1]++;
+      jogadas[jogo[i][j]]++;
     }
   }
 
@@ -185,23 +184,27 @@ int verifica_velha(int jogo[3][3])
 {
   int* jogadas = conta_jogadas(jogo);
 
-  // números de jogador inválidos
-  if (jogadas[0] == -1 || jogadas[1] == -1)
+  // impossível: números de jogador inválidos
+  if (jogadas[0] == -1 || jogadas[1] == -1 || jogadas[2] == -1)
     return -2;
 
-  // número inválido de jogadas
-  if (jogadas[1] > jogadas[0] || jogadas[0] > jogadas[1] + 1)
+  // impossível: número inválido de jogadas
+  if (jogadas[2] > jogadas[1] || jogadas[1] > jogadas[2] + 1)
     return -2;
 
   int v = vencedor(jogo);
 
-  // mais de uma vitória
+  // impossível: mais de uma vitória
   if (v == -1)
     return -2;
   // vencedor
   else if (v != 0)
     return v;
+  // empate
+  else if (jogadas[0] == 0)
+    return 0;
 
+  // jogo válido, indefinido
   return -1;
 }
 
