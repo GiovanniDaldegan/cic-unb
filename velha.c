@@ -67,19 +67,38 @@ int verifica_velha(int jogo[3][3])
         return cont_col[0][j];
 
 
-      // checa vitória na diagonal
-      if (i == j && jogo[i][j] == cont_diag[1][0])
+      // checa vitória na diagonal principal
+      if (i == j)
       {
-        cont_diag[0][0]++;
+        if (jogo[i][j] == cont_diag[1][0])
+        {
+          cont_diag[0][0]++;
+        }
+        else
+        {
+          cont_diag[0][0] = 0;
+          cont_diag[1][0] = jogo[i][j];
+        }
       }
-      else if (i == j)
+      
+      // checa vitória da diagonal secundária
+      if(i + j == 2)
       {
-        cont_diag[0][0] = 0;
-        cont_diag[1][0] = jogo[i][j];
+        if (jogo[i][j] == cont_diag[1][1])
+        {
+          cont_diag[0][1]++;
+        }
+        else
+        {
+          cont_diag[0][1] = 0;
+          cont_diag[1][1] = jogo[i][j];
+        }
       }
-
+ 
       if (cont_diag[0][0] == 2 && cont_diag[1][0] != 0)
         return cont_diag[1][0];
+      else if (cont_diag[0][1] == 2 && cont_diag[1][1] != 0)
+        return cont_diag[1][1];
     }
   }
 
