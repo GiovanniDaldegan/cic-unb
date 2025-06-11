@@ -215,7 +215,7 @@ TEST_CASE("Jogador vence na coluna")
 
 /** TESTE 9
  */
-TEST_CASE("Jogador vence na diagonal principal")
+TEST_CASE("Jogador vence na diagonal")
 {
   int jogo[3][3];
 
@@ -228,7 +228,7 @@ TEST_CASE("Jogador vence na diagonal principal")
   insere_movimento(jogo, 0, 2, 2);
   REQUIRE(verifica_velha(jogo) == 1);
 
-  /*
+
   inicia_jogo(jogo);
   insere_movimento(jogo, 0, 2, 2); // 1 1 2
   insere_movimento(jogo, 1, 1, 2); // 0 2 0
@@ -238,7 +238,6 @@ TEST_CASE("Jogador vence na diagonal principal")
   insere_movimento(jogo, 0, 1, 1);
   insere_movimento(jogo, 2, 2, 1);
   REQUIRE(verifica_velha(jogo) == 2);
-  */
 }
 
 
