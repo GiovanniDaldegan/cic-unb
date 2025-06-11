@@ -177,7 +177,7 @@ TEST_CASE("Jogador vence na linha")
   inicia_jogo(jogo);
   insere_movimento(jogo, 0, 0, 1); // 1 1 1
   insere_movimento(jogo, 0, 1, 1); // 1 2 2
-  insere_movimento(jogo, 0, 2, 1); // 2 1 2
+  insere_movimento(jogo, 0, 2, 1); // 2 0 0
   insere_movimento(jogo, 1, 0, 1); 
   insere_movimento(jogo, 2, 1, 1); 
 
@@ -266,6 +266,51 @@ TEST_CASE("Vitória dupla")
   insere_movimento(jogo, 1, 1, 2);
   insere_movimento(jogo, 2, 1, 2);
   REQUIRE(verifica_velha(jogo) == -2);
+}
+
+/** TESTE 11
+ */
+TEST_CASE("Empate")
+{
+  int jogo[3][3];
+
+  inicia_jogo(jogo);
+  insere_movimento(jogo, 0, 0, 1); // 1 1 2
+  insere_movimento(jogo, 0, 1, 1); // 2 2 1
+  insere_movimento(jogo, 0, 2, 2); // 1 2 1
+  insere_movimento(jogo, 1, 0, 2);
+  insere_movimento(jogo, 1, 1, 2);
+  insere_movimento(jogo, 1, 2, 1);
+  insere_movimento(jogo, 2, 0, 1);
+  insere_movimento(jogo, 2, 1, 2);
+  insere_movimento(jogo, 2, 2, 1);
+  REQUIRE(verifica_velha(jogo) == 0);
+
+
+  inicia_jogo(jogo);
+  insere_movimento(jogo, 0, 0, 1); // 1 2 2
+  insere_movimento(jogo, 0, 1, 2); // 2 1 1
+  insere_movimento(jogo, 0, 2, 2); // 1 1 2
+  insere_movimento(jogo, 1, 0, 2);
+  insere_movimento(jogo, 1, 1, 1);
+  insere_movimento(jogo, 1, 2, 1);
+  insere_movimento(jogo, 2, 0, 1);
+  insere_movimento(jogo, 2, 1, 1);
+  insere_movimento(jogo, 2, 2, 2);
+  REQUIRE(verifica_velha(jogo) == 0);
+
+
+  inicia_jogo(jogo);
+  insere_movimento(jogo, 0, 0, 2); // 2 1 2
+  insere_movimento(jogo, 0, 1, 1); // 2 1 1
+  insere_movimento(jogo, 0, 2, 2); // 1 2 1
+  insere_movimento(jogo, 1, 0, 2);
+  insere_movimento(jogo, 1, 1, 1);
+  insere_movimento(jogo, 1, 2, 1);
+  insere_movimento(jogo, 2, 0, 1);
+  insere_movimento(jogo, 2, 1, 2);
+  insere_movimento(jogo, 2, 2, 1);
+  REQUIRE(verifica_velha(jogo) == 0);
 }
 
 // TODO: melhorar os títulos e adicionar descrições aos testes
