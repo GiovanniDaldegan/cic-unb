@@ -1,10 +1,10 @@
+#include <stdlib.h>
 #include <stdio.h>
 #include "velha.h"
 
-int verifica_velha(int jogo[3][3])
+int* conta_jogadas(int jogo[3][3])
 {
-  int jogadas1 = 0, jogadas2 = 0;
-  int vitorias[2] = {0};
+  int* jogadas = (int*) calloc(2, sizeof(int));
 
   for (int i = 0; i < 3; i++)
   {
@@ -12,18 +12,24 @@ int verifica_velha(int jogo[3][3])
     {
       // números de jogador inválidos
       if (jogo[i][j] < 0 || jogo[i][j] > 2)
-        return -2;
+      {
+        jogadas[0] = -1;
+        jogadas[1] = -1;
+      }
 
       if (jogo[i][j] == 1)
-        jogadas1++;
+        jogadas[0]++;
       else if (jogo[i][j] == 2)
-        jogadas2++;
+        jogadas[1]++;
     }
   }
 
-  // número inválido de jogadas
-  if (jogadas2 > jogadas1 || jogadas1 > jogadas2 + 1)
-    return -2;
+  return jogadas;
+}
+
+int* conta_vitorias(int jogo[3][3])
+{
+  int* vitorias = (int*) calloc(2, sizeof(int));
 
   // arrays de checacem de vitória
   //  [0][*] contadores de repetição (1 por linha/coluna/diagonal)
@@ -39,7 +45,7 @@ int verifica_velha(int jogo[3][3])
   {
     for (int j = 0; j < 3; j++)
     {
-      // checa repetições nas linha
+      // checa repetições nas linhas
       if (jogo[i][j] == cont_lin[1][i])
       {
         cont_lin[0][i]++;
@@ -105,6 +111,22 @@ int verifica_velha(int jogo[3][3])
   // checa vitória na diagonal secundária
   if (cont_diag[0][1] == 2 && cont_diag[1][1] != 0)
     vitorias[cont_diag[1][1] - 1]++;
+
+  return vitorias;
+}
+
+int verifica_velha(int jogo[3][3])
+{
+  int* jogadas = conta_jogadas(jogo);
+  int* vitorias = conta_vitorias(jogo);
+
+  // números de jogador inválidos
+  if (jogadas[0] == -1 || jogadas[1] == -1)
+    return -2;
+
+  // número inválido de jogadas
+  if (jogadas[1] > jogadas[0] || jogadas[0] > jogadas[1] + 1)
+    return -2;
 
 
   if (vitorias[0] == 1)
