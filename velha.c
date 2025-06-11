@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include "velha.h"
 
 int verifica_velha(int jogo[3][3])
@@ -24,9 +25,12 @@ int verifica_velha(int jogo[3][3])
     return -2;
 
 
-  int cont_lin = 0;
+  int cont_lin = 0; // refatoração, unir em um array 1x2
   int num_anterior_lin = 0;
+
   int cont_col[2][3] = {{0}};
+  
+  int cont_diag[2][2] = {{0}};
 
   for (int i = 0; i < 3; i++)
   {
@@ -55,14 +59,31 @@ int verifica_velha(int jogo[3][3])
         cont_col[1][j]++;
       }
       else {
-        cont_col[1][j] = 0;
+        cont_col[1][j] = 0; // refatoração dos índices
         cont_col[0][j] = jogo[i][j];
       }
 
       if (cont_col[1][j] == 2 && cont_col[0][j])
         return cont_col[0][j];
+
+
+      // checa vitória na diagonal
+      if (i == j && jogo[i][j] == cont_diag[1][0])
+      {
+        cont_diag[0][0]++;
+      }
+      else if (i == j)
+      {
+        cont_diag[0][0] = 0;
+        cont_diag[1][0] = jogo[i][j];
+      }
+
+      if (cont_diag[0][0] == 2 && cont_diag[1][0] != 0)
+        return cont_diag[1][0];
     }
   }
+
+  // refatoração: checagem de vitória fora do loop
 
 
   return -1;
