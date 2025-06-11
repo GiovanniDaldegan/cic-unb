@@ -20,6 +20,8 @@ void insere_movimento(int jogo[3][3], int lin, int col, int jogador)
     jogo[lin][col] = jogador;
 }
 
+// TODO: mensagens de erro das funções auxiliares
+
 
 /* TESTES */
 
@@ -240,6 +242,30 @@ TEST_CASE("Jogador vence na diagonal")
   REQUIRE(verifica_velha(jogo) == 2);
 }
 
+/** TESTE 10
+ */
+TEST_CASE("Vitória dupla")
+{
+  int jogo[3][3];
 
-// TODO: teste x - os dois jogadores vencem
+  inicia_jogo(jogo);
+  insere_movimento(jogo, 0, 0, 1); // 1 1 1
+  insere_movimento(jogo, 0, 1, 1); // 2 2 2
+  insere_movimento(jogo, 0, 2, 1); // 0 0 0
+  insere_movimento(jogo, 1, 0, 2);
+  insere_movimento(jogo, 1, 1, 2);
+  insere_movimento(jogo, 1, 2, 2);
+  REQUIRE(verifica_velha(jogo) == -2);
+
+
+  inicia_jogo(jogo);
+  insere_movimento(jogo, 0, 0, 1); // 1 2 0
+  insere_movimento(jogo, 1, 0, 1); // 1 2 0
+  insere_movimento(jogo, 2, 0, 1); // 1 2 0
+  insere_movimento(jogo, 0, 1, 2);
+  insere_movimento(jogo, 1, 1, 2);
+  insere_movimento(jogo, 2, 1, 2);
+  REQUIRE(verifica_velha(jogo) == -2);
+}
+
 // TODO: melhorar os títulos e adicionar descrições aos testes
