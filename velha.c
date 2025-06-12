@@ -1,5 +1,4 @@
 #include <stdlib.h>
-#include <stdio.h>
 #include "velha.h"
 
 int* conta_jogadas(int jogo[3][3])
@@ -28,6 +27,13 @@ int* conta_jogadas(int jogo[3][3])
 
 int vencedor_linhas(int jogo[3][3])
 {
+  /*
+   * Matriz 2x3 que conta quantas linhas completas existem.
+   * Nos índices [0][*], armazena valores 0 (linha incompleta) ou 1 (linha
+   * completa), um pra cada linha.\n
+   * Nos índices [1][*], armazena os números dos jogadores que preencheram as
+   * linhas.
+   */
   int cont_lin[2][3] = {{0}};
 
   for (int i = 0; i < 3; i++)
@@ -65,9 +71,15 @@ int vencedor_linhas(int jogo[3][3])
   return vencedor;
 }
 
-
 int vencedor_colunas(int jogo[3][3])
 {
+  /*
+   * Matriz 2x3 que conta quantas colunas completas existem.
+   * Nos índices [0][*], armazena valores 0 (coluna incompleta) ou 1 (coluna
+   * completa), um pra cada coluna.\n
+   * Nos índices [1][*], armazena os números dos jogadores que preencheram as
+   * colunas.
+   */
   int cont_col[2][3] = {{0}};
 
   for (int i = 0; i < 3; i++)
@@ -106,6 +118,12 @@ int vencedor_colunas(int jogo[3][3])
 
 int vencedor_diagonais(int jogo[3][3])
 {
+  /*
+   * Matriz 2x2 que conta quantas diagonais completas existem.
+   * Nos índices [0][*], armazena valores 0 (diagonal incompleta) ou 1
+   * (diagonal completa), um pra cada diagonal.\n
+   * Nos índices [1][*], armazena o número do jogador que preencheu adiagonal.
+   */
   int cont_diag[2][2] = {{0}};
 
   for (int i = 0; i < 3; i++)
@@ -139,9 +157,6 @@ int vencedor_diagonais(int jogo[3][3])
           cont_diag[1][1] = jogo[i][j];
         }
       }
-      // checa vitória na coluna
-      //if (cont_col[0][j] == 2 && cont_col[1][j])
-        //vitorias[cont_col[1][j] - 1]++;
    }
   }
 
@@ -154,7 +169,6 @@ int vencedor_diagonais(int jogo[3][3])
 
   return 0;
 }
-
 
 int vencedor(int jogo[3][3])
 {

@@ -9,7 +9,7 @@ test: testa_velha
 	./testa_velha
 
 cpplint: testa_velha.cpp velha.c velha.h
-	cpplint --filter=-readability/utf8 --exclude=catch.h *.h *.c
+	cpplint --filter=-readability/utf8 --exclude=catch.hpp *.h *.c
 
 gcov: testa_velha.cpp velha.c velha.h 
 	g++ -std=c++20 -Wall -fprofile-arcs -ftest-coverage -c velha.c
