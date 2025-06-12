@@ -1,1 +1,7 @@
 *.class
+*.out
+*.o
+testa_velha
+
+Doxyfile
+
