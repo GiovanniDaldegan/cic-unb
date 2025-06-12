@@ -1,5 +1,10 @@
-#ifndef VELHA_H
-#define VELHA_H
+/*
+ * Copyright 2025 Giovanni Daldegan. Nenhum direito reservado :)
+ */
+
+
+#ifndef VELHA_H_
+#define VELHA_H_
 
 /**
  * Recebe uma matriz de jogo e retorna um array 1x3 com as contagens de 0, 1
@@ -62,4 +67,4 @@ int vencedor(int jogo[3][3]);
  */
 int verifica_velha(int[3][3]);
 
-#endif // VELHA_H
+#endif  // VELHA_H_

@@ -4,3 +4,30 @@ Trabalho 2
 O objetivo deste trabalho é aplicar as técnicas aprendidas na disciplina de
 Técnicas de Programação 2 e o desenvolvimento orientado a testes para criar um
 programa que verifica a validade de várias disposições de jogo da velha.
+
+Requisitos:
+- C++20
+- cpplint (opcional)
+- cppcheck (opcional)
+- valgrind (opcional)
+- gcov (opcional)
+- gdb (opcional)
+
+Para compilar e testar o programa, execute:
+make all
+
+Para verificação de estilo com cpplint:
+make cpplint
+
+Para verificação estática com cppchec:
+make cppcheck
+
+Para verificação dinâmica com valgrind:
+make cppcheck
+
+Para teste de cobertura com gcov:
+make gcov
+
+Para debugação com gdb:
+make gdb
+
