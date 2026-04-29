@@ -377,6 +377,37 @@ class cmp {
 
 
 
-#### EDs não-lineares
+### EDs não-lineares
 
 quando há uma relação de hierarquia entre os dados
+
+#### Árvore Binária de Busca - ABB (Binary Search Tree = BST)
+
+árvore em que cada nó tem no máximo dois filhos \
+há um nó raiz, no topo da árvore, e folhas, nas pontas
+
+todo nó tem uma chave (valor). seu filho da esquerda, se houver, deve ter chave menor que a sua, e seu filho da direita deve ter chave maior
+
+![BST 00](./BST00.png)
+
+para ter ganho de desempenho, precisamos que a BST seja balanceada; no pior caso, em que inserimos chaves sempre maiores ou sempre menores, a árvore ficará extremamente desbalanceada e tecnicamente linear, piorando seu desempenho e causando complexidade O(n) \
+para evitar isso, devemos escolher uma chave adequada, idealmente a mediana dos valores das chaves ordenados
+
+![BST 01](./BST01.png)
+
+### Set (conjunto)
+
+implementado por uma BST balanceada
+
+
+### Map
+
+
+### Hash
+
+devemos escolher bem a função hash para o contexto do uso da tabela hash. podemos configurar o tamanho da tabela, oferecendo mais posições e diminuindo colisões, e podemos escolher a 
+
+#### Hashset
+
+#### Hashmap
+
