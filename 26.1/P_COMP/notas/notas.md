@@ -411,3 +411,107 @@ devemos escolher bem a função hash para o contexto do uso da tabela hash. pode
 
 #### Hashmap
 
+
+### Grafo
+
+grafo G = (V, E), em que V é um conjunto de vértices e E é um conjunto de arestas que ligam esses vértices
+
+em um grafo simples, suas arestas apenas liga dois vértices, enquanto em um grafo ponderado, suas arestas associam um peso à essa ligação
+
+um grafo pode ser direcionado de forma que uma aresta que liga os vértices u e v é apenas saída para u e apenas entrada/chegada para v
+
+uma aresta pode ser um laço/loop, ligando um vértice u a ele mesmo
+
+podemos ter arestas paralelas, ou seja, que ligam os mesmos vértices (têm os mesmos vértices terminais)
+
+o grau de um vértice é a incidência de arestas nele, ou seja, se está ligado a 
+
+passeio: sequência de arestas partindo de u e chegando a v
+caminho: passeio sem repetição de vértices
+
+ciclo: sequência de arestas partindo de u e chegando a u
+
+grafo conexo: para quais quer dois vértices de um caminho, há um caminho entre eles (há um vértice desconexo). obs: essa condição é mais comum em grafos direcionados
+
+componentes conexos: grupos de vértices (subgrafo) conexo
+
+grafo bipartido: grafo em que podemos separar os vértices em dois subconjuntos, sendo que dois vértices de um subconjunto não compartilham uma aresta
+
+árvore: caso particular de grafo em que E = |V - 1|
+
+#### Representações de grafo
+
+##### Matriz de adjacência
+
+matriz VxV:
+- num grafo simples, o elemento aij (1 ou 0) indica se há ou não aresta ligando o vértice i ao j, com 0 <= i, j <= V-1
+- num grafo ponderado, o elemento aij indica se há ou não aresta ligando o vértice i ao j, sendo aij seu peso ou 0, caso não exista aresta
+
+em grafos bidirecionados/não direcionados, a matriz é simétrica em relação à diagonal principal
+
+##### Lista de adjacência
+
+vetor de vetores
+
+#### Busca
+
+percorremos um grafo de acordo com uma ordem, sempre monitorando se um vértice já foi visitado ou não
+
+##### Busa em Profundidade (Depth First Search - DFS)
+
+escolhemos um nó e visitamos primeiro os vizinhos dos vizinhos. sempre que visitarmos 
+
+bom para identificar se há caminho entre vértices
+
+##### Busca em Largura (Breadth First Search - BFS)
+
+escolhemos um nó e visitamos todos seus vizinhos para então visitar os vizinhos destes
+
+encontra o caminho mais curto entre o vértice inicial e outro qualquer
+
+
+#### Caminhos em grafos
+
+caminho: sequência não nula de arestas sem repetição de vértices, a primeira partindo de u e a última chegando a v
+
+caminho mínimo: caminho de menor custo, ou seja, considerando um grafo ponderado, caminho de u a v com menor soma de pesos possível
+
+##### Algoritmo de Dijkstra
+
+queremos encontrar o caminho mínimo de u e s. fazemos entrão uma busca em largura, mas priorizando a visita a vértices com menor custo de chegada
+
+precisamos armazenar
+- um vetor com os custos de chegada para cada vértice partindo de u
+- 
+
+- o processamento de cada aresta tem complexidade O(|E|) e a inserção na fila de prioridade é O(log n), então Dijkstra tem complexidade O(|E| * log n), sendo n < |E|
+- 
+
+>!NOTE
+> Essa implementação não comporta grafos com pesos negativos, pois poderia 
+
+###### Relaxamento
+
+se sabemos que há um caminho entre t e v com custo 6 mas encontramos um outro caminho de u a v com custo 4, o custo até v é o custo até t + 4, substituindo o custo até t + 6
+
+se o custo até um vértice t é 4 e, por enquanto, o custo até outro v é 7 e descubro uma aresta t -> v com peso 2, então esse caminho custa menos que o descoberto anteriormente, então atualizamos o custo até 
+(ideia de relaxamento de uma mola)
+
+##### Algoritmo Floyd-Warshall
+
+determina o caminho mínimo entre todos os pares de vértices conectados em um grafo ponderado
+
+verifica se é possível encontrar um vértice intermediário que minimize uma distância já computada. para cada vértice, checa se ele pode ser um vértice intermediário que diminui algum custo de caminho entre quaisquer dois outros vértices
+
+precisamos armazenar
+- de uma matriz das distâncias entre cada par ordenado de vértices
+
+- complexidade O(|V|^3)
+- porém, em
+
+
+##### outros algoritmos
+- Bellman-Ford
+- algoritmo de árvores geradoras mínimas
+- Kruskal
+- Prim
