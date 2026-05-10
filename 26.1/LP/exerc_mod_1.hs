@@ -20,9 +20,18 @@ converterNotaParaMencao a
   | a >= 0            = "SR"
 
 -- 03
+-- funções utilitárias
 inList :: Eq t => t -> [t] -> Bool
 inList _ [] = False
 inList a (b:bs) = (a == b) || (inList a bs)
+
+inListBetween :: Eq t => t -> [t] -> Int -> Int -> Bool
+inListBetween _ [] _ _ = False
+inListBetween e (f:fs) a b
+  | a > b || a < 1  = False       -- oculta erro
+  | a > 1     = inListBetween e fs (a-1) (b-1)
+  | b >= 1    = (e == f) || inListBetween e fs (a-1) (b-1)
+  | otherwise = False
 
 -- a) lista A - B, retorna apenas elementos de A e não de B
 listDiff :: Eq t => [t] -> [t] -> [t]
@@ -47,18 +56,43 @@ listUnion [] l  = l
 listUnion l []  = l
 listUnion (a:as) (b:bs) = a : b : listUnion as bs
 
--- d) indefinido para 
-listLast :: [t] -> t
-listLast 
+-- d) permite rep na primeira lista, mas na segunda se elemento pertencer à primeira
+listUnionNoRep :: Eq t => [t] -> [t] -> [t]
+listUnionNoRep [] [] = []
+listUnionNoRep a b = listUnionNoRepAux a a b
 
--- e)
---listUnion :: Eq t => [t] -> [t] -> [t]
+listUnionNoRepAux :: Eq t => [t] -> [t] -> [t] -> [t]
+listUnionNoRepAux _ [] [] = []
+listUnionNoRepAux _ l []  = l
+listUnionNoRepAux aog [] (b:bs)
+  | inList b aog  = listUnionNoRepAux aog [] bs
+  | otherwise     = b : listUnionNoRepAux aog [] bs
+listUnionNoRepAux aog (a:as) (b:bs)
+  | inList b aog  = a : listUnionNoRepAux aog as bs
+  | otherwise     = a : b : listUnionNoRepAux aog as bs
+{-
+  | (inList a aog) && (inList b bog)      = listUnionNoRepAux aog bog as bs
+  | not (inList a aog) && (inList b bog)  = a : listUnionNoRepAux aog bog as bs
+  | (inList a aog) && not (inList b bog)  = b : listUnionNoRepAux aog bog as bs
+  | otherwise                             = a : b : listUnionNoRepAux aog bog as bs
+-}
 
--- f)
---listUnion :: Eq t => [t] -> [t] -> [t]
+-- e) indefinido para lista vazia
+listLast :: Eq t => [t] -> t
+listLast (a:as)
+  | as == []  = a
+  | otherwise = listLast as
+
+-- f) indefinido para lista vazia / index out of bounds
+listNth :: [t] -> Int -> t
+listNth (a:as) n
+  | n == 1    = a
+  | otherwise = listNth as (n-1)
 
 -- g)
---listUnion :: Eq t => [t] -> [t] -> [t]
+listInvert :: [t] -> [t]
+listInvert [] = []
+listInvert (a:as) = (listInvert as) ++ [a]
 
 -- h)
 --listUnion :: Eq t => [t] -> [t] -> [t]
@@ -69,5 +103,7 @@ listLast
 
 
 main :: IO ()
-main = putStr $ show (listUnion [2, 1, 3, 4] [1, 2, 3, 0])
+--main = putStr $ show (listUnion [2, 1, 3, 4] [1, 2, 3, 0])
 --main = putStr $ show (diffList [1, 2, 3] [3, 2, 1, 0])
+--main = putStr $ show (listUnionNoRep [1, 2, 3, 0, 1] [1, 3, 0, 2, 2, 2])
+main = putStr $ show (inListBetween 0 [1, 1, 1, 0, 1, 1, 1] 3 5)
