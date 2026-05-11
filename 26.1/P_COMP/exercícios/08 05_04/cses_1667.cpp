@@ -4,6 +4,16 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+void print_atecessor(vector<int>& m, int start, int end, int depth) {
+  int antec = m[end];
+  if (end != start)
+    print_atecessor(m, start, antec, depth+1);
+
+  if (end == start)
+    cout << depth << '\n';
+  cout << end +1 << ' ' ;
+}
+
 int main()
 {
   int n, m;
@@ -18,38 +28,30 @@ int main()
     graph[c1-1].push_back(c2-1);
     graph[c2-1].push_back(c1-1);
   }
-  
-  bool done = false;
-  queue<int> que (1) = {0};
+    
+  queue<int> que;
+  que.push(0);
   vector<bool> visited (n, false);
-  map<int, int> antecessor;
+  vector<int> antecessors (n, -1);
 
   while(que.size()) {
-    int curr = q.front();
-    q.pop();
-    for (int v : q[curr]) {
+    int curr = que.front();
+    que.pop();
+    for (int v : graph[curr]) {
       if (!visited[v]) {
-        q.push(v);
+        que.push(v);
         visited[v] = true;
+        
+        antecessors[v] = curr;
       }
     }
-  }
-
-  while (que.size()) {
-    for (int i = 0; i < size(grap[curr]); i++) {
-      if (!visited[grap[curr][i]]) {
-        que.push(grap[curr][i]);
-        visited[grap[curr][i]] = true;
-      }
-    }
-    
-    // atualizar curr
   }
   
-  if (!visited[n])
+  if (!visited[n-1])
     cout << "IMPOSSIBLE";
-
-  visited = {false};
+  else
+    print_atecessor(antecessors, 0, n-1, 1);
+  cout << '\n';
 
   return 0;
 }
