@@ -254,7 +254,7 @@ w_novo = w_antigo + F
 ### Arquitetura de RNA
 camada de entrada, camadas intermediárias/escondidas, 
 
-### Portas de limiar
+### Portas de limiar (curvas)
 degrau \
 degrau simétrico \
 linear \
@@ -297,12 +297,12 @@ teoricamente, é possível aplicar a retropropragação em uma rede com n camada
 
 > [ ] DEVER: leitura do material Neural Networks - A Comprehensive Foundation - Simon Haykin, ch. 4 182-195
 
-"você não é cabelo?"
+"você não é cabelo?" (rede neural para diferenciar uma pessoa cabeluda de uma não cabeluda)
 "ele era aluno muito bom. eu falava 1, 2, 3... ele falava como? 4, 5, 6"
 "quando eu apontar pra você, te perguntar e você não acertar, não fica chateado. [...] quando a gente sair pela porta, esquece tudo. eu como professor tenho o dever de te chatear um pouquinho [...]"
 
 **Two passes**:
-- forward pass começa na camada de entrada; os pesos permanecem constante, e as entradas são computadas até a saída
+- forward pass começa na camada de entrada; os pesos permanecem constantes, e as entradas são computadas até a saída
 - backward pass começa na camada de saída; os erros são propagados para trás, de forma que os erros são atualizos a cada camada
 
 ### setup RNA
@@ -332,9 +332,11 @@ para isso, usamos uma RNA de camada única, com o mesmo número de categorias qu
 
 ### convolução
 
-stride (int)
+stride (int): passo de cada iteração de convolução em uma mesma linha (passo de deslocamento horizontal)
 
 ### padding
+
+adição de uma borda de pixels para melhorar o reconhecimento de padrões reconhecido nas extremidades da imagem
 
 ### max pooling
 
@@ -343,12 +345,18 @@ comprimir uma matriz mantendo apenas o máximo valor de um bloco menor elementos
 por exemplo, se pela convolução obtivemos uma matriz 6x6, podemos aplicar max pooling considerando "sub-matrizes" 2x2
 
 ```
-0 0 1 1 1 0         
-0 0 1 1 2 0         0 1 2
-0 0 1 1 3 0   ->    0 1 3
-0 0 0 0 3 0         0 0 3
-0 0 0 0 3 0
-0 0 0 0 2 0         
+padrão:
+0 1 0
+0 1 0
+0 1 0
+
+imagem original     res. convolução     res. max pooling
+0 1 1 1 1 0         0 0 1 1 1 0         
+0 0 0 0 1 0         0 0 1 1 2 0         0 1 2
+0 0 0 0 1 0   ->    0 0 1 1 3 0   ->    0 1 3
+0 0 0 0 1 0         0 0 0 0 3 0         0 0 3
+0 0 0 0 1 0         0 0 0 0 3 0         
+0 0 0 0 1 0         0 0 0 0 2 0         
 ```
 
 linha 1, coluna 1 da matriz resultante: o máximo entre 0 0 0 0 é 0
@@ -502,3 +510,66 @@ n entradas : n nós : n categorias
 - padding
 - max pooling
 - flatten
+
+
+# Tomada de Decisão
+
+abordagens IA
+- simbólico: parada há alguns anos
+- numérico: em alta, sucesso nas aplicações
+
+cenário: **quero jogar tênis**
+
+## Árvore de decisão
+
+analisar dados de interesse e identificar quais predominam sobre quais
+
+![arvore_decisao](arvore_decisao.png)
+
+![expressao_decisao](expressao_decisao.png)
+
+precisamos "medir" informações
+
+### Entropia
+
+podemos definir entropia como um "grau de incerteza" \
+`Entropy(S) = -p1 * log2 (p1) - p2 * log2 (p2)`, considerando `S = (p1, p2)`
+
+![entropia_formula](entropia_formula.png)
+
+se S é uma tupla de n probabilidades, teremos n termos `- pi * logn (pi)`, com `1 <= i <= n` e `logn` é o logarítmo na base n
+
+### Ganho
+
+`Gain(S,A) = Entropy(S) - sum[v pertence A](|Sv|/|S| * Entropy(Sv))`
+
+![ganho_formula](ganho_formula.png)
+
+```
+se p1 = p2 = 0.5, a entropia é
+-2^-1 * log2 (2^-1) - 2^-1 * log2 (2^-1)
+2^-1 * log2 (2) + 2^-1 * log2 (2) = 1/2 + 1/2 = 1
+
+se p1 = 1 e p2 = 0
+-1 * log2 (1) - 0 * log2 (1) = -1 * 0 - 0 = 0
+```
+
+a função de entropia desenha um gráfico similar ao de uma parábola com concavidade pra baixo. as raízes são 0 e 1 e a asbcissa do ponto máximo é 0.5,
+
+![entropia_grafico.png](entropia_grafico.png)
+
+
+![trainamento_tenis](trainamento_tenis.png)
+
+wind 14/14
+- weak 8/14
+  - sim 6/8
+  - não 2/8
+`entropy((6/8, 2/8)) = - 6/8 * log2 (6/8) - 2/8 * log2 (2/8) =~ 0,881`
+
+- strong 6/14
+  - sim 3/6
+  - não 3/6
+`entropy((3/6, 3/6)) = 1`
+
+Gain (S, Wind) 
