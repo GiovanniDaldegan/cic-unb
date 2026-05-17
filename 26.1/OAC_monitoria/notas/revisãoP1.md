@@ -1,13 +1,14 @@
 assuntos da P1
 - fórmula de tempo de execução, comparação de desempenho
 - relação frequência <-> tempo de clock (potências de 10 e prefixos)
-- programação assembly
-  - manipulação de float
-  - manipulação de vetores
+- programação em RISC-V
+  - manipulação de vetores e endereçamento
+  - estrutura de loop
   - acesso à memória
+  - manipulação de float
 - decompilação assembly
   - tipos de instrução
-  - endereçamento
+  - endereçamento relativo (sem labels)
 
 
 ## desempenho
@@ -52,8 +53,6 @@ ocorre quando o resultado de uma operação não pode ser representado na mesma 
 
 em complemento de 2, o overflow pode ocorrer quando **somamos números de mesmo sinal** ou **subtraímos números de sinais opostos**
 
-![tipos_instrução](tipos_instrução.png)
-
 ## potências de 10 e prefixos
 
 1 MHz = 1 * 10^6 ciclo/s \
@@ -69,12 +68,37 @@ GHz  | ns
 THz  | ps
 
 
+## linguagem assembly
+
+![tipos_instrução](tipos_instrução.png)
+
 ## Memory Mapped I/O (MMIO)
 
 ![mmio_rars](mmio_rars.png)
 
+## programação em RISC-V
 
-## decompilação assembly
+ao escrever um procedimento, precisamos saber
+
+- receber argumentos nos registradores a0, a1, ...
+- inicializar variáveis (t0, t1, ...)
+- criar desvios condicionais para loops ou checagens
+- retornar os resultados em a0, a1, ...
+
+para percorrer um vetor precisamos de
+- o endereço do começo do vetor (*v)
+- criar um loop que avance para cada posição do vetor
+
+se temos um vetor de inteiros pra percorrer, cada inteiro toma 32 bits ou 4 bytes \
+então, se a primeira posição do vetor é a label v, queremos acessar v + 0, v + 4, v + 8... \
+para fazer essa sequência:
+- podemos usar um registrador para contar de 0, 1, 2, ..., até a posição final e, em cada iteração, multiplicar esse valor por 4 para somar à posição inicial
+- ou podemos somar 4 ao registrador com o endereço para que ele aponte diretamente para v[0], v[1], ...
+
+cada estratégia precisa ter uma forma adequada de checar se chegamos ao final do vetor. se isso não for bem definido, o programa vai acessar posições indesejadas
+
+
+## descompilação assembly
 1. converter hexa -> bin
 2. identificar instrução pelo opcode na tabela e possivelmente funct3 e funct7
 3. identificar registradores (xN)
