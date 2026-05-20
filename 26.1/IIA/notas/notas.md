@@ -434,6 +434,11 @@ todos os pesos são 1
 
 ![Elman_vs_Jordan_Network](Elman_vs_Jordan_Network.png)
 
+### overview
+desvantagens
+- gasto de memória
+- a retropropagação do gradiente local pode ter over/underflow quando há muitas camadas (multiplicações sucessivas)
+
 # REVISÃO P1
 
 ## Problema de IA
@@ -441,10 +446,27 @@ todos os pesos são 1
 o que podemos resolver com IA?
 - **jogos**: jogo dos 8 números, 8 rainhas, Jogo da Velha, Go
 
-**espaço de solução**: espaço de todos os estados possíveis, considerando as transições possíveis entre estados a partir do ponto inicial
-**solução**: caminho entre estados que levam do estado inicial para o estado desejado/objetivo
+um problema de IA exige:
+- **espaço de estados**: espaço de todos os estados possíveis, considerando as transições possíveis entre estados a partir do ponto inicial
+- **solução**: caminho entre estados que levam do estado inicial para o estado desejado/objetivo
+- **ações/operadores** que permitem a transição entre estados
+- um **objetivo**, sendo uma propriedade abstrata ou concreta que qualifica o estado final
 
 representação do espaço de solução: árvore de estados, com o estado inicial como raiz
+
+uma resolução implica:
+- custo de busca (tempo e memória)
+- custo de caminho/solução (qualidade) **[pode não existir]**
+- custo total = busca + caminho
+
+tipos de problema
+dados conhecidos:   | estado atual | efeito das ações |
+--                  | --    | --        
+estados simples     | X     | X
+estados múltiplos 1 |       | X
+estados múltiplos 2 |       |
+contingencial       |       |
+exploratório        |       |
 
 ## Busca
 
@@ -456,7 +478,7 @@ algoritmo
 
 algoritmos: BFS, DFS, bidirecional
 
-- BFS - custo uniforme
+- BFS com custo uniforme: preferência do estado com menor custo de transição
 - bidirecional - partindo do estado inicial e final
 
 ### Busca heurística
@@ -565,11 +587,47 @@ wind 14/14
 - weak 8/14
   - sim 6/8
   - não 2/8
-`entropy((6/8, 2/8)) = - 6/8 * log2 (6/8) - 2/8 * log2 (2/8) =~ 0,881`
+
+  `entropy((6/8, 2/8)) = - 6/8 * log2 (6/8) - 2/8 * log2 (2/8) =~ 0,881`
 
 - strong 6/14
   - sim 3/6
   - não 3/6
-`entropy((3/6, 3/6)) = 1`
 
-Gain (S, Wind) 
+  `entropy((3/6, 3/6)) = 1`
+
+Gain (S, Wind)
+
+# BERT
+
+## MLM
+
+
+## Binary Crossentropy
+
+como medir confiabilidade de um modelo treinado?
+
+binary crossentropy é uma função de perda (loss function) para medir a confiabilidade de um modelo de classificação para duas classes (binário)
+
+y: rótulo verdadeiro \
+^y: rótulo previsto
+
+o valor real é 0 ou 1. se a previsão do modelo é próxima da realidade, a perda é baixa e confiável; caso contrário, é alta e pouco confiável
+
+
+fórmula
+loss = - [y * log (^y) + (1 - y) * log (1 - ^y)]
+
+na saída, usa a curva de ativação sigmoidal \
+é fácil de se implementar e 
+
+## Categorical Crossentropy
+
+função de perda para um modelo de classificação de 3 ou mais classes
+
+
+características | binary crossentropy | categorical crossentropy
+--              | --                  | --
+num classes     | 2                   | 3 ou mais
+ativação        | sigmóide            | softmax
+soma das prob.  | não precisa ser 1   | 1
