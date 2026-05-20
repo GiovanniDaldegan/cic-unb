@@ -1057,3 +1057,54 @@ remoção do "açúcar síntático", formas ou elementos desnecessários do cód
 - source code optimization: pré-avaliar e pré-computar valores conhecidos em tempo de compilação
 - target code optimization: escolher instruções mais baratas que as do programa não otimizado
 
+> EXERCÍCIO: !tarefa de expressões! descompactar LE1.rar e estudar execução do processo com base no README.txt + modificar o pattern matching para que os erros sejam enunciados na execução, sem interrupção do programa por erro
+
+## Linguagem Imperativa 1
+
+```c
+// ex 1
+x = x;
+
+// ex 2
+x = y;
+
+// ex 1
+int x, y;
+x = y;
+```
+
+> EXERCÍCIO: Obtenha o valor do tipo algébrico representando cada programa apresentado como exemplo da LI1 nos slides anteriores // Você pode checar o resultado usando o programa TestLI, que faz parte do arquivo LI1.rar
+
+para o programa `ex1.li1`
+```c
+x = 1;
+```
+```hs
+Prog (SAss (Ident "x") (EInt 1))
+```
+
+para `ex2.li1`
+```c
+{
+  x = 1;
+  y = 2;
+  z = x + y;
+}
+```
+```hs
+Prog (SBlock [SAss (Ident "x") (EInt 1), SAss (Ident "y") (EInt 2), SAss (Ident "y") (EInt 2), SAss (Ident "z") (EAdd (Ident "x") (Ident "y"))])
+```
+
+> EXERCÍCIO: Estenda a definição de tipos algébricos e do interpretador para implementar os comandos for e if. (tentar fazer o for como um bloco único ou como um caso específico do while)
+
+LI1:
+- contexto dinâmico com variáveis
+- comandos e blocos de comando
+
+motivação da LI2: a LI1 não oferece nenhum tipo de modularização
+- todo comando que quisermos repetir ao longo do programa exige que ele seja copiado e que essa cópia seja executada
+- a concepção e compreensão de um único bloco enorme de código como programa é bem mais trabalhosa (assim como a manutenção)
+* asadasdasd
+- as
+- asadasdasd
+* as
