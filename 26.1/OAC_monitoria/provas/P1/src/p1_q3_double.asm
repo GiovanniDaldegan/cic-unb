@@ -1,0 +1,87 @@
+# obs: converti os tabs pra espaços pra formatação ficar bonitinha
+
+.data
+pi: .float 3.141592653589793238462 # 3.1415926535, 6.283185307
+
+.text
+MAIN: li a7,6
+      ecall
+
+      jal SENO
+      
+      li a7,2
+      ecall
+
+      li a7,10
+      ecall
+
+
+# Procedimento SENO
+# Recebe um valor x em radianos e retorna seu seno aproximado.
+# Internamente, converte x para double e realiza as operações com precisão
+# dupla. Por fim, converte o resultado final de volta para float
+#
+# input:
+# - fa0: x (float)
+# output:
+# - fa0: seno(x) (float)
+SENO:
+        fcvt.d.s fa0, fa0
+        li      t1, 1           # t1: n (contador)
+        li      t6, 1           # t6: k (contador 2n+1)
+        li      t2, 11          # t2: limite de n (10 iterações, soma de 11 termos)
+        li      t3, 2
+        
+        # normalizar 0 <= x <= pi
+        # importante, mas desnecessário para os testes da P1
+        
+        # ft0: somatório
+        fmv.d   ft0, fa0        # ft0: x (inicial, n=1)
+
+        # ft1: potencia x^1, x^3, x^5, ..., x^21;
+        fmv.d   ft1, fa0        # ft1: x (inicial, n=1)
+        
+        # ft2: fatorial  1!, 3!, 5!, ..., 21!
+        li      t4, 1
+        fcvt.d.w ft2, t4        # ft2: 1 (inicial, n=1)
+                
+loop_seno:
+        bge     t1, t2, saida_seno
+        
+        rem     t4, t1, t3      # t4: t1 % 2
+        bne     t4, zero, n_impar
+        li      t4, 1           # t4: 1 (quando n par)
+        jal     zero, calc
+n_impar:
+        li      t4, -1          # t4: -1 (quando n ímpar)
+calc:
+        fcvt.d.w ft3, t4        # ft3: (float) (-1)^n
+        
+        # cálculo fatorial (2n+1)! (fatorial anterior * n * (n+1))
+        addi    t6, t6, 1       # t6: 2n
+        fcvt.d.w ft4, t6        # ft4: (float) 2n
+        fmul.d  ft2, ft2, ft4   # ft2: *= 2n
+        
+        addi    t6, t6, 1       # t6: 2n+1
+        fcvt.d.w ft4, t6        # ft4: (float) 2n+1
+        fmul.d  ft2, ft2, ft4   # ft2: *= 2n+1
+        
+        
+        # cálculo potência x^(2n+1) (potência anterior * x^2)
+        fmul.d  ft1, ft1, fa0   # ft1: x^(2n)
+        fmul.d  ft1, ft1, fa0   # ft1: x^(2n+1)
+        
+        
+        fdiv.d  ft4, ft1, ft2   # ft4: x^(2n+1) / fat(2n+1)
+        fmul.d  ft4, ft4, ft3   # ft4: ft4 * (-1)^n
+
+        fadd.d  ft0, ft0, ft4   # ft0: += x^(2n+1) / fat(2n+1) * (-1)^n
+        
+        addi    t1, t1, 1       # n += 1
+
+        j       loop_seno
+
+saida_seno:
+        fcvt.s.d ft0, ft0
+        fmv.d   fa0, ft0
+        ret
