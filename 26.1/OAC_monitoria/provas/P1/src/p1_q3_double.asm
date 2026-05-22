@@ -29,7 +29,7 @@ SENO:
         fcvt.d.s fa0, fa0
         li      t1, 1           # t1: n (contador)
         li      t6, 1           # t6: k (contador 2n+1)
-        li      t2, 11          # t2: limite de n (10 iterações, soma de 11 termos)
+        li      t2, 10          # t2: limite de n (10 iterações, soma de 11 termos)
         li      t3, 2
         
         # normalizar 0 <= x <= pi
@@ -44,9 +44,11 @@ SENO:
         # ft2: fatorial  1!, 3!, 5!, ..., 21!
         li      t4, 1
         fcvt.d.w ft2, t4        # ft2: 1 (inicial, n=1)
-                
+        
+        fmul.d  ft5, fa0, fa0   # ft5: x^2
+
 loop_seno:
-        bge     t1, t2, saida_seno
+        bgt     t1, t2, saida_seno
         
         rem     t4, t1, t3      # t4: t1 % 2
         bne     t4, zero, n_impar
@@ -68,9 +70,8 @@ calc:
         
         
         # cálculo potência x^(2n+1) (potência anterior * x^2)
-        fmul.d  ft1, ft1, fa0   # ft1: x^(2n)
-        fmul.d  ft1, ft1, fa0   # ft1: x^(2n+1)
-        
+        fmul.d  ft1, ft1, ft5   # ft1: x^(2n)
+
         
         fdiv.d  ft4, ft1, ft2   # ft4: x^(2n+1) / fat(2n+1)
         fmul.d  ft4, ft4, ft3   # ft4: ft4 * (-1)^n

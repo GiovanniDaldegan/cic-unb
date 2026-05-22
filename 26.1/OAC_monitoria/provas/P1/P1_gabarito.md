@@ -81,12 +81,12 @@ se o período de clock é de 0,2727272... μs, então a frequência é de 3.666.
 [ainda vou escrever a explicação dela]
 
 [questão 3 (precisão simples)](./src/p1_q3_float.asm) \
-[questão 3 (precisão dupla)](./src/p1_q3_double.asm)
+[questão 3 (precisão dupla)](./src/p1_q3_double.asm) (só uma curiosidade mesmo)
 
-realmente, o teste 3 tem alguma divergência dessa implementação. fiz a versão em double pra ver o que dava, mas também tive resultado diferente: seno(3.14159265359) = -8.741243E-8
+a implementação no Aprender3 salva $x^2$ e calcula ${x}^{2n+1}$ multiplicando a potência calculada na última iteração e esse valor salvo. essa implementação dá `-1.8874114E-7` no Teste 3 (seno(3.14159265359))
 
-de toda forma, como o resto das respostas tá correto eu acho que depende totalmente da implementação que usaram para os testes. pode ser culpa da imprecisão de float e da ordem das operações da implementação no Code Runner
+mas se, no lugar disso, a gente obter ${x}^{2n+1}$ multiplcando a potência anterior por $x$ duas vezes, o resultado desse teste sai `-1.0829432E-8`. matematicamente, o resultado é o mesmo, mas a imprecisão de float dá essa divergência \
+essa diferença não deve ser penalizada na nota da prova. se perderam ponto e o Lamar não corrigir, depois falem com ele
 
-eu acho que quem só teve divergência no teste 3 na tentativa final da prova deveria receber pontuação total
-
+resultado da segunda implementação, sem usar o valor de $x^2$ pra calcular a potência de cada iteração: \
 ![q3_testes](./img/q3_testes.png)
