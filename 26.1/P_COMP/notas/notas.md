@@ -515,3 +515,22 @@ precisamos armazenar
 - algoritmo de árvores geradoras mínimas
 - Kruskal
 - Prim
+
+
+
+## Soma de prefixos
+
+temos um vetor de inteiros e queremos fazer q consultas nele, de forma que cada consulta opera sobre um intervalo [l, r] de posições desse vetor e deve retornar a soma de todos os inteiros presentes no intervalo
+
+se a cada consulta acessamos 
+
+## Programação delta
+
+vetor delta \
+posição do início do intervalo += 1 \
+posição logo após o fim do intervalo -= 1 (caso não seja fora do vetor)
+
+vetor psum \
+pos_delta = delta[0] \
+pos_delta += delta[i] \
+psum[i] = v[i] + pos_delta
