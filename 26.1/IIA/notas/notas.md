@@ -598,9 +598,9 @@ wind 14/14
 
 Gain (S, Wind)
 
-# BERT
+# BERT - Bidirectional encoder representations from transformers
 
-## MLM
+## MLM - Masked Language Model
 
 
 ## Binary Crossentropy
@@ -623,7 +623,7 @@ na saída, usa a curva de ativação sigmoidal \
 
 ## Categorical Crossentropy
 
-função de perda para um modelo de classificação de 3 ou mais classes
+função de perda para um modelo de classif icação de 3 ou mais classes
 
 
 características | binary crossentropy | categorical crossentropy
@@ -631,3 +631,27 @@ características | binary crossentropy | categorical crossentropy
 num classes     | 2                   | 3 ou mais
 ativação        | sigmóide            | softmax
 soma das prob.  | não precisa ser 1   | 1
+
+# Transformers
+
+## Tokenização
+
+mapeamento de palavras e frases com ID : Token
+
+para linguagens ideogramáticas, é preciso uma etapa de codificação dos ideogramas em "palavras" compreensíveis para o computador
+
+
+# Abordagem simbólica de IA
+
+## Modelagem lógica
+
+### Mundo de Wumpus
+
+o agente é um caçador de tesouros. ele vai partir de uma caverna para encontrar ouro e voltar, mas deve evitar buracos e uma criatura fedorenta: Wumpus
+
+o agente tem 5 sensores:
+- fedor (presente em)
+- brisa
+- luz 
+
+![mundo_de_wumpus](mundo_de_wumpus.png)
