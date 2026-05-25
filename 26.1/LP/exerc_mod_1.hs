@@ -28,7 +28,7 @@ inList a (b:bs) = (a == b) || (inList a bs)
 inListBetween :: Eq t => t -> [t] -> Int -> Int -> Bool
 inListBetween _ [] _ _ = False
 inListBetween e (f:fs) a b
-  | a > b || a < 1  = False       -- oculta erro
+  | a > b     = False       -- oculta erro
   | a > 1     = inListBetween e fs (a-1) (b-1)
   | b >= 1    = (e == f) || inListBetween e fs (a-1) (b-1)
   | otherwise = False
@@ -59,15 +59,16 @@ listUnion (a:as) (b:bs) = a : b : listUnion as bs
 -- d) permite rep na primeira lista, mas na segunda se elemento pertencer à primeira
 listUnionNoRep :: Eq t => [t] -> [t] -> [t]
 listUnionNoRep [] [] = []
-listUnionNoRep a b = listUnionNoRepAux a a b
+listUnionNoRep a b = listUnionNoRepAux a a b 0
 
-listUnionNoRepAux :: Eq t => [t] -> [t] -> [t] -> [t]
-listUnionNoRepAux _ [] [] = []
-listUnionNoRepAux _ l []  = l
+listUnionNoRepAux :: Eq t => [t] -> [t] -> [t] -> Int -> [t]
+listUnionNoRepAux _ [] [] _ = []
+listUnionNoRepAux _ l []   = l    -- permite 
 listUnionNoRepAux aog [] (b:bs)
   | inList b aog  = listUnionNoRepAux aog [] bs
   | otherwise     = b : listUnionNoRepAux aog [] bs
 listUnionNoRepAux aog (a:as) (b:bs)
+  | inList b aog && inListBetween a aog   = a : listUnionNoRepAux aog as bs
   | inList b aog  = a : listUnionNoRepAux aog as bs
   | otherwise     = a : b : listUnionNoRepAux aog as bs
 {-
@@ -106,4 +107,4 @@ main :: IO ()
 --main = putStr $ show (listUnion [2, 1, 3, 4] [1, 2, 3, 0])
 --main = putStr $ show (diffList [1, 2, 3] [3, 2, 1, 0])
 --main = putStr $ show (listUnionNoRep [1, 2, 3, 0, 1] [1, 3, 0, 2, 2, 2])
-main = putStr $ show (inListBetween 0 [1, 1, 1, 0, 1, 1, 1] 3 5)
+main = putStr $ show (inListBetween 0 [1, 1, 1, 0, 1, 1, 1] 5 3)

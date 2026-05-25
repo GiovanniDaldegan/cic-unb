@@ -1091,6 +1091,9 @@ para `ex2.li1`
   z = x + y;
 }
 ```
+
+como o interpretador vai representar o programa em LI1
+
 ```hs
 Prog (SBlock [SAss (Ident "x") (EInt 1), SAss (Ident "y") (EInt 2), SAss (Ident "y") (EInt 2), SAss (Ident "z") (EAdd (Ident "x") (Ident "y"))])
 ```
@@ -1104,7 +1107,21 @@ LI1:
 motivação da LI2: a LI1 não oferece nenhum tipo de modularização
 - todo comando que quisermos repetir ao longo do programa exige que ele seja copiado e que essa cópia seja executada
 - a concepção e compreensão de um único bloco enorme de código como programa é bem mais trabalhosa (assim como a manutenção)
-* asadasdasd
-- as
-- asadasdasd
-* as
+
+
+## Linguagem Imperativa 2
+
+novidades: chamadas de função e retorno, literais e operadores booleanos e de string
+
+agora, um programa é uma lista de funções e, por padrão, executa apenas a que for identificada como "main". no seu corpo, ela pode executar comandos de atribuição, bloco de comandos, condicional, ou chamar outra função 
+
+todo contexto local de uma função deve conter também todas as funções existentes, pois podemos chamar qualquer função em seu corpo de execução (exceto a main, preferencialmente, para evitar ciclos)
+
+returno: a função chamada mapeia seu resultado no seu contexto de execução para então busca esse valor para comunicar ao contexto antecessor. o escopo antecessor então incrementa seu contexto adicionando o resultado da função
+
+ao chamar uma função, o programa checa a existência dela no contexto de execução (lista). como **ainda** não temos checagem de tipos na LI2, teremos um **erro de execução** ao tentarmos chamar uma função que não existe
+
+
+motivação para a tipagem dos valores: evitar operar valores que não correspondem ao uso correto dos operadores ou que contradigam a avaliação das expressões
+- podemos mudar a gramática das expressões da linguagem LI1 (não evita todos os casos não desejados)
+- ou fazer de outra forma, evitando expressões mal formadas e mais
