@@ -6,18 +6,28 @@
 using namespace std;
 
 int main() {
-  int n;
-  cin >> n;
-  map<int, priority_queue<int, vector<int>, grater<int>>> occurs; 
-  priority_queue<int> dist;
+  int t, n, num;
+  cin >> t;
 
-  int num;
-  for (int i = 0; i < n; i++) {
-    cin >> num;
-    
-    if (!occurs.count(num)) {
-      priority_queue..push(i);
+  for (int j = 0; j < t; j++) {
+    int max = -1;
+    unordered_map<int, int> occur;
+    cin >> n;
+
+    for (int i = 0; i < n; i++) {
+      cin >> num;
+
+      if (occur.count(num)) {
+        if (max < occur[num])
+          max = occur[num];
+        occur[num] = i;
+      }
+      else
+        occur[num] = i;
     }
+
+    cout << max +1 << '\n';
   }
+  return 0;
 }
 
