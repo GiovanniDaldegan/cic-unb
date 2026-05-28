@@ -5,3 +5,13 @@ testa_velha
 
 Doxyfile
 
+# OAC 26.1 - monitoria
+/26.1/OAC_monitoria/**/*.db_info
+/26.1/OAC_monitoria/**/*db/
+/26.1/OAC_monitoria/**/output_files/
+/26.1/OAC_monitoria/**/simulation/
+/26.1/OAC_monitoria/**/*.qsf*
+# /26.1/OAC_monitoria/**/*.qpf*
+# /26.1/OAC_monitoria/**/*.qpf*
+/26.1/OAC_monitoria/**/*.out*
+/26.1/OAC_monitoria/**/*dump*

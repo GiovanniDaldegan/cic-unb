@@ -1,0 +1,84 @@
+Restore Archived Project report for TopDE
+Wed May 27 19:57:19 2026
+Quartus Prime Version 25.1std.0 Build 1129 10/21/2025 SC Lite Edition
+
+
+---------------------
+; Table of Contents ;
+---------------------
+  1. Legal Notice
+  2. Restore Archived Project Summary
+  3. Restore Archived Project Messages
+  4. Files Restored
+  5. Files Not Restored
+
+
+
+----------------
+; Legal Notice ;
+----------------
+Copyright (C) 2025  Altera Corporation. All rights reserved.
+Your use of Altera Corporation's design tools, logic functions 
+and other software and tools, and any partner logic 
+functions, and any output files from any of the foregoing 
+(including device programming or simulation files), and any 
+associated documentation or information are expressly subject 
+to the terms and conditions of the Altera Program License 
+Subscription Agreement, the Altera Quartus Prime License Agreement,
+the Altera IP License Agreement, or other applicable license
+agreement, including, without limitation, that your use is for
+the sole purpose of programming logic devices manufactured by
+Altera and sold by Altera or its authorized distributors.  Please
+refer to the Altera Software License Subscription Agreements 
+on the Quartus Prime software download page.
+
+
+
++-------------------------------------------------------------------------+
+; Restore Archived Project Summary                                        ;
++---------------------------------+---------------------------------------+
+; Restore Archived Project Status ; Successful - Wed May 27 19:57:19 2026 ;
+; Revision Name                   ; TopDE                                 ;
+; Top-level Entity Name           ; decoder7                              ;
+; Family                          ; Cyclone V                             ;
++---------------------------------+---------------------------------------+
+
+
++-----------------------------------+
+; Restore Archived Project Messages ;
++-----------------------------------+
+Info: Successfully restored 'C:/Users/giova/dev/github/cic-unb/26.1/OAC_monitoria/labs/LAB2/Decoder7.qar' into the 'C:/Users/giova/dev/github/cic-unb/26.1/OAC_monitoria/labs/LAB2/Decoder7_restored/' directory
+Info: Generated report 'TopDE.restore.rpt'
+Info (23030): Evaluation of Tcl script c:/altera_lite/25.1std/quartus/common/tcl/apps/qpm/qar.tcl was successful
+Info: Quartus Prime Shell was successful. 0 errors, 0 warnings
+    Info: Peak virtual memory: 4858 megabytes
+    Info: Processing ended: Wed May 27 19:57:19 2026
+    Info: Elapsed time: 00:00:00
+    Info: Total CPU time (on all processors): 00:00:00
+
+
++-------------------------------+
+; Files Restored                ;
++-------------------------------+
+; File Name                     ;
++-------------------------------+
+; qar_info.json                 ;
+; Decoder7.out.sdc              ;
+; TopDE.out.sdc                 ;
+; TopDE.qpf                     ;
+; TopDE.qsf                     ;
+; TopDE.v                       ;
+; TopDE.vwf                     ;
+; TopDE_assignment_defaults.qdf ;
+; decoder7.v                    ;
+; decoder7.vwf                  ;
++-------------------------------+
+
+
++--------------------+
+; Files Not Restored ;
++--------------------+
+; File Name          ;
++--------------------+
+
+
