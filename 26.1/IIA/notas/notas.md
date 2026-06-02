@@ -643,7 +643,7 @@ para linguagens ideogramáticas, é preciso uma etapa de codificação dos ideog
 
 # Abordagem simbólica de IA
 
-## Modelagem lógica
+## Agentes baseados em conhecimento
 
 ### Mundo de Wumpus
 
@@ -655,3 +655,35 @@ o agente tem 5 sensores:
 - luz 
 
 ![mundo_de_wumpus](mundo_de_wumpus.png)
+
+## Características do ambiente
+
+Acessível ou Inacessível (sabemos o estado atual e os possíveis?)
+Determinístico ou Não-Determinístico (sabemos quais resultados cada ação implica?)
+Episódico ou Não-Episódico
+Estático ou Dinâmico
+Discreto ou Contínuo
+
+
+namkim
+
+### Tipos de raciocínio
+
+- Dedução: aplicação de regras de inferênicas sobre fatos -> novos fatos
+- Abdução: aplicação inversa de regras de inferência sobre fatos -> novos fatos
+- Indução: parte-se dos fatos para generalizar regras
+- Analogia: aplicação sobre regras de adaptação sobre casos
+
+
+### Modelagem lógica
+
+Base do conhecimento
+- sentenças representando as percepções do agente
+- sentenças válidas implicadas a partir das sentenças das percepções
+- regras de inferência
+
+para o agente do mundo de Wumpus...
+- os fatos são as constatações que ele faz pelos sensores e pela posição que ele ocupa no mapa
+- as regras de inferência são as formas que ele pode obter novos fatos sobre o mapa a partir dos fatos já considerados
+
+considerando regras de inferência que permitam o agente concluir ou supor onde tem um buraco, onde está Wumpus e quais casas são seguras, ele é capaz de descobrir o que há em cada casa do mapa. no melhor dos casos, poderá fazer isso sem cair em buracos ou encontrar Wumpus
