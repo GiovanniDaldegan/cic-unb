@@ -1059,7 +1059,7 @@ remoção do "açúcar síntático", formas ou elementos desnecessários do cód
 
 > EXERCÍCIO: !tarefa de expressões! descompactar LE1.rar e estudar execução do processo com base no README.txt + modificar o pattern matching para que os erros sejam enunciados na execução, sem interrupção do programa por erro
 
-## Linguagem Imperativa 1
+## Linguagem Imperativa 1 - LI1
 
 ```c
 // ex 1
@@ -1109,7 +1109,7 @@ motivação da LI2: a LI1 não oferece nenhum tipo de modularização
 - a concepção e compreensão de um único bloco enorme de código como programa é bem mais trabalhosa (assim como a manutenção)
 
 
-## Linguagem Imperativa 2
+## Linguagem Imperativa 2 - LI2
 
 novidades: chamadas de função e retorno, literais e operadores booleanos e de string
 
@@ -1125,3 +1125,138 @@ ao chamar uma função, o programa checa a existência dela no contexto de execu
 motivação para a tipagem dos valores: evitar operar valores que não correspondem ao uso correto dos operadores ou que contradigam a avaliação das expressões
 - podemos mudar a gramática das expressões da linguagem LI1 (não evita todos os casos não desejados)
 - ou fazer de outra forma, evitando expressões mal formadas e mais
+
+
+## Linguagem Imperativa 2 Tipada - LI2T
+
+### Inicialização
+
+as variáveis são declaradas informando seu tipo apenas (**sem valores**). nas etapas de back-end da linguagem LI2T, vamos inicializar as variáveis com valores padrão de acordo com seus tipos
+
+```c
+int x;      // x = 0
+bool z;     // z = false ?
+String y;   // y = ""
+```
+
+### Checagem estática de tipos
+
+#### Variáveis
+
+além de impedir que alguns casos de códigos inconsistentes e potencialmente errôneos sejam tratados como programas bem-formados, a tipagem fornece uma integração maior entre etapas de desenvolvimento, exigindo que o programador tenha maior consciência do uso de funções e variáveis
+
+no processo de checagem (estática) de tipos, vamos manter um **contexto de tipos**. em um dado escopo, todas as variáveis devem ser mapeadas para um tipo no contexto de tipos
+
+a inicialização de uma variável, nessa checagem de tipos (front-end), consiste na declaração de seu nome e tipo simultaneamente. a execução do comando de inicialização atualiza o contexto de tipos, adicionando o mapeamento da variável para um tipo
+
+caso uma variável já esteja presente num mesmo contexto e a declaremos novamente, teremos um erro de declaração repetida
+
+#### Funções
+
+além disso, as funções devem retornar exatamente 1 valor, cujo tipo devemos declarar na assinatura da função. para a execução do programa, esse tipo declarado é uma promessa, nem sempre temos certeza que será retornado um valor (funções que não param, erros de execução, etc.). porém, podemos pelo menos checar se o programa define o retorno de uma expressão/valor de mesmo tipo da assinatura
+
+e claro que os parâmetros devem ter tipo definido. a assinatura da função passa a incluir também o tipo de cada parâmetro
+
+por enquanto, vamos simplificar o retorno de funções. o último comando de toda função deve ser da forma `return`, e apenas deve ser usado como último comando de uma função (isso pra facilitar a checagem de tipo e **promessa de retorno** da função)
+
+tanto a inferência de tipos quando a checagem de tipos são recursivas e chamam uma a outra
+
+#### Escopo
+
+para cada escopo do programa (uma função, um bloco de um while, etc.), tanto para a checagem de tipos quanto para a execução, é necessário que todas as variáveis utilizadas tenham sido inicializadas
+
+duas funções diferentes sempre terão escopos e contextos completamente separados, apenas se "comunicam" pela passagem de argumentos, tanto na compilação quanto na execução
+
+no caso de criar um bloco aninhado em um escopo maior, empilhamos um contexto de tipos do bloco aninhado sobre o contexto que o engloba. temos então uma **pilha de contextos** de execução e de tipos
+
+quando utilizarmos as funções de *lookup*, a busca será feita do topo da pilha para a base, dando prioridade para o escopo mais aninhado
+
+
+#### Exemplos
+
+```c
+int main () {
+  int f;
+  f = fat(5);
+  return f;
+}
+
+int fat (int n) {
+  int r;
+  if (n)
+    then r = n * fat(n-1);
+    else r = 1
+  return r;
+}
+```
+
+para avaliar o programa acima, precisamos checar se:
+
+`main`
+- o tipo de `f` é definido
+- a função `fat` é chamada corretamente, ela existe e os argumentos casam com os parâmetros
+- a atribuição de `f` é realizada com uma expressão de mesmo tipo da variável atribuída
+- a função retorna uma expressão de mesmo tipo que a promessa de sua assinatura
+
+`fat`
+- o tipo de `r` é definido
+- o comando `if` tem uma expressão numérica `n` e dois comandos para `then` e `else`
+- os comandos aninhados em `if` são bem tipados
+
+  `then`
+  - `fat` existe, o argumento `n-1` é do tipo da assinatura da função
+  - a multiplicação é feita entre um inteiro `n` e uma função de tipo inferido de retorno `int`
+  - é atribuído um inteiro a `r`
+
+  `else`
+  - é atribuído um inteiro 1 a `r`
+
+- a função retorna uma expressão do mesmo tipo que o declarado na sua assinatura
+
+
+o seguinte programa é válido, pois o bloco aninhado implica a formação de um novo contexto aninhado no escopo de `main`, de forma que não há dupla declaração de `i`
+```c
+int main () {
+  int i;
+  i = 2;
+
+  {
+    int i;
+    i = 3;
+  }
+
+  return i;
+}
+```
+
+já esse programa não é válido/bem-tipado, pois tenta acessar uma variável `i` não definida no escopo geral de `main`
+```c
+int main () {
+  int j;
+  j = 2;
+
+  {
+    int i;
+    i = 3;
+  }
+
+  j = i;
+  return j;
+}
+```
+
+o próximo programa também é válido
+```c
+int main () {
+  int j;
+  j = 2;
+  
+  {
+    int i;
+    i = 3;
+    j = i;
+  }
+  
+  return j;
+}
+```
