@@ -1260,3 +1260,30 @@ int main () {
   return j;
 }
 ```
+
+#### Implementação
+
+> obs: em Haskell, podemos usar a sintaxe `newName@ (AlgType a b)` para criar um alias `newName` para `AlgType a b`
+
+ambiente: contexto de tipos
+
+funções     | parâmetros                    | utilidade
+--          | --                            | --
+tk          | ambiente, comando             | checa se a expressão é válida em um contexto de tipos
+tke         | ambiente, expressão, tipo     | checa se uma expressão é do tipo alvo
+combChecks  | ambiente, expr1, expr2, tipo  | checa se duas expressões são de um mesmo tipo alvo
+tinf        | ambiente, expressão           | infere o tipo de uma expressão
+
+procedimento:
+
+devemos checar se todos os comandos de todas as funções de um programa são válidos \
+precisamos que:
+- todas as variáveis utilizadas sejam declaradas previamente
+- todos os comandos
+  - de atribuição tenham uma expressão de mesmo tipo da variável alvo
+  - de bloco contenha apenas comandos válidos
+  - if tenham expressão inteira e todos os comandos válidos 
+  - while tenham expressão inteira e comandos válidos
+- todas as chamadas de função
+  - recebam um argumento para cada parâmetro definido
+  - todos os argumentos sejam de mesmo tipo do parâmetro correspondente
