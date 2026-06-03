@@ -10,8 +10,10 @@ Doxyfile
 /26.1/OAC_monitoria/**/*db/
 /26.1/OAC_monitoria/**/output_files/
 /26.1/OAC_monitoria/**/simulation/
-/26.1/OAC_monitoria/**/*.qsf*
-# /26.1/OAC_monitoria/**/*.qpf*
-# /26.1/OAC_monitoria/**/*.qpf*
+/26.1/OAC_monitoria/**/*.qdf
+/26.1/OAC_monitoria/**/*.qws
+/26.1/OAC_monitoria/**/*.rpt
+
 /26.1/OAC_monitoria/**/*.out*
 /26.1/OAC_monitoria/**/*dump*
+/26.1/OAC_monitoria/**/*.bak
