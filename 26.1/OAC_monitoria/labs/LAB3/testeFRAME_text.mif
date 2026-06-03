@@ -1,0 +1,56 @@
+DEPTH = 16384;
+WIDTH = 32;
+ADDRESS_RADIX = HEX;
+DATA_RADIX = HEX;
+CONTENT
+BEGIN
+00000000 : ff000437;   % 6: 	li s0,0xFF000000	# Frame0 %
+00000001 : 0004041b;   % 6:  %
+00000002 : 0fc10297;   % 7: 	la t0,tela		# endereço da imagem %
+00000003 : ff828293;   % 7:  %
+00000004 : 0002a303;   % 8: 	lw t1,0(t0)		# Numero de linhas %
+00000005 : 0042a383;   % 9: 	lw t2,4(t0)		# numero de colunas %
+00000006 : 00000e13;   % 10: 	li t3,0			# contador %
+00000007 : 02730eb3;   % 11: 	mul t4,t1,t2		# numero de pixels %
+00000008 : 00828293;   % 12: 	addi t0,t0,8		# primeiro pixel da imagem %
+00000009 : 01de0e63;   % 13: LOOP: 	beq t3,t4,FORA		# Coloca a imagem no Frame0 %
+0000000a : 0002af03;   % 14: 	lw t5,0(t0) %
+0000000b : 01e42023;   % 15: 	sw t5,0(s0) %
+0000000c : 00428293;   % 16: 	addi t0,t0,4 %
+0000000d : 00440413;   % 17: 	addi s0,s0,4 %
+0000000e : 001e0e13;   % 18: 	addi t3,t3,1 %
+0000000f : fe9ff06f;   % 19: 	j LOOP %
+00000010 : ff100437;   % 21: FORA: 	li s0,0xFF100000	# Frame 1 %
+00000011 : 0004041b;   % 21:  %
+00000012 : 0fc10297;   % 22: 	la t0,tela %
+00000013 : fb828293;   % 22:  %
+00000014 : 0002a303;   % 23: 	lw t1,0(t0) %
+00000015 : 0042a383;   % 24: 	lw t2,4(t0) %
+00000016 : 00000e13;   % 25: 	li t3,0 %
+00000017 : 02730eb3;   % 26: 	mul t4,t1,t2 %
+00000018 : 00828293;   % 27: 	addi t0,t0,8 %
+00000019 : 03de0063;   % 28: LOOP2: 	beq t3,t4,FORA2	 %
+0000001a : 0002af03;   % 29: 	lw t5,0(t0) %
+0000001b : ffff4f13;   % 30: 	not t5,t5		# inverso do pixel %
+0000001c : 01e42023;   % 31: 	sw t5,0(s0) %
+0000001d : 00428293;   % 32: 	addi t0,t0,4 %
+0000001e : 00440413;   % 33: 	addi s0,s0,4 %
+0000001f : 001e0e13;   % 34: 	addi t3,t3,1 %
+00000020 : fe5ff06f;   % 35: 	j LOOP2 %
+00000021 : 0c800993;   % 37: FORA2:	li s3,200 %
+00000022 : ff200437;   % 38: 	li s0,0xFF200604	# Escolhe o Frame 0 ou 1 %
+00000023 : 6044041b;   % 38:  %
+00000024 : ff2004b7;   % 39: 	li s1,0xFF200510	# StopWatch %
+00000025 : 5104849b;   % 39:  %
+00000026 : ff200937;   % 40: 	li s2,0xFF200514	# randomico %
+00000027 : 5149091b;   % 40:  %
+00000028 : 00000393;   % 41: 	li t2,0			# inicio Frame 0 %
+00000029 : 00742023;   % 43: FORALOOP: sw t2,0(s0)		# seleciona a Frame t1 %
+0000002a : 0004a303;   % 44: 	lw t1,0(s1)		# le o tempo %
+0000002b : 00092383;   % 45: 	lw t2,0(s2)		# le um numero randomico %
+0000002c : 0333f3b3;   % 46: 	remu t2,t2,s3		# randomico entre 0 e 199 %
+0000002d : 00730333;   % 47: 	add t1,t1,t2		# soma com o tempo %
+0000002e : fe63d6e3;   % 49: LOOP3:	bge t2,t1,FORALOOP	# aguarda t2 segundos %
+0000002f : 0004a383;   % 50: 	lw t2,0(s1) %
+00000030 : ff9ff06f;   % 51: 	j LOOP3 %
+END;
