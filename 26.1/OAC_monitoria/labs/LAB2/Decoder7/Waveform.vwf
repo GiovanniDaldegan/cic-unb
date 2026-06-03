@@ -1,13 +1,13 @@
 /*<simulation_settings>
-<ftestbench_cmd>quartus_eda --gen_testbench --tool=modelsim_oem --format=verilog --write_settings_files=off TopDE -c TopDE --vector_source="C:/Users/giova/dev/github/cic-unb/26.1/OAC_monitoria/labs/LAB2/Decoder7_restored/simulation/qsim/decoder7.vwf" --testbench_file="C:/Users/giova/dev/github/cic-unb/26.1/OAC_monitoria/labs/LAB2/Decoder7_restored/simulation/qsim/decoder7.vwf.vt"</ftestbench_cmd>
-<ttestbench_cmd>quartus_eda --gen_testbench --tool=modelsim_oem --format=verilog --write_settings_files=off TopDE -c TopDE --vector_source="C:/Users/giova/dev/github/cic-unb/26.1/OAC_monitoria/labs/LAB2/Decoder7_restored/simulation/qsim/decoder7.vwf" --testbench_file="C:/Users/giova/dev/github/cic-unb/26.1/OAC_monitoria/labs/LAB2/Decoder7_restored/simulation/qsim/decoder7.vwf.vt"</ttestbench_cmd>
-<fnetlist_cmd>quartus_eda --write_settings_files=off --simulation --functional=on --flatten_buses=off --tool=modelsim_oem --format=verilog --output_directory="C:/Users/giova/dev/github/cic-unb/26.1/OAC_monitoria/labs/LAB2/Decoder7_restored/simulation/qsim/" TopDE -c TopDE</fnetlist_cmd>
-<tnetlist_cmd>quartus_eda --write_settings_files=off --simulation --functional=off --flatten_buses=off --timescale=1ps --tool=modelsim_oem --format=verilog --output_directory="C:/Users/giova/dev/github/cic-unb/26.1/OAC_monitoria/labs/LAB2/Decoder7_restored/simulation/qsim/" TopDE -c TopDE</tnetlist_cmd>
+<ftestbench_cmd>quartus_eda --gen_testbench --tool=modelsim_oem --format=verilog --write_settings_files=off TopDE -c TopDE --vector_source="C:/Users/giova/dev/github/cic-unb/26.1/OAC_monitoria/labs/LAB2/Decoder7/Waveform.vwf" --testbench_file="C:/Users/giova/dev/github/cic-unb/26.1/OAC_monitoria/labs/LAB2/Decoder7/simulation/qsim/Waveform.vwf.vt"</ftestbench_cmd>
+<ttestbench_cmd>quartus_eda --gen_testbench --tool=modelsim_oem --format=verilog --write_settings_files=off TopDE -c TopDE --vector_source="C:/Users/giova/dev/github/cic-unb/26.1/OAC_monitoria/labs/LAB2/Decoder7/Waveform.vwf" --testbench_file="C:/Users/giova/dev/github/cic-unb/26.1/OAC_monitoria/labs/LAB2/Decoder7/simulation/qsim/Waveform.vwf.vt"</ttestbench_cmd>
+<fnetlist_cmd>quartus_eda --write_settings_files=off --simulation --functional=on --flatten_buses=off --tool=modelsim_oem --format=verilog --output_directory="C:/Users/giova/dev/github/cic-unb/26.1/OAC_monitoria/labs/LAB2/Decoder7/simulation/qsim/" TopDE -c TopDE</fnetlist_cmd>
+<tnetlist_cmd>quartus_eda --write_settings_files=off --simulation --functional=off --flatten_buses=off --timescale=1ps --tool=modelsim_oem --format=verilog --output_directory="C:/Users/giova/dev/github/cic-unb/26.1/OAC_monitoria/labs/LAB2/Decoder7/simulation/qsim/" TopDE -c TopDE</tnetlist_cmd>
 <modelsim_script>onerror {exit -code 1}
 vlib work
 vlog -work work TopDE.vo
-vlog -work work decoder7.vwf.vt
-vsim -c -t 1ps -L cyclonev_ver -L altera_ver -L altera_mf_ver -L 220model_ver -L sgate_ver -L altera_lnsim_ver work.decoder7_vlg_vec_tst
+vlog -work work Waveform.vwf.vt
+vsim -voptargs="+acc" -c -t 1ps -L cyclonev_ver -L altera_ver -L altera_mf_ver -L 220model_ver -L sgate_ver -L altera_lnsim_ver work.decoder7_vlg_vec_tst
 vcd file -direction TopDE.msim.vcd
 vcd add -internal decoder7_vlg_vec_tst/*
 vcd add -internal decoder7_vlg_vec_tst/i1/*
@@ -20,12 +20,17 @@ proc simTimestamp {} {
 after 2500 simTimestamp
 run -all
 quit -f
+
+
+
+
+
 </modelsim_script>
 <modelsim_script_timing>onerror {exit -code 1}
 vlib work
 vlog -work work TopDE.vo
-vlog -work work decoder7.vwf.vt
-vsim -novopt -c -t 1ps -L cyclonev_ver -L altera_ver -L altera_mf_ver -L 220model_ver -L sgate_ver -L altera_lnsim_ver work.decoder7_vlg_vec_tst
+vlog -work work Waveform.vwf.vt
+vsim -voptargs="+acc" -c -t 1ps -L cyclonev_ver -L altera_ver -L altera_mf_ver -L 220model_ver -L sgate_ver -L altera_lnsim_ver work.decoder7_vlg_vec_tst
 vcd file -direction TopDE.msim.vcd
 vcd add -internal decoder7_vlg_vec_tst/*
 vcd add -internal decoder7_vlg_vec_tst/i1/*
@@ -38,6 +43,11 @@ proc simTimestamp {} {
 after 2500 simTimestamp
 run -all
 quit -f
+
+
+
+
+
 </modelsim_script_timing>
 <hdl_lang>verilog</hdl_lang>
 </simulation_settings>*/
@@ -48,19 +58,20 @@ the Block Editor! File corruption is VERY likely to occur.
 */
 
 /*
-Copyright (C) 2018  Intel Corporation. All rights reserved.
-Your use of Intel Corporation's design tools, logic functions 
-and other software and tools, and its AMPP partner logic 
+Copyright (C) 2025  Altera Corporation. All rights reserved.
+Your use of Altera Corporation's design tools, logic functions 
+and other software and tools, and any partner logic 
 functions, and any output files from any of the foregoing 
 (including device programming or simulation files), and any 
 associated documentation or information are expressly subject 
-to the terms and conditions of the Intel Program License 
-Subscription Agreement, the Intel Quartus Prime License Agreement,
-the Intel FPGA IP License Agreement, or other applicable license
+to the terms and conditions of the Altera Program License 
+Subscription Agreement, the Altera Quartus Prime License Agreement,
+the Altera IP License Agreement, or other applicable license
 agreement, including, without limitation, that your use is for
 the sole purpose of programming logic devices manufactured by
-Intel and sold by Intel or its authorized distributors.  Please
-refer to the applicable agreement for further details.
+Altera and sold by Altera or its authorized distributors.  Please
+refer to the Altera Software License Subscription Agreements 
+on the Quartus Prime software download page.
 */
 
 HEADER
@@ -68,11 +79,21 @@ HEADER
 	VERSION = 1;
 	TIME_UNIT = ns;
 	DATA_OFFSET = 0.0;
-	DATA_DURATION = 320.0;
+	DATA_DURATION = 10.0;
 	SIMULATION_TIME = 0.0;
 	GRID_PHASE = 0.0;
 	GRID_PERIOD = 10.0;
 	GRID_DUTY_CYCLE = 50;
+}
+
+SIGNAL("Clk")
+{
+	VALUE_TYPE = NINE_LEVEL_BIT;
+	SIGNAL_TYPE = SINGLE_BIT;
+	WIDTH = 1;
+	LSB_INDEX = -1;
+	DIRECTION = INPUT;
+	PARENT = "";
 }
 
 SIGNAL("In")
@@ -205,14 +226,18 @@ SIGNAL("Out[0]")
 	PARENT = "Out";
 }
 
-SIGNAL("Clk")
+TRANSITION_LIST("Clk")
 {
-	VALUE_TYPE = NINE_LEVEL_BIT;
-	SIGNAL_TYPE = SINGLE_BIT;
-	WIDTH = 1;
-	LSB_INDEX = -1;
-	DIRECTION = INPUT;
-	PARENT = "";
+	NODE
+	{
+		REPEAT = 1;
+		NODE
+		{
+			REPEAT = 50;
+			LEVEL 0 FOR 0.1;
+			LEVEL 1 FOR 0.1;
+		}
+	}
 }
 
 TRANSITION_LIST("In[3]")
@@ -222,10 +247,11 @@ TRANSITION_LIST("In[3]")
 		REPEAT = 1;
 		NODE
 		{
-			REPEAT = 1;
-			LEVEL 0 FOR 160.0;
-			LEVEL 1 FOR 160.0;
+			REPEAT = 3;
+			LEVEL 0 FOR 1.6;
+			LEVEL 1 FOR 1.6;
 		}
+		LEVEL 0 FOR 0.4;
 	}
 }
 
@@ -236,10 +262,11 @@ TRANSITION_LIST("In[2]")
 		REPEAT = 1;
 		NODE
 		{
-			REPEAT = 2;
-			LEVEL 0 FOR 80.0;
-			LEVEL 1 FOR 80.0;
+			REPEAT = 6;
+			LEVEL 0 FOR 0.8;
+			LEVEL 1 FOR 0.8;
 		}
+		LEVEL 0 FOR 0.4;
 	}
 }
 
@@ -250,10 +277,11 @@ TRANSITION_LIST("In[1]")
 		REPEAT = 1;
 		NODE
 		{
-			REPEAT = 4;
-			LEVEL 0 FOR 40.0;
-			LEVEL 1 FOR 40.0;
+			REPEAT = 12;
+			LEVEL 0 FOR 0.4;
+			LEVEL 1 FOR 0.4;
 		}
+		LEVEL 0 FOR 0.4;
 	}
 }
 
@@ -264,9 +292,9 @@ TRANSITION_LIST("In[0]")
 		REPEAT = 1;
 		NODE
 		{
-			REPEAT = 8;
-			LEVEL 0 FOR 20.0;
-			LEVEL 1 FOR 20.0;
+			REPEAT = 25;
+			LEVEL 0 FOR 0.2;
+			LEVEL 1 FOR 0.2;
 		}
 	}
 }
@@ -276,7 +304,7 @@ TRANSITION_LIST("Out[6]")
 	NODE
 	{
 		REPEAT = 1;
-		LEVEL X FOR 320.0;
+		LEVEL X FOR 10.0;
 	}
 }
 
@@ -285,7 +313,7 @@ TRANSITION_LIST("Out[5]")
 	NODE
 	{
 		REPEAT = 1;
-		LEVEL X FOR 320.0;
+		LEVEL X FOR 10.0;
 	}
 }
 
@@ -294,7 +322,7 @@ TRANSITION_LIST("Out[4]")
 	NODE
 	{
 		REPEAT = 1;
-		LEVEL X FOR 320.0;
+		LEVEL X FOR 10.0;
 	}
 }
 
@@ -303,7 +331,7 @@ TRANSITION_LIST("Out[3]")
 	NODE
 	{
 		REPEAT = 1;
-		LEVEL X FOR 320.0;
+		LEVEL X FOR 10.0;
 	}
 }
 
@@ -312,7 +340,7 @@ TRANSITION_LIST("Out[2]")
 	NODE
 	{
 		REPEAT = 1;
-		LEVEL X FOR 320.0;
+		LEVEL X FOR 10.0;
 	}
 }
 
@@ -321,7 +349,7 @@ TRANSITION_LIST("Out[1]")
 	NODE
 	{
 		REPEAT = 1;
-		LEVEL X FOR 320.0;
+		LEVEL X FOR 10.0;
 	}
 }
 
@@ -330,23 +358,7 @@ TRANSITION_LIST("Out[0]")
 	NODE
 	{
 		REPEAT = 1;
-		LEVEL X FOR 320.0;
-	}
-}
-
-TRANSITION_LIST("Clk")
-{
-	NODE
-	{
-		REPEAT = 1;
-		LEVEL 1 FOR 10.0;
-		NODE
-		{
-			REPEAT = 15;
-			LEVEL 0 FOR 10.0;
-			LEVEL 1 FOR 10.0;
-		}
-		LEVEL 0 FOR 10.0;
+		LEVEL X FOR 10.0;
 	}
 }
 
@@ -403,7 +415,7 @@ DISPLAY_LINE
 DISPLAY_LINE
 {
 	CHANNEL = "Out";
-	EXPAND_STATUS = EXPANDED;
+	EXPAND_STATUS = COLLAPSED;
 	RADIX = Binary;
 	TREE_INDEX = 5;
 	TREE_LEVEL = 0;
