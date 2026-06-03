@@ -687,3 +687,68 @@ para o agente do mundo de Wumpus...
 - as regras de inferência são as formas que ele pode obter novos fatos sobre o mapa a partir dos fatos já considerados
 
 considerando regras de inferência que permitam o agente concluir ou supor onde tem um buraco, onde está Wumpus e quais casas são seguras, ele é capaz de descobrir o que há em cada casa do mapa. no melhor dos casos, poderá fazer isso sem cair em buracos ou encontrar Wumpus
+
+### Explorando o mundo de Wumpus
+
+legenda de sentenças: \
+~a : negação de a \
+a e b: conjunção de a e b \
+a ou b: disjunlão de a e b \
+a > b: a implica b \
+X(x, y): objeto O ocupa a posição (x, y) do mapa (x coluna, y linha) \
+s(x, y): sensor s positivo na posição (x, y)
+
+ações: \
+av: avança na direção que o agente aponta \
+gira(l|r): gira 90º para esquerda ou direita \
+pega: pega objeto na mesma posição que o agente \
+at: atira flecha na direção que o agente aponta \
+sai: o agente sai da caverna (por onde entrou)
+
+objetos: \
+A: agente \
+O: ouro \
+B: buraco
+
+sensores (e regras do mundo de Wumpus): \
+f: fedor - RW1: casa de Wumpus e adjacentes \
+b: brisa - RW2: casa de buraco e adjacentes \
+c: choque - RW3: posição bloqueada, parede \
+l: luz do ouro - RW4: casa do ouro \
+g: grito de Wumpus - RW5: casa de Wumpus
+
+regras de inferência: \
+modus ponens \
+E-eliminação \
+E-introdução \
+Ou-introdução \
+Eliminação da dupla negação \
+Resolução unidade
+
+regras de inferência e regras de sensores: \
+s(x, y): s(x, y) ou s(x-1, y) ou s(x, y-1) ou s(x+1, y) ou s(x, y+1) \
+~s(x, y): ~s(x, y) e ~s(x-1, y) e ~s(x, y-1) e ~s(x+1, y) e ~s(x, y+1)
+
+situação do mundo: \
+![mundo_de_wumpus](mundo_de_wumpus.png)
+
+fixo: W(1, 3), O(2, 3), B(3, 1), B(3, 3), B(4, 4)
+inicial: A(1, 1), agente aponta para a direita
+
+agente      | ação    | sensores  | regras aplicadas  | novos fatos                                           | base de conhecimento (sentenças atômicas)
+--          | --      | --        | --                | --                                                    | --
+A(1, 1), r  |         | ~f(1, 1)  | Mod. Ponens, RW1  | ~W(1, 1) e ~W(2, 1) e ~W(1, 2)                        | {}
+A(1, 1), r  |         |           | E-eliminação x3   | ~W(1, 1), ~W(2, 1), ~W(1, 2)                          | {~W(1, 1), ~W(2, 1), ~W(1, 2)}
+A(1, 1), r  |         | ~b(1, 1)  | Mod. Ponens, RW2  | ~B(1, 1) e ~B(2, 1) e ~B(1, 2)                        | {~W(1, 1), ~W(2, 1), ~W(1, 2)}
+A(1, 1), r  |         |           | E-eliminação x3   | ~B(1, 1), ~B(2, 1), ~B(1, 2)                          | {~W(1, 1), ~W(2, 1), ~W(1, 2), ~B(1, 1), ~B(2, 1), ~B(1, 2)}
+A(2, 1), r  | av      | ~f(2, 1)  | Mod. Ponens, RW1  | ~W(2, 2) e ~W(1, 1) e ~W(2, 1) e ~W(3, 1)             | {~W(1, 1), ~W(2, 1), ~W(1, 2), ~B(1, 1), ~B(2, 1), ~B(1, 2)}
+A(2, 1), r  |         |           | E-eliminação x3   | ~W(2, 2), ~W(1, 1), ~W(2, 1), ~W(3, 1)                | {~W(1, 1), ~W(2, 1), ~W(1, 2), ~B(1, 1), ~B(2, 1), ~B(1, 2), ~W(3, 1), ~W(2, 2)}
+A(2, 1), r  |         | b(2, 1)   | Mod. Ponens, RW2  | B(2, 2) ou B(1, 1) ou B(2, 1) ou B(3, 1)              | {~W(1, 1), ~W(2, 1), ~W(1, 2), ~B(1, 1), ~B(2, 1), ~B(1, 2), ~W(3, 1), ~W(2, 2)}
+A(2, 1), r  |         |           | Ou-eliminação x2  | B(2, 2) ou B(3, 1)                                    | {~W(1, 1), ~W(2, 1), ~W(1, 2), ~B(1, 1), ~B(2, 1), ~B(1, 2), ~W(3, 1), ~W(2, 2)}
+A(2, 1), u  | gira(l) |           |                   |                                                       | {~W(1, 1), ~W(2, 1), ~W(1, 2), ~B(1, 1), ~B(2, 1), ~B(1, 2), ~W(3, 1), ~W(2, 2)}
+A(2, 1), l  | gira(l) |           |                   |                                                       | {~W(1, 1), ~W(2, 1), ~W(1, 2), ~B(1, 1), ~B(2, 1), ~B(1, 2), ~W(3, 1), ~W(2, 2)}
+A(1, 1), l  | av      |           |                   |                                                       | {~W(1, 1), ~W(2, 1), ~W(1, 2), ~B(1, 1), ~B(2, 1), ~B(1, 2), ~W(3, 1), ~W(2, 2)}
+A(1, 1), u  | gira(r) |           |                   |                                                       | {~W(1, 1), ~W(2, 1), ~W(1, 2), ~B(1, 1), ~B(2, 1), ~B(1, 2), ~W(3, 1), ~W(2, 2)}
+A(1, 2), u  | av      | f(1, 2)   | Mod. Ponens, RW1  | W(1, 3) ou W(1, 2) ou W(2, 2) ou W(1, 1)              | {~W(1, 1), ~W(2, 1), ~W(1, 2), ~B(1, 1), ~B(2, 1), ~B(1, 2), ~W(3, 1), ~W(2, 2)}
+A(1, 2), u  |         |           | Ou-eliminação x3  | W(1, 3)                                               | {~W(1, 1), ~W(2, 1), ~W(1, 2), ~B(1, 1), ~B(2, 1), ~B(1, 2), ~W(3, 1), ~W(2, 2), W(1, 3)}
+...         | ...     | ...       | ...               | ...                                                   | {...}
