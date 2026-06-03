@@ -1098,7 +1098,11 @@ como o interpretador vai representar o programa em LI1
 Prog (SBlock [SAss (Ident "x") (EInt 1), SAss (Ident "y") (EInt 2), SAss (Ident "y") (EInt 2), SAss (Ident "z") (EAdd (Ident "x") (Ident "y"))])
 ```
 
-> EXERCÍCIO: Estenda a definição de tipos algébricos e do interpretador para implementar os comandos for e if. (tentar fazer o for como um bloco único ou como um caso específico do while)
+> EXERCÍCIO: Estenda a definição de tipos algébricos e do interpretador para implementar os comandos `for` e `if`. (tentar fazer o for como um bloco único ou como um caso específico do while)
+
+duas abordagens para o `for`:
+- normalização/desugaring, reutilizando o bloco while, adicionando a execução do comando de inicialização do `for` e passando os comandos de execução interna e o comando de atualização para controle do while
+- criando novo comando de loop, mas adicionando execução de comando a cada iteração
 
 LI1:
 - contexto dinâmico com variáveis
