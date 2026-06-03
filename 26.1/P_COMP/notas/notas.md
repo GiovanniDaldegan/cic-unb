@@ -534,3 +534,58 @@ vetor psum \
 pos_delta = delta[0] \
 pos_delta += delta[i] \
 psum[i] = v[i] + pos_delta
+
+
+# Paradigmas para programação competitiva
+
+- Busca completa
+- Divisão e conquista
+- Algoritmos gulosos
+- Programação dinâmica
+
+## Busca completa
+
+exaurir todas os casos possíveis para encontrar uma solução \
+desvantagens: custoso, implica em complexidades maiores de tempo e memória \
+vantagens: simplicidade da implementação, certeza da resposta certa
+
+### Geradores e filtros
+
+
+### Produto cartesiano
+
+dados n conjuntos de dados, formamos todas as tuplas de tamanho n possíveis, d
+
+a geração dos subconjuntos está vinculada à forma que definimos os conjuntos de dados (vector, máscara de bits, set)
+
+### Permutações
+
+`next_permutation()`, `prev_permutation()` | utilizam iterators
+
+### Combinações
+
+$$
+
+com repetições:
+
+$$
+
+## Divisão e conquista
+
+vantagens: \
+desvantagens: 
+
+## Algoritmos gulosos
+
+deixa a força bruta de lado. avalia a situação atual e prevê qual é o melhor passo a se tomar para cortar casos desnecessários/não promissores
+
+vantagens: otimiza complexidades de tempo e memória \
+desvantagens: não garante uma resposta certa nem ideal (não completo nem ótimo); lógica complexa
+
+## Programação dinâmica
+
+busca a resposta correta, mas reutilizando resultados de computações para evitar computar dados desnecessários ou redundantes
+
+vantagens:
+desvantagens:
+
