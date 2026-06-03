@@ -1,3 +1,6 @@
+// https://codeforces.com/group/oU854jcGqI/contest/693503/problem/Extra1
+// codeforces grp oU854jcGqI 693503 Extra1 - Controle Binário
+
 #include <bits/stdc++.h>
 #define ll long long
 #define pii pair<int, int>
@@ -17,6 +20,7 @@ int main() {
       n *= 2;
     
     count ++;
+    cout << n << ' ' << count << '\n';
   }
   
   cout << count << '\n';
