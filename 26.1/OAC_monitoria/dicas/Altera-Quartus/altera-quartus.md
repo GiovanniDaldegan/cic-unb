@@ -10,10 +10,13 @@ senão
 Display 7 segmentos
 S[]
 
+Índice
+1. [Setup Quartus + ModelSim](#setup-quartus--modelsim)
+    1. [Setup Quartus + ModelSim](#setup-quartus--modelsim)
+    1. [Setup Quartus + ModelSim](#setup-quartus--modelsim)
+1. 
 
-Roteiro:
-
-## Setup Quartus + ModelSim
+## Setup Quartus & ModelSim
 componentes:
 - Quartus Prime Lite Edition
 - Questa*-Altera FPGA and Starter Editions
