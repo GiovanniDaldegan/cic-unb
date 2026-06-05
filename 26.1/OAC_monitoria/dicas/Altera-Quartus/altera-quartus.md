@@ -114,7 +114,7 @@ Exemplo de erro na simulação por variável não definida (`SALT_LICENSE_SERVER
 
     ![set_as_top-level_entity](set_as_top-level_entity.png)
 
-1. Analise recursos físicos \
+1. Analise os recursos físicos \
     Anote os valores mostrados no Flow Summary depois da compilação:
     - Total de ALMs 
     - Total de registradores
@@ -123,28 +123,32 @@ Exemplo de erro na simulação por variável não definida (`SALT_LICENSE_SERVER
 
     ![requisitos_fisicos](requisitos_fisicos.png)
 
-1. Analise recursos temporais
+1. Analise os recursos temporais
 
     1. Tools > Timing Analyzer \
         ![tools_timing_analyzer](tools_timing_analyzer.png)
 
-    1. Na janela aberta, na seção "Tasks" à esquerda, clique duas vezes nas opções "Create Timing Netlist" \
+    1. Na janela aberta, na seção "Tasks" à esquerda, clique duas vezes nas opções "Create Timing Netlist", depois em "Report FMax Summary" \
+        Anote a **frequência máxima** para o design. Arredonde esse valor para baixo e use-o pra calcular o **perído mínimo de clock** que o design aguenta.
+
         ![create_netlist_fmax.png](create_netlist_fmax.png)
     
-    1. Crie um clock. Vá em Constraints > Create Clock
-        Certifique-se de que não há outro clock já definido. \
+    1. Caso, seu projeto seja síncrono (utilize clock) crie um clock. Vá em Constraints > Create Clock \
+        1. Dê um nome para o clock
+        1. Insira o período mínimo de clock calculado anteriormente
         Se estiver usando o processador RISC-V pronto, ele já tem clocks definidos, não precisa criar outro. <!-- TODO: checar se é isso mesmo -->
-    
-    1. De volta na seção "Tasks", clique duas vezes em "Report FMax Summary" \
-
-        Anote a **frequência máxima** para o design. Arredonde esse valor para baixo e use-o pra calcular o **perído mínimo de clock** que o design aguenta.
 
     1. Clique duas vezes na opção "Report Datasheet"
 
-        Na seção "Report" também à esquerda, visualize as tabelas de Setup Times (**tsu**), Hold Times (**th**) e Clock to Output Times (**tco**). \
-        Visualize também a tabela de Propagation delay.
+        Na seção "Report" também à esquerda, visualize as tabelas e anote:
+        - Setup Times (**tsu**) anote o menor valor 
+        - Hold Times (**th**)
+        - Clock to Output Times (**tco**). \
+        - Propagation delay.
 
         A tabela de tsu **deve** ter valores negativos, enquanto as tabelas de th, tco e tpd devem ter valores positivos. Se não seguir essa regra, quer dizer que o período de clock definido é curto demais e a execução terá hazards.
+    
+
 
 
 ## Simulação - Quartus
