@@ -1175,6 +1175,7 @@ no caso de criar um bloco aninhado em um escopo maior, empilhamos um contexto de
 
 quando utilizarmos as funções de *lookup*, a busca será feita do topo da pilha para a base, dando prioridade para o escopo mais aninhado
 
+shallow vs deep
 
 #### Exemplos
 
@@ -1271,12 +1272,14 @@ int main () {
 
 ambiente: contexto de tipos
 
-funções     | parâmetros                    | utilidade
---          | --                            | --
-tk          | ambiente, comando             | checa se a expressão é válida em um contexto de tipos
-tke         | ambiente, expressão, tipo     | checa se uma expressão é do tipo alvo
-combChecks  | ambiente, expr1, expr2, tipo  | checa se duas expressões são de um mesmo tipo alvo
-tinf        | ambiente, expressão           | infere o tipo de uma expressão
+funções     | parâmetros                | retorno     | utilidade
+--          | --                        | --          | --
+typeCheckP  | programa                  | [contexto]  | checa se todas as funções de um programa são válidas
+typeCheckF  | contexto, função          | contexto    | checa se função é válidas
+tk          | contexto, comando         | contexto    | checa se a expressão é válida em um contexto de tipos
+tke         | cntxt, expressão, tipo    | cntxt, expr | checa se uma expressão é do tipo alvo
+combChecks  | cntxt, expr1, expr2, tipo | tipo        | checa se duas expressões são de um mesmo tipo alvo
+tinf        | cntxt, expr               | tipo        | infere o tipo de uma expressão
 
 procedimento:
 
@@ -1291,3 +1294,53 @@ precisamos que:
 - todas as chamadas de função
   - recebam um argumento para cada parâmetro definido
   - todos os argumentos sejam de mesmo tipo do parâmetro correspondente
+
+
+##### Garantir a promessa de retorno
+
+funções                       | parâmetros        | retorno     | utilidade
+--                            | --                | --          | --
+checkExecutionPathExhaustion  | lista de comandos | bool        | checa se uma seq de cmds tem todos caminhos terminados em `return`
+checkExecutionPathExhaustionS | comando           | bool        | checa se um comando termina em `return` (em todos caminhos)
+deadCodeFree                  | lista de comandos | bool        | checa se uma seq de cmds não tem código morto (após `return`)
+deadCodeFreeS                 | comando           | bool        | checa se um comando não é código morto
+
+
+##### Normalização
+
+dado um programa (sem erro de tipos) com "açúcar sintático", formamos um novo programa que substitui as formas alternativas de comandos pelas convencionais e suportadas pelo programa
+
+```c
+// declaração de múltiplas variáveis
+int i, j;       /*->*/    int i;
+                          int j;
+
+// inicialização e atribuição
+int i = 10;     /*->*/    int i;
+                          i = 10;
+
+// do-while
+do {blck}       /*->*/    {blck};
+while (expr);             while (expr) {blck}
+
+```
+
+outras normalizações: for, 
+
+#### Otimização estática
+
+##### Pré-avaliação
+
+a checagem de tipos passa a guardar valores de variáveis declaradas como constantes para substituir todas suas ocorrências
+
+#### Otimização dinâmica
+
+##### Memoização
+
+armazenar uma cache pra evitar computar os exatos mesmos valores novamente
+
+essa otimização transforma a execução em complexidade temporal exponencial de uma função recursiva de fatorial em complexidade linear
+
+#### curiosidade: SYB
+
+scrap boiler plate?
