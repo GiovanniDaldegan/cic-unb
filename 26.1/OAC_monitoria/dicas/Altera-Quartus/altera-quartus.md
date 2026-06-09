@@ -1,4 +1,12 @@
-# Tutorial e dicas para desenvolvimento Quartus - FPGA
+# Tutorial e dicas para desenvolvimento Quartus + FPGA
+
+<!-- 
+TODO:
+- borrar caminhos da minha máquina
+- análise de requisitos temporais (tirar dúvidas de quais tempos anotar)
+- seção simulação Quartus + troubleshooting
+-->
+
 
 ## Sobre este texto
 
@@ -133,7 +141,7 @@ Exemplo de erro na simulação por variável não definida (`SALT_LICENSE_SERVER
 
         ![create_netlist_fmax.png](create_netlist_fmax.png)
     
-    1. Caso, seu projeto seja síncrono (utilize clock) crie um clock. Vá em Constraints > Create Clock \
+    1. Caso, seu projeto seja síncrono (utilize clock) crie um clock. Vá em Constraints > Create Clock
         1. Dê um nome para o clock
         1. Insira o período mínimo de clock calculado anteriormente
         Se estiver usando o processador RISC-V pronto, ele já tem clocks definidos, não precisa criar outro. <!-- TODO: checar se é isso mesmo -->
@@ -143,7 +151,7 @@ Exemplo de erro na simulação por variável não definida (`SALT_LICENSE_SERVER
         Na seção "Report" também à esquerda, visualize as tabelas e anote:
         - Setup Times (**tsu**) anote o menor valor 
         - Hold Times (**th**)
-        - Clock to Output Times (**tco**). \
+        - Clock to Output Times (**tco**)
         - Propagation delay.
 
         A tabela de tsu **deve** ter valores negativos, enquanto as tabelas de th, tco e tpd devem ter valores positivos. Se não seguir essa regra, quer dizer que o período de clock definido é curto demais e a execução terá hazards.
@@ -154,7 +162,7 @@ Exemplo de erro na simulação por variável não definida (`SALT_LICENSE_SERVER
 ## Simulação - Quartus
 
 
-## Simulação - FPGA DE1-SoC (Cyclone V)
+## Execução - FPGA DE1-SoC (Cyclone V)
 
 ### Carregar design na placa
 
@@ -227,7 +235,8 @@ S[]
     Lembre-se de selecionar o tipo correto de arquivo na opção "Files of Type", por padrão o explorador procura por arquivos `.hex` \
     ![in-sys_content_editor_select_file](in-sys_content_editor_select_file.png)
 
-1. `F7` carrega a memória selecionada e sobrescreve na placa, reiniciando a execução na placa
+1. `F7` carrega a memória selecionada e sobrescreve na placa.\
+    Obs.: Isso **NÃO** reinicia a execução na máquina, `PC` e o banco de registradores não mudarão.
 
 
 # Referências
