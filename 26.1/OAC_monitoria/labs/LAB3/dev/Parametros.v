@@ -41,9 +41,9 @@ Thiago Pereira Ribeiro Dantas				- 14/0170961
 
 // ************************************************************
 // * Escolha a arquitetura (ISA) a ser implementada           *
-//`define RV32I
+`define RV32I
 //`define RV32IM
-`define RV32IMF
+//`define RV32IMF
 
 
 // ************************************************
