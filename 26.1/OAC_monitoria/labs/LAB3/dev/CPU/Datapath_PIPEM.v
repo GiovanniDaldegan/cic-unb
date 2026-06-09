@@ -726,7 +726,9 @@ wire [31:0] wEX_ForwardB2;
 always @(*)
 	case(fsw)	
 		1'b0:	wEX_ForwardB2 <= wEX_ForwardB;
+`ifdef RV32IMF
 		1'b1:	wEX_ForwardB2 <= wEX_FRead2;
+`endif
 		default 	wEX_ForwardB2 <= ZERO;
 	endcase
 	
