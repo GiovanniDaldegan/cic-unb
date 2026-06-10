@@ -7,7 +7,7 @@ os trabalhos serão exercícios. nos últimos semestres as notas das provas eram
 
 
 
-# Módulo 1
+# Módulo 1 - Linguagem Funcional (Haskell)
 
 ## INTRODUÇÃO
 
@@ -993,7 +993,7 @@ f x y
 ```
 
 
-# Módulo 2
+# Módulo 2 - Linguagem Imperativa
 
 a história dos compiladores acompanha a história da abstração nas linguagens de programação. começa nas linguagens de máquina (baixo nível) e, para aumentar produtividade, usabilidade, simplicidade do código fonte e portabilidade, passa a abstrair os conceitos e aproximar das linguagem naturais (alto nível)
 
@@ -1344,3 +1344,47 @@ essa otimização transforma a execução em complexidade temporal exponencial d
 #### curiosidade: SYB
 
 scrap boiler plate?
+
+
+# Módulo 3 - Linguagem Orientada a Objeto
+
+## Linguagem Orientada a Objetos 1
+
+### Classes
+
+agora, um programa é uma lista de classes
+
+toda classe pode ter
+- atributos
+- métodos (construtores)
+- outras classes
+
+
+### Information Hiding
+
+restringir o acesso a informações (atributos e métodos) a contextos específicos do programa
+
+obs: o *pattern matching* fere o princípio de de information hiding, pois expôe a estrutura de uma função para o usuário da função. além de tornar o código mais acoplado, a operação da função fica dependente dos padrões da sua definição. o programa se torna mais sensível a mudanças, 
+
+
+### Contexto de tipos na execução
+
+precisamos manter um contexto de tipos durante a execução para:
+- instanciar uma classe alocando memória na heap
+- consultar os métodos e atributos de um objeto (buscando a classe da qual ele é tipo)
+
+### Implementação
+
+novidades em relação à Linguagem Imperativa 2 Tipada
+
+expressões:
+- instanciação de classe: cria um objeto da classe indicada
+- chamada de método: chama uma função da classe do objeto sobre ele
+
+comandos:
+- um comando pode ser uma expressão \
+  uma chamada de função que não retorna nenhum valor pode ser usada como comando. sua estrutura é apenas uma chamada `objeto.metodo(args)`
+
+agora, expressões podem alterar o contexto de execução (new, chamada de método). sendo assim, a avaliação de uma função deve retornar o valor avaliado para a expressão e o contexto atualizado (novo objeto ou execução do método chamado)
+
+> EXERCÍCIO: desenhar a execução do programa da classe Aluno (instanciações na memória) + analisar a avaliação de ENew
