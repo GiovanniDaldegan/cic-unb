@@ -8,7 +8,6 @@ Doxyfile
 # OAC 26.1 - monitoria
 /26.1/OAC_monitoria/**/*.db_info
 /26.1/OAC_monitoria/**/*db/
-/26.1/OAC_monitoria/**/output_files/
 /26.1/OAC_monitoria/**/simulation/
 /26.1/OAC_monitoria/**/*.qdf
 /26.1/OAC_monitoria/**/*.qws
