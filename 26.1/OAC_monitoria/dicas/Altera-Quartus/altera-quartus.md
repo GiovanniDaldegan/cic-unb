@@ -5,6 +5,11 @@ TODO:
 - borrar caminhos da minha máquina
 - análise de requisitos temporais (tirar dúvidas de quais tempos anotar)
 - seção simulação Quartus + troubleshooting
+
+extra
+- projetos e módulos de teste para checar o funcionamento de uma instalação do Quartus
+- testar Quartus+FPGA nos PCs do LINF1
+- link para texto mais detalhado e abrangente de troubleshooting (recursos da UnB, computadores do LINF, versões específicas do Quartus, conflitos com SOs específicos, etc.)
 -->
 
 
@@ -15,6 +20,15 @@ Caso a resposta para seu problema ou dúvida não esteja aqui, **leia o tutorial
 
 Se tiver alguma dúvida ou sugestão para este arquivo, por favor entre em contato pela monitoria ou me mande mensagem pelo Teams. \
 Posso fazer uma sessão FAQ depois aqui com dúvidas comuns.
+
+<!-- 
+Caso queira utilizar alguma versão de programa diferente das seguintes, siga para o [arquivo que trata de todos os problemas possíveis do mundo](https://pudim.com.br)
+- Quartus Prime Lite Edition 25.1
+- Questa Starter Edition
+- ModelSim
+
+<br>
+-->
 
 Escrito por Giovanni Daldegan.
 
