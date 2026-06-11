@@ -664,8 +664,24 @@ Episódico ou Não-Episódico
 Estático ou Dinâmico
 Discreto ou Contínuo
 
+<!-- 
+Li Weigang
 
 namkim
+
+Li passou um exercício rapidinho pra formular sentenças em LPO
+
+eu e o colega do meu lado demos um exemplo quase idêntico ao do quadro (nem todo brasileiro gosta de futebol -> nem todo americano gosta de basquete)
+li não gostou que repetimos a ideia, descartou (dps entendi q era pq ele queria eleger uma das respostas pra aparecer na prova)
+
+alguns grupos pra frente, alguém também imita a estrutura de outro exemplo, trocando não gostar de corrupção e burocracia por não gostar de fruta e legume. Li fala que tá errado, pq tem que gostar de fruta e legume
+
+outro fala algo sobre não gostar de pregar o dedo, que é ruim. "ah, mas esse é muito estranho! não", rindo
+
+no final, ele pergunta qual foi o melhor exemplo. uma pessoa fala que é o de pregar o dedo. ele discorda pq é muito estranho
+
+esse cara é engraçado. a aula foi meio freestyle, n ajudou tanto quem não fez lógica, LC1 ou não lembra muito de FTC. achei bem cômico como o critério de validade dos exemplos variava: uma hora, a ideia era ser sempre verdadeiro para a estrutura real do mundo; outra, era o moral e certo. nunca foi se a frase era bem formada ou não, faltou contexto
+-->
 
 ### Tipos de raciocínio
 
@@ -694,7 +710,7 @@ legenda de sentenças: \
 ~a : negação de a \
 a e b: conjunção de a e b \
 a ou b: disjunlão de a e b \
-a > b: a implica b \
+a -> b: a implica b \
 X(x, y): objeto O ocupa a posição (x, y) do mapa (x coluna, y linha) \
 s(x, y): sensor s positivo na posição (x, y)
 
@@ -732,7 +748,7 @@ s(x, y): s(x, y) ou s(x-1, y) ou s(x, y-1) ou s(x+1, y) ou s(x, y+1) \
 situação do mundo: \
 ![mundo_de_wumpus](mundo_de_wumpus.png)
 
-fixo: W(1, 3), O(2, 3), B(3, 1), B(3, 3), B(4, 4)
+fixo: W(1, 3), O(2, 3), B(3, 1), B(3, 3), B(4, 4) \
 inicial: A(1, 1), agente aponta para a direita
 
 agente      | ação    | sensores  | regras aplicadas  | novos fatos                                           | base de conhecimento (sentenças atômicas)
@@ -752,3 +768,33 @@ A(1, 1), u  | gira(r) |           |                   |                         
 A(1, 2), u  | av      | f(1, 2)   | Mod. Ponens, RW1  | W(1, 3) ou W(1, 2) ou W(2, 2) ou W(1, 1)              | {~W(1, 1), ~W(2, 1), ~W(1, 2), ~B(1, 1), ~B(2, 1), ~B(1, 2), ~W(3, 1), ~W(2, 2)}
 A(1, 2), u  |         |           | Ou-eliminação x3  | W(1, 3)                                               | {~W(1, 1), ~W(2, 1), ~W(1, 2), ~B(1, 1), ~B(2, 1), ~B(1, 2), ~W(3, 1), ~W(2, 2), W(1, 3)}
 ...         | ...     | ...       | ...               | ...                                                   | {...}
+
+
+## Lógica de Predicados (de 1ª Ordem)
+
+termos: constantes e variáveis \
+
+funções: tomam n termos e são avaliadas para apenas um termo, sendo n inteiro tal que 0 <= n \
+
+predicados: tomam uma sentença e são avaliadas para um valor de verdade (verdadeiro, falso) \
+
+sentenças: atômicas ou complexas
+- atômicas: formadas por apenas 1 predicado
+- complexas: formadas por predicados unidos por conectivos (operadores)
+
+conectivos:
+- negação: não A
+- conjunção: A e B
+- disjunção: A ou B
+- implicação: se A, então B
+- bi-implicação / equivalência: A = B, (A e B) ou (não A e não B)
+
+quantificadores:
+- universal: Ax, para todo x; x assume todo termo
+- existencial: Ex, existe x; x assume um termo
+
+Ax (Rx -> Vx) dado que Rx: x respira, Vx: x é vivo
+Ax (Rx -> Vx) =||= ~Ex ~(Rx -> Vx) =||= ~Ex (Rx e ~Vx)
+
+
+"LPO não faz engajamentos ontológicos para coisas como tempo, categorias, e eventos"
