@@ -5,6 +5,7 @@ TODO:
 - borrar caminhos da minha máquina
 - análise de requisitos temporais (tirar dúvidas de quais tempos anotar)
 - seção simulação Quartus + troubleshooting
+- problema -voptargs="+acc" no Quartus 24.1
 
 extra
 - projetos e módulos de teste para checar o funcionamento de uma instalação do Quartus
@@ -43,16 +44,27 @@ Escrito por Giovanni Daldegan.
 ## Setup Quartus & ModelSim
 
 Componentes necessários (mínimo para OAC):
-- Quartus Prime Lite Edition
-- Questa*-Altera FPGA and Starter Editions
-- Cyclone V device support
-- MAX 10 FPGA device support (não tenho certeza se é necessário, mas de toda forma é bem pequeno)
+
+- Quartus 25.1:
+    - Quartus Prime Lite Edition 25.1
+    - Questa*-Altera FPGA and Starter Editions 25.1
+    - Cyclone V device support (25.1)
+    - MAX 10 FPGA device support (25.1)
+
+- ModelSim 20.1
+
+Reserve pelo menos 20 GB para o download e instalação dos programas. Se estiver fazendo a **instalação manual ou completa**, reserve 40 GB. Se não tiver todo esse espaço, apague os instaladores a cada programa instalado com sucesso e funcional (teste se está tudo certo antes de apagar).
+
+Os **componentes mínimos** instalados devem ocupar por volta de 20 GB.
+
+> [!note]
+> Os valores de memória necessária para a instalação apresentados aqui tomam como referência as versões para Windows. Em geral, as versões para Linux parecem ocupar ainda mais espaço em disco.
 
 
 ### Instalação Quartus ([Windows](https://www.altera.com/downloads/fpga-development-tools/quartus-prime-lite-edition-design-software-version-25-1-windows), [Linux](https://www.altera.com/downloads/fpga-development-tools/quartus-prime-lite-edition-design-software-version-25-1-linux))
 
-- Instalador (recomendado)
-    1. Baixe o instalador personalizado
+- Instalador (**recomendado**; ~17,94 GB necessários em disco, instalação ocupa ~13,76 GB)
+    1. Baixe o instalador personalizável
     
     1. Selecione os componentes listados [acima](#setup-quartus--modelsim)
     
@@ -60,30 +72,32 @@ Componentes necessários (mínimo para OAC):
 
     ![instalador](src_quartus_fpga/instalador.png)
 
-- Manual
+- Manual (~21,32 GB necessários em disco, instalação ocupa ~17,19 GB)
     1. Baixar, **na mesma pasta**, os [componentes listados](#setup-quartus--modelsim)
 
     1. Com todos instaladores e suportes de dispositivos na mesma pasta temporária:
         - Instalar Quartus Prime
         - Instalar Questa*-Altera FPGA and Starter Editions
 
-- Completo (download 6.5 GB, espaço necessário 31.37 GB)
+- Completo (~31,37 GB necessários em disco, instalação ocupa ~18,35 GB)
     1. Baixar o instalador completo (Quartus + Questa-Altera FPGA + suportes para dispositivos)
 
     1. Instalar
 
 Altera Download Center - Quartus Prime Lite: \
-https://www.altera.com/downloads/fpga-development-tools/quartus-prime-pro-edition-design-software-version-26-1-windows
+https://www.altera.com/downloads/fpga-development-tools/quartus-prime-lite-edition-design-software-version-25-1
 
 
 #### Possíveis falhas na instalação
 
-É possível que o instalador tenha problemas para estabelecer uma conexão com a internet. Se o problema persistir, pode ser melhor instalar os proramas individualmente (ou a versão completa). \
+É possível que o instalador tenha problemas para estabelecer uma conexão com a internet. Se o problema persistir, pode ser melhor instalar os programas individualmente (ou a versão completa).
+
+Teste a conexão em Settings > Test internet connection: \
 ![instalador_erro](src_quartus_fpga/instalador_erro.png)
 
 
 ### Instalação ModelSim ([Windows/Linux](https://www.altera.com/downloads/simulation-tools/modelsim-fpgas-standard-edition-software-version-20-1-1))
-Baixar e instalar ModelSim-FPGA Edition.
+Baixar e instalar ModelSim-FPGA Edition (3,02 GB necessários em disco, instalação ocupa 1,82 GB).
 
 Altera Download Center - ModelSim \
 https://www.altera.com/downloads/simulation-tools/modelsim-fpgas-standard-edition-software-version-20-1-1
@@ -133,8 +147,12 @@ Exemplo de erro na simulação por variável não definida (`SALT_LICENSE_SERVER
 
 1. Selecione o arquivo correto como Top-Level \
     Na seção Project Navigator, selecione a aba Files. Clique com o botão direito sobre o arquivo e selecione a opção "Set as Top-Level Entity".
-
+    
     ![comp_top-level](src_quartus_fpga/comp_top-level.png)
+    
+    Caso esteja compilando o processador RISC-V 24.1, selecione a **arquitetura e a ISA** a desejadas no arquivo `Parametros.v` e garanta que `TopDE.v` esteja como Top-Level.
+    
+    ![processador_parametros](src_quartus_fpga/processador_parametros.png)
 
 1. Analise os recursos físicos \
     Anote os valores mostrados no Flow Summary depois da compilação:
@@ -235,6 +253,28 @@ S[]
 
 -->
 
+### Gerar arquivos de inicialização de memória
+
+Para instanciar memórias no projeto do Quartus, utilizamos arquivos `.mif` (Memory Initialization File) que guardam os dados sequencialmente, no formato `<endereço> : <dado>;`. No caso de processadores de 32b, precisamos que os dados sejam representados com 1 word cada.
+
+Para gerar os arquivos `.mif` dos segmentos de dados e texto de um programa RISC-V, utilizamos a ferramenta RARS. \
+Primeiro, abra o programa que deseja carregar no projeto no RARS e siga os passos:
+
+1. Compile o programa. \
+    ![rars_compilar](src_quartus_fpga/rars_compilar.png)
+
+1. Selecione a ferramenta em File > Dump Memory \
+    ![rars_dump_mem](src_quartus_fpga/rars_dump_mem.png)
+
+1. Clique no botão Dump to file \
+    **Não precisa escolher `.text` ou `.data`** na opção Memory Segment, a ferramenta cria arquivos `.mif` para ambos os segmentos de uma só vez.
+
+    Garanta que a o formato selecionado é **MIF format**.
+    
+    ![rars_dump_to_file](src_quartus_fpga/rars_dump_to_file.png)
+
+1. Escolha um nome significativo e uma pasta prática, de preferência específica para arquivos `.mif` e dentro do seu projeto.
+
 ### Editar memória da placa
 
 1. Tools > In-System Content Editor
@@ -252,7 +292,7 @@ S[]
     ![in-sys_content_editor_select_file](src_quartus_fpga/in-sys_content_editor_select_file.png)
 
 1. `F7` carrega a memória selecionada e sobrescreve na placa.\
-    Obs.: Isso **NÃO** reinicia a execução na máquina, `PC` e o banco de registradores não mudarão.
+    Obs.: Isso **NÃO** reinicia a execução na máquina, `PC` e o banco de registradores não mudarão. Aperte KEY[0] para reiniciar a execução.
 
 
 # Referências
