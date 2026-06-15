@@ -1373,6 +1373,14 @@ precisamos manter um contexto de tipos durante a execução para:
 - instanciar uma classe alocando memória na heap
 - consultar os métodos e atributos de um objeto (buscando a classe da qual ele é tipo)
 
+então, durante execução, teremos um contexto para cada classe, representando seu esqueleto: atributos e seus tipos para instanciação; métodos e seus tipos para chamada de método em algum objeto
+
+
+### Contexto de objeto
+
+cada instância de uma classe deve ter um contexto de execução com seus atributos. além disso, a partir do momento que temos herança, faz bastante sentido guardar, também nesse contexto, o tipo do objeto (um identificador de sua classe).
+
+
 ### Implementação
 
 novidades em relação à Linguagem Imperativa 2 Tipada
@@ -1388,3 +1396,81 @@ comandos:
 agora, expressões podem alterar o contexto de execução (new, chamada de método). sendo assim, a avaliação de uma função deve retornar o valor avaliado para a expressão e o contexto atualizado (novo objeto ou execução do método chamado)
 
 > EXERCÍCIO: desenhar a execução do programa da classe Aluno (instanciações na memória) + analisar a avaliação de ENew
+
+
+### Herança
+
+duplicação de código de classe
+- mais simples de realizar
+- todas as informações da nova classe estão explícitas e são de acesso imediato para quem analisa seu código
+- alto custo de manutenção de código (para cada cópia de uma classe), propensão a erros ou múltiplas implementações ("ambiguidade" de métodos)
+- 
+
+conceitualmente, as contas Conta e Poupança são muito parecidas (têm métodos creditar, debitar), mas para a linguagem são duas classes completamente diferentes. então, isso implica
+- duplicação de código das interfaces
+- 
+
+
+a herança permite
+- reutilização de código \
+  todos os atributos e métodos da superclasse são herdados pela subclasse
+
+- extensibilidade (overriding) \
+  operações da superclasse podem ser redefinidas da subclasse
+
+- múltiplas assinaturas de métodos de mesmo nome (overloading)
+
+- comportamento semelhante entre super e subclasse
+
+- substitução \
+  um objeto da superclasse podem ser substituídos por objetos da subclasse. isso vale para instanciações e assinaturas de funções
+
+  podemos criar um objeto Conta mas instanciar e atribuir a ele um objeto da classe Poupança
+  ```cpp
+  Conta c; c = new Poupanca(1, 2);
+  ```
+
+  porém, isso introduz um detalhe tratado na próxima sessão
+
+superclasse, subclasse
+redefinição de métodos
+polimorfismo de subtipo
+
+
+#### Casts
+
+caso tenhamos um objeto de uma superclasse e a ele tenha sido atribuído uma instanciação de uma subclasse, não podemos chamar um método da subclasse de forma natural para o objeto. o método será buscado na definição da superclasse e não terá correspondência.
+
+então, precisamos realizar um casting do objeto para a subclasse, de forma que um interpretador ou compilador possa buscar a definição do método na subclasse
+
+```cpp
+Conta c;
+c = new Poupanca("123.34-7");
+c.renderJuros(0.01);                // erro de método não definido
+((Poupanca c)).renderJuros(0.01);   // casting para Poupanca
+```
+
+
+#### Overriding
+
+uma subclasse pode sobrescrever o método da superclasse. se um método da subclasse possui a mesma assinatura 
+
+```cpp
+class ContaBonificada extends Conta {
+  public creditar(int valor) {
+    this.saldo += valor;
+    this.bonus += valor * 0.01;
+  }
+}
+
+Conta c;
+c = new ContaBonificada();
+c.creditar();               // vai executar a implementação mais específica do método
+```
+
+
+#### Overloading
+
+
+#### Ligações dinâmicas (dynamic biding)
+
