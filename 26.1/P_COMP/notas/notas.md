@@ -575,6 +575,9 @@ $$
 vantagens: \
 desvantagens: 
 
+**Merge Sort**: eu sei ordenar dois inteiros. se tenho um vetor, posso dividi-lo em sub vetores até que cada um contenha apenas um inteiro. assim, vou ordenando cada um e formando novamente sub vetores, agora ordenados. faço isso, comparando pares de inteiros, até que tenha formado o vetor final com todos os elementos ordenados
+
+
 ## Algoritmos gulosos
 
 deixa a força bruta de lado. avalia a situação atual e prevê qual é o melhor passo a se tomar para cortar casos desnecessários/não promissores
@@ -588,4 +591,3 @@ busca a resposta correta, mas reutilizando resultados de computações para evit
 
 vantagens:
 desvantagens:
-
