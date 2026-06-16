@@ -1,0 +1,132 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Page-1" id="7wzDGKtB86rvU4ftHhxO">
+    <mxGraphModel grid="0" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="1920" pageHeight="1200" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="04NG--ZXwBIPATTmJzsa-67" parent="1" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=3;" value="" vertex="1">
+          <mxGeometry height="870" width="1060" x="-1482.5" y="-1050" as="geometry" />
+        </mxCell>
+        <mxCell id="04NG--ZXwBIPATTmJzsa-38" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=none;dashed=1;dashPattern=8 8;rotation=-30;" value="" vertex="1">
+          <mxGeometry height="718.66" width="1080" x="-1500" y="-976.03" as="geometry" />
+        </mxCell>
+        <mxCell id="04NG--ZXwBIPATTmJzsa-15" edge="1" parent="1" source="04NG--ZXwBIPATTmJzsa-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;curved=1;" target="04NG--ZXwBIPATTmJzsa-14">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="04NG--ZXwBIPATTmJzsa-21" connectable="0" parent="04NG--ZXwBIPATTmJzsa-15" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=13;" value="&lt;div&gt;Atribuição de estoque&lt;/div&gt;&lt;div&gt;e destino&lt;/div&gt;" vertex="1">
+          <mxGeometry relative="1" x="0.2087" y="15" as="geometry">
+            <mxPoint x="15" y="5" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="04NG--ZXwBIPATTmJzsa-30" edge="1" parent="1" source="04NG--ZXwBIPATTmJzsa-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;curved=1;" target="04NG--ZXwBIPATTmJzsa-11">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="04NG--ZXwBIPATTmJzsa-31" connectable="0" parent="04NG--ZXwBIPATTmJzsa-30" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=13;" value="&lt;div&gt;Requisição de disponibilidade&lt;/div&gt;&lt;div&gt;de recursos&lt;/div&gt;" vertex="1">
+          <mxGeometry relative="1" x="0.025" as="geometry">
+            <mxPoint y="39" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="04NG--ZXwBIPATTmJzsa-1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=3;" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;&lt;b&gt;Sistema de Gerenciamento de Robôs&lt;/b&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry height="64" width="160" x="-958.5" y="-770" as="geometry" />
+        </mxCell>
+        <mxCell id="04NG--ZXwBIPATTmJzsa-54" edge="1" parent="1" source="04NG--ZXwBIPATTmJzsa-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;curved=1;" target="04NG--ZXwBIPATTmJzsa-1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="04NG--ZXwBIPATTmJzsa-55" connectable="0" parent="04NG--ZXwBIPATTmJzsa-54" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=13;" value="&lt;div&gt;Requisição de recursos&lt;/div&gt;&lt;div&gt;pela interface&lt;/div&gt;" vertex="1">
+          <mxGeometry relative="1" x="-0.0787" y="-21" as="geometry">
+            <mxPoint x="19" y="-11" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="04NG--ZXwBIPATTmJzsa-2" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" value="&lt;font style=&quot;font-size: 13px;&quot;&gt;Agente Solicitante&lt;/font&gt;" vertex="1">
+          <mxGeometry height="60" width="30" x="-1202.5" y="-860" as="geometry" />
+        </mxCell>
+        <mxCell id="04NG--ZXwBIPATTmJzsa-11" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;Sistema de Estoque&lt;/font&gt;" vertex="1">
+          <mxGeometry height="60" width="120" x="-702.5" y="-646.7" as="geometry" />
+        </mxCell>
+        <mxCell id="04NG--ZXwBIPATTmJzsa-19" edge="1" parent="1" source="04NG--ZXwBIPATTmJzsa-14" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;curved=1;" target="04NG--ZXwBIPATTmJzsa-1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="04NG--ZXwBIPATTmJzsa-20" connectable="0" parent="04NG--ZXwBIPATTmJzsa-19" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=13;" value="Status operacional e bateria" vertex="1">
+          <mxGeometry relative="1" x="0.344" y="15" as="geometry">
+            <mxPoint x="-15" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="04NG--ZXwBIPATTmJzsa-22" edge="1" parent="1" source="04NG--ZXwBIPATTmJzsa-14" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;curved=1;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="-1232.5" y="-556" />
+              <mxPoint x="-1232.5" y="-700" />
+              <mxPoint x="-1202.5" y="-700" />
+            </Array>
+            <mxPoint x="-1202.5" y="-770" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="04NG--ZXwBIPATTmJzsa-23" connectable="0" parent="04NG--ZXwBIPATTmJzsa-22" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=13;" value="&lt;div&gt;Entrega de recursos&lt;/div&gt;&lt;div&gt;solicitados&lt;/div&gt;" vertex="1">
+          <mxGeometry relative="1" x="0.1922" y="-26" as="geometry">
+            <mxPoint x="-6" y="-25" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="04NG--ZXwBIPATTmJzsa-33" edge="1" parent="1" source="04NG--ZXwBIPATTmJzsa-14" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.25;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0.25;entryDx=0;entryDy=0;curved=1;startArrow=classic;startFill=1;" target="04NG--ZXwBIPATTmJzsa-32">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="04NG--ZXwBIPATTmJzsa-34" connectable="0" parent="04NG--ZXwBIPATTmJzsa-33" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=13;" value="&lt;div&gt;Depósito e retirada&lt;/div&gt;&lt;div&gt;de recursos&lt;/div&gt;" vertex="1">
+          <mxGeometry relative="1" x="0.2343" y="-10" as="geometry">
+            <mxPoint x="1" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="04NG--ZXwBIPATTmJzsa-62" edge="1" parent="1" source="04NG--ZXwBIPATTmJzsa-14" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.863;exitY=1.051;exitDx=0;exitDy=0;entryX=0.75;entryY=0;entryDx=0;entryDy=0;curved=1;exitPerimeter=0;" target="04NG--ZXwBIPATTmJzsa-25">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="04NG--ZXwBIPATTmJzsa-63" connectable="0" parent="04NG--ZXwBIPATTmJzsa-62" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=13;" value="&lt;div&gt;Especificação do&lt;/div&gt;&lt;div&gt;recurso&lt;/div&gt;" vertex="1">
+          <mxGeometry relative="1" x="0.513" y="3" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="04NG--ZXwBIPATTmJzsa-14" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;Robô&lt;/font&gt;" vertex="1">
+          <mxGeometry height="60" width="120" x="-1158.5" y="-586" as="geometry" />
+        </mxCell>
+        <mxCell id="04NG--ZXwBIPATTmJzsa-26" edge="1" parent="1" source="04NG--ZXwBIPATTmJzsa-25" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;curved=1;" target="04NG--ZXwBIPATTmJzsa-11">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="04NG--ZXwBIPATTmJzsa-29" connectable="0" parent="04NG--ZXwBIPATTmJzsa-26" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=13;" value="&lt;div&gt;Status de disponibilidade de&lt;/div&gt;&lt;div&gt;recursos&lt;/div&gt;" vertex="1">
+          <mxGeometry relative="1" x="-0.1409" y="69" as="geometry">
+            <mxPoint y="1" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="04NG--ZXwBIPATTmJzsa-45" edge="1" parent="1" source="04NG--ZXwBIPATTmJzsa-25" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.25;exitY=0;exitDx=0;exitDy=0;entryX=0.441;entryY=1.012;entryDx=0;entryDy=0;curved=1;entryPerimeter=0;" target="04NG--ZXwBIPATTmJzsa-14">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="04NG--ZXwBIPATTmJzsa-47" connectable="0" parent="04NG--ZXwBIPATTmJzsa-45" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=13;" value="&lt;div&gt;Entrega&lt;/div&gt;&lt;div&gt;de recursos&lt;/div&gt;" vertex="1">
+          <mxGeometry relative="1" x="0.0692" y="-3" as="geometry">
+            <mxPoint x="6" y="-16" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="04NG--ZXwBIPATTmJzsa-25" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;Estoque Local&lt;/font&gt;" vertex="1">
+          <mxGeometry height="60" width="120" x="-1122.5" y="-396" as="geometry" />
+        </mxCell>
+        <mxCell id="04NG--ZXwBIPATTmJzsa-32" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;Ponto de Controle&lt;/font&gt;" vertex="1">
+          <mxGeometry height="60" width="120" x="-1402.5" y="-450" as="geometry" />
+        </mxCell>
+        <mxCell id="04NG--ZXwBIPATTmJzsa-39" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" value="&lt;font style=&quot;font-size: 13px;&quot;&gt;Gerente&lt;/font&gt;" vertex="1">
+          <mxGeometry height="60" width="30" x="-652.5" y="-960" as="geometry" />
+        </mxCell>
+        <mxCell id="04NG--ZXwBIPATTmJzsa-41" edge="1" parent="1" source="04NG--ZXwBIPATTmJzsa-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.75;exitY=0;exitDx=0;exitDy=0;entryX=0;entryY=0.3333333333333333;entryDx=0;entryDy=0;entryPerimeter=0;curved=1;" target="04NG--ZXwBIPATTmJzsa-39">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="04NG--ZXwBIPATTmJzsa-42" connectable="0" parent="04NG--ZXwBIPATTmJzsa-41" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=13;" value="Relatório de falhas" vertex="1">
+          <mxGeometry relative="1" x="0.3218" y="-31" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="04NG--ZXwBIPATTmJzsa-64" edge="1" parent="1" source="04NG--ZXwBIPATTmJzsa-11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.25;exitDx=0;exitDy=0;entryX=0.809;entryY=1.002;entryDx=0;entryDy=0;entryPerimeter=0;curved=1;" target="04NG--ZXwBIPATTmJzsa-1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="04NG--ZXwBIPATTmJzsa-65" connectable="0" parent="04NG--ZXwBIPATTmJzsa-64" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=13;" value="&lt;div&gt;Estado de recursos&lt;/div&gt;&lt;div&gt;por estoque&lt;/div&gt;" vertex="1">
+          <mxGeometry relative="1" x="0.1104" y="-9" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
