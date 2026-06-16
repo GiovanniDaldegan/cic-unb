@@ -798,3 +798,15 @@ Ax (Rx -> Vx) =||= ~Ex ~(Rx -> Vx) =||= ~Ex (Rx e ~Vx)
 
 
 "LPO não faz engajamentos ontológicos para coisas como tempo, categorias, e eventos"
+
+## Conteúdos P2
+
+- RNN
+- Árvore de decisão
+- BERT
+  - Classificação Binária
+  - CrossEntropy
+- Lógica proposicional
+- Lógica de predicados de primeira ordem
+- Leis de De Morgan
+- Prolog
