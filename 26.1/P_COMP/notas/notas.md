@@ -585,6 +585,28 @@ deixa a força bruta de lado. avalia a situação atual e prevê qual é o melho
 vantagens: otimiza complexidades de tempo e memória \
 desvantagens: não garante uma resposta certa nem ideal (não completo nem ótimo); lógica complexa
 
+escolhemos uma heurística (implementada ou conceitual) para prever a melhor solução local, de forma que todas as soluções locais contribuam para a melhor solução global
+
+### Técnica de Two Pointers
+
+dado uma estrutura linear, podemos ter um ponteiro em cada extremidade, `l` e `r`
+
+#### 2Sum
+
+temos um vetor **ordenado**
+
+definimos os ponteiros
+- se a `*l + *r > alvo`, decrescemos `r` em 1
+- se a `*l + *r < alvo`, incrementamos `l` em 1
+- se a `*l + *r = alvo`, temos a resposta
+- se `l == r`, não há resposta
+
+cada posição é checada apenas uma vez
+
+#### 3Sum
+
+temos 3 ponteiros, `l`, `r` e `k`
+
 ## Programação dinâmica
 
 busca a resposta correta, mas reutilizando resultados de computações para evitar computar dados desnecessários ou redundantes
