@@ -7,7 +7,7 @@ os trabalhos serão exercícios. nos últimos semestres as notas das provas eram
 
 
 
-# Módulo 1 - Linguagem Funcional (Haskell)
+# Módulo 1 - Paradigma Funcional (Haskell)
 
 ## INTRODUÇÃO
 
@@ -993,7 +993,7 @@ f x y
 ```
 
 
-# Módulo 2 - Linguagem Imperativa
+# Módulo 2 - Paradigma Imperativo
 
 a história dos compiladores acompanha a história da abstração nas linguagens de programação. começa nas linguagens de máquina (baixo nível) e, para aumentar produtividade, usabilidade, simplicidade do código fonte e portabilidade, passa a abstrair os conceitos e aproximar das linguagem naturais (alto nível)
 
@@ -1346,7 +1346,7 @@ essa otimização transforma a execução em complexidade temporal exponencial d
 scrap boiler plate?
 
 
-# Módulo 3 - Linguagem Orientada a Objeto
+# Módulo 3 - Paradigma de Orientação a Objetos
 
 ## Linguagem Orientada a Objetos 1
 
@@ -1474,3 +1474,64 @@ c.creditar();               // vai executar a implementação mais específica d
 
 #### Ligações dinâmicas (dynamic biding)
 
+# Módulo 4 - Paradigma lógico (Prolog)
+
+corpo de um programa em linguagem lógica (lógica de predicados)
+- fatos
+- relações/regras
+
+Silogismo
+
+Todo homem é mortal
+Sócrates é homem
+Logo, Sócrates é mortal.
+
+```prolog
+homem(Sócrates).
+mortal(X) :- homem(X).
+
+% queries:
+% perguntar se Sócrates é mortal; fornecemos uma sentença e o interpretador avalia
+?- mortal(Sócrates).  % true
+?- mortal(João).      % false
+
+% perguntar se alguém é mortal; requisitamos que ele encontre um objeto que satisfaça a consulta
+?- mortal(Y).         % Y = Sócrates
+
+homem(João).
+
+?- mortal(Y).         % Y = Sócrates
+                      % Y = João
+```
+
+processo de dedução de `?- mortal(Sócrates).`
+1. procuramos um fato que diga que `mortal(Sócrates)`
+   1. não há tal fato
+
+2. procuramos uma regra cuja cabeça case com o fato `mortal(Sócrates)`
+   1. há, a regra `mortal(X) :- homem(X).` tem cabeça `mortal(X)`, que casa com o fato da consulta
+
+   2. substituímos X por Sócrates em toda a regra
+
+   3. fazemos uma nova checagem: `homem(Sócrates)` é consequência lógica do programa?
+
+   4. dado que há o fato `homem(Sócrates)`, sim. então Sócrates satisfaz a regra, então `mortal(Sócrates)` é verdade
+
+
+processo de dedução de `?- mortal(Y).` com Sócrates e João homens
+1. procuramos um fato correspondente
+   1. não há
+2. procuramos uma regra que unifique para ao fato da consulta 
+   1. há a regra `mortal(X) :- homem(X)`
+   2. substituímos Y por X na regra
+   3. checamos: `homem(Y)` é conclusão lógica do programa?
+   4. `homem(Y)` unifica com `homem(Sócrates)` e `homem(João)` \
+      é retornada cada substituição válida de Y presente em um fato da base de conhecimento
+
+
+resumidamente, o processo se trata de atestar fatos pela base de conhecimento e as relações definidas \
+sempre pegamos um fato que queremos atestar e tentamos unificar com um fato ou a cabeça de uma regra
+- se unifica com um fato, temos uma resposta pra consulta
+- se unifica com uma regra, temos que aprofundar a busca dos objetos na cauda da regra
+
+> EXERCÍCIO: testar queries de família e criar a relação **descendente**
