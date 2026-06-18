@@ -17,9 +17,8 @@ extra
         - mostra o estado inicial do banco de dados adicionando x0 a cada registrador e apresentando o resultado (apresentar como? exigir estrutura de apresentação do design testado?)
         - leitura das primeiras n words de uma das memórias (input * 4)
         - teste de todos imediatos
-        - 
 
-      - teste de hazards
+      - teste de temporização adequada. casos de borda
 -->
 
 
@@ -36,10 +35,13 @@ extra
             - [Definição das variáveis de ambiente](#definição-das-variáveis-de-ambiente)
     - [Desenvolvimento em HDL - Verilog](#desenvolvimento-em-hdl---verilog)
     - [Compilação do design - Quartus](#compilação-do-design---quartus)
+        - [Análise dos requisitos físicos](#análise-dos-requisitos-físicos)
+        - [Análise dos requisitos temporais](#análise-dos-requisitos-temporais)
     - [Simulação - Quartus](#simulação---quartus)
     - [Execução - FPGA DE1-SoC (Cyclone V)](#execução---fpga-de1-soc-cyclone-v)
         - [Carregar design na placa](#carregar-design-na-placa)
         - [Gerar arquivos de inicialização de memória](#gerar-arquivos-de-inicialização-de-memória)
+        - [Criar unidades de memória no Quartus](#criar-unidades-de-memória-no-quartus)
         - [Editar memória da placa](#editar-memória-da-placa)
 - [Referências](#referências)
 
@@ -72,7 +74,7 @@ Reserve pelo menos 20 GB para o download e instalação dos programas. Se estive
 Os **componentes mínimos** instalados devem ocupar por volta de 20 GB.
 
 > [!note]
-> Os valores de memória necessária para a instalação apresentados aqui tomam como referência as versões para Windows. Em geral, as versões para Linux parecem ocupar ainda mais espaço em disco.
+> Os valores de memória necessária para as instalações apresentados aqui tomam como referência as versões para Windows. Em geral, as versões para Linux parecem ocupar ainda mais espaço em disco.
 
 
 ### Instalação Quartus ([Windows](https://www.altera.com/downloads/fpga-development-tools/quartus-prime-lite-edition-design-software-version-25-1-windows), [Linux](https://www.altera.com/downloads/fpga-development-tools/quartus-prime-lite-edition-design-software-version-25-1-linux))
@@ -159,49 +161,64 @@ Exemplo de erro na simulação por variável não definida (`SALT_LICENSE_SERVER
 
 ## Compilação do design - Quartus
 
-1. Selecione o arquivo correto como Top-Level \
-    Na seção Project Navigator, selecione a aba Files. Clique com o botão direito sobre o arquivo e selecione a opção "Set as Top-Level Entity".
+Selecione o arquivo correto como Top-Level \
+Na seção Project Navigator, selecione a aba Files. Clique com o botão direito sobre o arquivo e selecione a opção "Set as Top-Level Entity".
+
+![comp_top-level](src_quartus_fpga/comp_top-level.png)
+
+Caso esteja compilando o processador RISC-V 24.1, selecione a **organização e a ISA** a desejadas no arquivo `Parametros.v` e garanta que `TopDE.v` esteja como Top-Level.
+
+![processador_parametros](src_quartus_fpga/processador_parametros.png)
+
+Após a compilação, analise os requisitos físicos e temporais como explicado a seguir.
+
+### Análise dos requisitos físicos
+Anote os valores mostrados no Flow Summary depois da compilação:
+- Total de ALMs 
+- Total de registradores
+- Número de bits usados
+- Número de blocos DPS
+
+![comp_requisitos_fisicos](src_quartus_fpga/comp_requisitos_fisicos.png)
+
+### Análise dos requisitos temporais
+
+1. Tools > Timing Analyzer \
+    ![timing_analyzer](src_quartus_fpga/timing_analyzer.png)
+
+1. Na janela aberta, na seção "Tasks" à esquerda, clique duas vezes nas opções "Create Timing Netlist", depois em "Report FMax Summary" \
+    Anote a **frequência máxima** para o design. Arredonde esse valor para baixo e use-o pra calcular o **perído mínimo de clock** que o design aguenta.
+
+    ![timing_create_netlist_fmax.png](src_quartus_fpga/timing_create_netlist_fmax.png)
+
+1. **Caso seu projeto seja síncrono** (utilize clock) crie um clock. Vá em Constraints > Create Clock
+    1. Dê um nome significativo para o clock
+    2. Defina o período como o período mínimo de clock calculado anteriormente
+    3. Clique nos 3 pontinhos
+    4. Na janela que abrir, clique no boão "List" para listar todos os pinos
+    5. Encontre o pino de clock do seu módulo Top-Level
+    6. Selecione-o apertando no botão ">"
+
+    ![timing_create_clock_0](src_quartus_fpga/timing_create_clock_0.png)
     
-    ![comp_top-level](src_quartus_fpga/comp_top-level.png)
-    
-    Caso esteja compilando o processador RISC-V 24.1, selecione a **organização e a ISA** a desejadas no arquivo `Parametros.v` e garanta que `TopDE.v` esteja como Top-Level.
-    
-    ![processador_parametros](src_quartus_fpga/processador_parametros.png)
+    Ao final do processo, a janela de criação de clock deve se parecer com o seguinte. Clique OK e o clock será criado. \
+    Siga o resto dos passos abaixo.
 
-1. Analise os recursos físicos \
-    Anote os valores mostrados no Flow Summary depois da compilação:
-    - Total de ALMs 
-    - Total de registradores
-    - Número de bits usados
-    - Número de blocos DPS
+    ![timing_create_clock_1](src_quartus_fpga/timing_create_clock_1.png)
 
-    ![comp_requisitos_fisicos](src_quartus_fpga/comp_requisitos_fisicos.png)
+2. Clique duas vezes na opção "Report Datasheet"
+    As instruções a seguir só valem se esta foi a tabela gerada por último. Caso tenha gerado outra tabela, basta clicar novamente em "Report Datasheet" para voltar para a tabela de interesse aqui.
 
-1. Analise os recursos temporais
+    Na seção "Report" também à esquerda, visualize as tabelas e anote:
+    - Setup Times (**tsu**): anote o **menor** valor entre Rise e Fall
+    - Hold Times (**th**): anote o maior valor entre Rise e Fall
+    - Clock to Output Times (**tco**): anote o maior valor entre Rise e Fall
+    - Propagation delay (**tpd**): anote o maior valor entre RR, RF, FR, FF
 
-    1. Tools > Timing Analyzer \
-        ![timing_analyzer](src_quartus_fpga/timing_analyzer.png)
+    A tabela de **tsu deve ter valores negativos** em Report Datasheet, enquanto as tabelas de th, tco e tpd devem ter valores positivos. Se não seguir essa regra, quer dizer que o período de clock definido é curto demais e a execução terá hazards.
 
-    1. Na janela aberta, na seção "Tasks" à esquerda, clique duas vezes nas opções "Create Timing Netlist", depois em "Report FMax Summary" \
-        Anote a **frequência máxima** para o design. Arredonde esse valor para baixo e use-o pra calcular o **perído mínimo de clock** que o design aguenta.
+    Esse problema do clock também é verificável gerando os relatórios de Slack (Setup Summary, Hold Summary, etc.), no qual todos os valores apresentados devem ser positivos. Caso o valor seja negativo, aparecerá em vermelho, indicando que algum requisito temporal não foi satisfeito e o design pode estar sujeitos a falhas e comportamentos inesperados.
 
-        ![timing_create_netlist_fmax.png](src_quartus_fpga/timing_create_netlist_fmax.png)
-    
-    1. Caso, seu projeto seja síncrono (utilize clock) crie um clock. Vá em Constraints > Create Clock
-        1. Dê um nome para o clock
-        1. Insira o período mínimo de clock calculado anteriormente
-        Se estiver usando o processador RISC-V pronto, ele já tem clocks definidos, não precisa criar outro. <!-- TODO: checar se é isso mesmo -->
-
-    1. Clique duas vezes na opção "Report Datasheet"
-
-        Na seção "Report" também à esquerda, visualize as tabelas e anote:
-        - Setup Times (**tsu**) anote o menor valor 
-        - Hold Times (**th**)
-        - Clock to Output Times (**tco**)
-        - Propagation delay.
-
-        A tabela de tsu **deve** ter valores negativos, enquanto as tabelas de th, tco e tpd devem ter valores positivos. Se não seguir essa regra, quer dizer que o período de clock definido é curto demais e a execução terá hazards.
-    
 
 
 
@@ -288,6 +305,50 @@ Primeiro, abra o programa que deseja carregar no projeto no RARS e siga os passo
     ![rars_dump_to_file](src_quartus_fpga/rars_dump_to_file.png)
 
 1. Escolha um nome significativo e uma pasta prática, de preferência específica para arquivos `.mif` e dentro do seu projeto.
+
+
+### Criar unidades de memória no Quartus
+
+1. Selecione o tipo de memória \
+    No seu projeto no Quartus, vá para a seção "IP Catalog". Expanda as opções Library > Basic Functions > On Chip Memory. Selecione "RAM: 1-PORT"
+    
+    ![mem_ram1port.png](src_quartus_fpga/mem_ram1port.png)
+
+1. Dê o nome do módulo de memória \
+    Nomes sugeridos: \
+    `ramI` para memória de instruções \
+    `ramD` para memória de dados
+
+    ![mem_save_ip_variation_ram](src_quartus_fpga/mem_save_ip_variation_ram.png)
+
+1.  Configure a unidade de RAM: 1-PORT \
+    Somente as telas relevantes serão apresentadas com os passos necessários. As demais, basta avançar clicando "Next".
+
+    1. Defina o tamanho da saída 'q' para 32 bits e o tamanho da memória para 1024 words \
+        ![mem_ram_tamanho](src_quartus_fpga/mem_ram_tamanho.png)
+    
+    1. **Desmarque** a opção "'q' output port" \
+        ![mem_q_output](src_quartus_fpga/mem_q_output.png)
+
+    1. Defina a leitura de endereço em escrita como "Don't Care" \
+        ![mem_dont_care](src_quartus_fpga/mem_dont_care.png)
+
+    1. Na tela de inicialização
+        1. Selecione a opção "Yes"
+        1. Selecione o arquivo com o conteúdo da memória em "Browse..."
+        1. Nomeie a unidade de memória
+
+        Nesse exemplo, estamos instanciando uma memória de instruções, então selecionamos um arquivo `*_text.mif` e damos o nome de "TEXT" para a unidade. \
+        Para uma memória de dados, selecionaríamos um arquivo `*_data.mif` e poderíamos dar o nome "DATA".
+
+        ![mem_content](src_quartus_fpga/mem_content.png)
+    
+    2. **Desmarque** a opção de criar arquivos black-blox (`*_bb.v`) \
+        ![mem_bbv](src_quartus_fpga/mem_bbv.png)
+
+    3. Clique em "Finish" e confirme o aviso de adição do arquivo ao projeto.\
+        ![mem_add_ip_file](src_quartus_fpga/mem_add_ip_file.png)
+
 
 ### Editar memória da placa
 
