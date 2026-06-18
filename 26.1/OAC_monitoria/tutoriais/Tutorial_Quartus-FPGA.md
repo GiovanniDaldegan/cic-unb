@@ -42,7 +42,7 @@ extra
         - [Carregar design na placa](#carregar-design-na-placa)
         - [Gerar arquivos de inicialização de memória](#gerar-arquivos-de-inicialização-de-memória)
         - [Criar unidades de memória no Quartus](#criar-unidades-de-memória-no-quartus)
-        - [Editar memória da placa](#editar-memória-da-placa)
+        - [Editar memória carregada na placa FPGA](#editar-memória-carregada-na-placa-fpga)
 - [Referências](#referências)
 
 
@@ -206,7 +206,7 @@ Anote os valores mostrados no Flow Summary depois da compilação:
 
     ![timing_create_clock_1](src_quartus_fpga/timing_create_clock_1.png)
 
-2. Clique duas vezes na opção "Report Datasheet"
+1. Clique duas vezes na opção "Report Datasheet"
     As instruções a seguir só valem se esta foi a tabela gerada por último. Caso tenha gerado outra tabela, basta clicar novamente em "Report Datasheet" para voltar para a tabela de interesse aqui.
 
     Na seção "Report" também à esquerda, visualize as tabelas e anote:
@@ -291,20 +291,21 @@ Para instanciar memórias no projeto do Quartus, utilizamos arquivos `.mif` (Mem
 Para gerar os arquivos `.mif` dos segmentos de dados e texto de um programa RISC-V, utilizamos a ferramenta RARS. \
 Primeiro, abra o programa que deseja carregar no projeto no RARS e siga os passos:
 
-1. Compile o programa. \
+1. Compile o programa \
     ![rars_compilar](src_quartus_fpga/rars_compilar.png)
 
 1. Selecione a ferramenta em File > Dump Memory \
     ![rars_dump_mem](src_quartus_fpga/rars_dump_mem.png)
 
 1. Clique no botão Dump to file \
-    **Não precisa escolher `.text` ou `.data`** na opção Memory Segment, a ferramenta cria arquivos `.mif` para ambos os segmentos de uma só vez.
+    **Não precisa escolher `.text` ou `.data`** na opção Memory Segment, a ferramenta cria arquivos `.mif` para ambos os segmentos de uma só vez
 
     Garanta que a o formato selecionado é **MIF format**.
     
     ![rars_dump_to_file](src_quartus_fpga/rars_dump_to_file.png)
 
-1. Escolha um nome significativo e uma pasta prática, de preferência específica para arquivos `.mif` e dentro do seu projeto.
+1. Escolha um nome significativo e uma pasta prática, de preferência específica para arquivos `.mif` e dentro do seu projeto \
+    Ao fim do processo, o RARS terá criado dois arquivos, `<nome_que_vc_deu>_data.mif` e `<nome_que_vc_deu>_text.mif`.
 
 
 ### Criar unidades de memória no Quartus
@@ -312,26 +313,26 @@ Primeiro, abra o programa que deseja carregar no projeto no RARS e siga os passo
 1. Selecione o tipo de memória \
     No seu projeto no Quartus, vá para a seção "IP Catalog". Expanda as opções Library > Basic Functions > On Chip Memory. Selecione "RAM: 1-PORT"
     
-    ![mem_ram1port.png](src_quartus_fpga/mem_ram1port.png)
+    ![mem_unit_ram1port.png](src_quartus_fpga/mem_unit_ram1port.png)
 
 1. Dê o nome do módulo de memória \
     Nomes sugeridos: \
     `ramI` para memória de instruções \
     `ramD` para memória de dados
 
-    ![mem_save_ip_variation_ram](src_quartus_fpga/mem_save_ip_variation_ram.png)
+    ![mem_unit_save_ip_variation_ram](src_quartus_fpga/mem_unit_save_ip_variation_ram.png)
 
 1.  Configure a unidade de RAM: 1-PORT \
     Somente as telas relevantes serão apresentadas com os passos necessários. As demais, basta avançar clicando "Next".
 
     1. Defina o tamanho da saída 'q' para 32 bits e o tamanho da memória para 1024 words \
-        ![mem_ram_tamanho](src_quartus_fpga/mem_ram_tamanho.png)
+        ![mem_unit_ram_tamanho](src_quartus_fpga/mem_unit_ram_tamanho.png)
     
     1. **Desmarque** a opção "'q' output port" \
-        ![mem_q_output](src_quartus_fpga/mem_q_output.png)
+        ![mem_unit_q_output](src_quartus_fpga/mem_unit_q_output.png)
 
     1. Defina a leitura de endereço em escrita como "Don't Care" \
-        ![mem_dont_care](src_quartus_fpga/mem_dont_care.png)
+        ![mem_unit_dont_care](src_quartus_fpga/mem_unit_dont_care.png)
 
     1. Na tela de inicialização
         1. Selecione a opção "Yes"
@@ -341,33 +342,40 @@ Primeiro, abra o programa que deseja carregar no projeto no RARS e siga os passo
         Nesse exemplo, estamos instanciando uma memória de instruções, então selecionamos um arquivo `*_text.mif` e damos o nome de "TEXT" para a unidade. \
         Para uma memória de dados, selecionaríamos um arquivo `*_data.mif` e poderíamos dar o nome "DATA".
 
-        ![mem_content](src_quartus_fpga/mem_content.png)
+        ![mem_unit_content](src_quartus_fpga/mem_unit_content.png)
     
-    2. **Desmarque** a opção de criar arquivos black-blox (`*_bb.v`) \
-        ![mem_bbv](src_quartus_fpga/mem_bbv.png)
+    1. **Desmarque** a opção de criar arquivos black-blox (`*_bb.v`) \
+        ![mem_unit_bbv](src_quartus_fpga/mem_unit_bbv.png)
 
-    3. Clique em "Finish" e confirme o aviso de adição do arquivo ao projeto.\
-        ![mem_add_ip_file](src_quartus_fpga/mem_add_ip_file.png)
+    1. Clique em "Finish" e confirme o aviso de adição do arquivo ao projeto.\
+        ![mem_unit_add_ip_file](src_quartus_fpga/mem_unit_add_ip_file.png)
 
 
-### Editar memória da placa
+### Editar memória carregada na placa FPGA
+
+Com o design já carregado na placa e rodando, siga os passos:
 
 1. Tools > In-System Content Editor
 
-1. `F5` mostra a memória carregada na placa \
+1. Na janela aberta, deve aparecer as memórias presentes na placa \
+    `F5` recarrega as memórias obtidas da placa.
+    
     Caso não apareçam as unidades de memória de dados e programa, feche a janela e abra novamente (chance do Quartus travar).
 
-    ![in-sys_content_editor](src_quartus_fpga/in-sys_content_editor.png)
+    ![mem_in-sys_content_editor](src_quartus_fpga/mem_in-sys_content_editor.png)
 
-1. Selecione a unidade de memória (DATA, TEXT), clique com o botão direito e Import Data From File \
-    ![in-sys_content_editor_select_mem](src_quartus_fpga/in-sys_content_editor_select_mem.png)
+1. Selecione uma unidade de memória (DATA, TEXT), clique com o botão direito e Import Data From File \
+    ![mem_in-sys_content_editor_select_mem](src_quartus_fpga/mem_in-sys_content_editor_select_mem.png)
 
-1. Selecione o arquivo `.mif` correspondente à unidade a ser reescrita (dados ou programa) \
-    Lembre-se de selecionar o tipo correto de arquivo na opção "Files of Type", por padrão o explorador procura por arquivos `.hex` \
-    ![in-sys_content_editor_select_file](src_quartus_fpga/in-sys_content_editor_select_file.png)
+1. Localize e selecione o arquivo `.mif` correspondente à unidade a ser reescrita (dados ou programa) \
+    Lembre-se de selecionar o tipo correto de arquivo na opção "Files of Type", por padrão o explorador procura por arquivos `.hex`.
+    
+    ![mem_in-sys_content_editor_select_file](src_quartus_fpga/mem_in-sys_content_editor_select_file.png)
 
-1. `F7` carrega a memória selecionada e sobrescreve na placa.\
-    Obs.: Isso **NÃO** reinicia a execução na máquina, `PC` e o banco de registradores não mudarão. Aperte KEY[0] para reiniciar a execução.
+1. Após selecionar todas as memórias, pressione `F7` para carregar as memórias e sobrescrever na placa.\
+    Obs.: Isso **NÃO** reinicia a execução na máquina, `PC` e o banco de registradores não mudarão.
+    
+    Aperte `KEY[0]` para reiniciar a execução.
 
 
 # Referências
