@@ -2,16 +2,46 @@
 
 <!-- 
 TODO:
-- borrar caminhos da minha máquina
-- análise de requisitos temporais (tirar dúvidas de quais tempos anotar)
+- análise de requisitos temporais (tempos dos processadores RISC-V 24.1)
 - seção simulação Quartus + troubleshooting
 - problema -voptargs="+acc" no Quartus 24.1
 
 extra
-- projetos e módulos de teste para checar o funcionamento de uma instalação do Quartus
+- projeto para teste de instalação do Quartus com exemplos de Verilog (com comentários didáticos para codificação e simulação)
 - testar Quartus+FPGA nos PCs do LINF1
-- link para texto mais detalhado e abrangente de troubleshooting (recursos da UnB, computadores do LINF, versões específicas do Quartus, conflitos com SOs específicos, etc.)
+- link para texto mais detalhado e abrangente de orientações e troubleshooting (recursos da UnB, computadores do LINF, versões específicas do Quartus, conflitos com SOs específicos, etc.)
+
+- artefatos de teste de entregas de OAC
+    - programas (em RISC-V) de teste de processador RISC-V
+      - estado inicial dos módulos
+        - mostra o estado inicial do banco de dados adicionando x0 a cada registrador e apresentando o resultado (apresentar como? exigir estrutura de apresentação do design testado?)
+        - leitura das primeiras n words de uma das memórias (input * 4)
+        - teste de todos imediatos
+        - 
+
+      - teste de hazards
 -->
+
+
+## Índice <!-- omit from toc -->
+
+- [Tutorial para desenvolvimento com Quartus + FPGA](#tutorial-para-desenvolvimento-com-quartus--fpga)
+    - [Sobre este texto](#sobre-este-texto)
+    - [Setup Quartus \& ModelSim](#setup-quartus--modelsim)
+        - [Instalação Quartus (Windows, Linux)](#instalação-quartus-windows-linux)
+            - [Possíveis falhas na instalação](#possíveis-falhas-na-instalação)
+        - [Instalação ModelSim (Windows/Linux)](#instalação-modelsim-windowslinux)
+        - [Setup adicional](#setup-adicional)
+            - [Obtenção da licença](#obtenção-da-licença)
+            - [Definição das variáveis de ambiente](#definição-das-variáveis-de-ambiente)
+    - [Desenvolvimento em HDL - Verilog](#desenvolvimento-em-hdl---verilog)
+    - [Compilação do design - Quartus](#compilação-do-design---quartus)
+    - [Simulação - Quartus](#simulação---quartus)
+    - [Execução - FPGA DE1-SoC (Cyclone V)](#execução---fpga-de1-soc-cyclone-v)
+        - [Carregar design na placa](#carregar-design-na-placa)
+        - [Gerar arquivos de inicialização de memória](#gerar-arquivos-de-inicialização-de-memória)
+        - [Editar memória da placa](#editar-memória-da-placa)
+- [Referências](#referências)
 
 
 ## Sobre este texto
@@ -22,24 +52,8 @@ Caso a resposta para seu problema ou dúvida não esteja aqui, **leia o tutorial
 Se tiver alguma dúvida ou sugestão para este arquivo, por favor entre em contato pela monitoria ou me mande mensagem pelo Teams. \
 Posso fazer uma sessão FAQ depois aqui com dúvidas comuns.
 
-<!-- 
-Caso queira utilizar alguma versão de programa diferente das seguintes, siga para o [arquivo que trata de todos os problemas possíveis do mundo](https://pudim.com.br)
-- Quartus Prime Lite Edition 25.1
-- Questa Starter Edition
-- ModelSim
-
-<br>
--->
-
 Escrito por Giovanni Daldegan.
 
-<!-- 
-## Índice
-1. [Setup Quartus + ModelSim](#setup-quartus--modelsim)
-    1. [Setup Quartus + ModelSim](#setup-quartus--modelsim)
-    1. [Setup Quartus + ModelSim](#setup-quartus--modelsim)
-1.
--->
 
 ## Setup Quartus & ModelSim
 
@@ -150,7 +164,7 @@ Exemplo de erro na simulação por variável não definida (`SALT_LICENSE_SERVER
     
     ![comp_top-level](src_quartus_fpga/comp_top-level.png)
     
-    Caso esteja compilando o processador RISC-V 24.1, selecione a **arquitetura e a ISA** a desejadas no arquivo `Parametros.v` e garanta que `TopDE.v` esteja como Top-Level.
+    Caso esteja compilando o processador RISC-V 24.1, selecione a **organização e a ISA** a desejadas no arquivo `Parametros.v` e garanta que `TopDE.v` esteja como Top-Level.
     
     ![processador_parametros](src_quartus_fpga/processador_parametros.png)
 
@@ -298,3 +312,6 @@ Primeiro, abra o programa que deseja carregar no projeto no RARS e siga os passo
 # Referências
 
 **M. V. LAMAR**. *Tutorial de uso do Quartus-Prime v2.2*.
+
+Timing Analyzer: Introduction to Timing Analysis \
+https://youtu.be/HMAqjjCuDEI
