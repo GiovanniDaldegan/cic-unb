@@ -56,6 +56,7 @@ Posso fazer uma sessão FAQ depois aqui com dúvidas comuns.
 
 Escrito por Giovanni Daldegan.
 
+<br>
 
 ## Setup Quartus & ModelSim
 
@@ -153,11 +154,13 @@ Exemplo de erro na simulação por variável não definida (`SALT_LICENSE_SERVER
 > [!note]
 > Acredito que a variável `LM_LICENSE_FILE` é essencial para o Quartus Prime 24.1 e `SALT_LICENSE_SERVER` pro 25.1. Como teve um rebranding de Intel &rarr; Altera nesses tempos, devem ter mudado alguns detalhes de licença e do software. Parece que introduziram algumas inconsistências depois dessa mudança.
 
+<br>
 
 ## Desenvolvimento em HDL - Verilog
 
 [em desenvolvimento]
 
+<br>
 
 ## Compilação do design - Quartus
 
@@ -183,7 +186,7 @@ Anote os valores mostrados no Flow Summary depois da compilação:
 
 ### Análise dos requisitos temporais
 
-1. Tools > Timing Analyzer \
+1. Abra a ferramenta: Tools > Timing Analyzer \
     ![timing_analyzer](src_quartus_fpga/timing_analyzer.png)
 
 1. Na janela aberta, na seção "Tasks" à esquerda, clique duas vezes nas opções "Create Timing Netlist", depois em "Report FMax Summary" \
@@ -209,6 +212,8 @@ Anote os valores mostrados no Flow Summary depois da compilação:
 1. Clique duas vezes na opção "Report Datasheet"
     As instruções a seguir só valem se esta foi a tabela gerada por último. Caso tenha gerado outra tabela, basta clicar novamente em "Report Datasheet" para voltar para a tabela de interesse aqui.
 
+    A ferramenta vai criar tabelas de análise temporal do design em relação ao clock criado.
+
     Na seção "Report" também à esquerda, visualize as tabelas e anote:
     - Setup Times (**tsu**): anote o **menor** valor entre Rise e Fall
     - Hold Times (**th**): anote o maior valor entre Rise e Fall
@@ -219,13 +224,13 @@ Anote os valores mostrados no Flow Summary depois da compilação:
 
     Esse problema do clock também é verificável gerando os relatórios de Slack (Setup Summary, Hold Summary, etc.), no qual todos os valores apresentados devem ser positivos. Caso o valor seja negativo, aparecerá em vermelho, indicando que algum requisito temporal não foi satisfeito e o design pode estar sujeitos a falhas e comportamentos inesperados.
 
-
-
+<br>
 
 ## Simulação - Quartus
 
 [em desenvolvimento]
 
+<br>
 
 ## Execução - FPGA DE1-SoC (Cyclone V)
 
@@ -251,7 +256,7 @@ Com um design compilado e um arquivo `.sof` correspondente na pasta `output_file
 
 1. No despositivo com nome do seu arquivo `.sof`, presente na tabela, marque a opção "Program/Configure"
 
-1. Aperte o botão Start e espere carregar na placa
+1. Aperte o botão "Start" e espere carregar na placa
     A placa vai acender um led verde até o design estar totalmente carregado.
 
 Ao final do processo, a tela do Programmer deve estar assim e o seu design já está rodando na placa:
@@ -298,14 +303,14 @@ Primeiro, abra o programa que deseja carregar no projeto no RARS e siga os passo
     ![rars_dump_mem](src_quartus_fpga/rars_dump_mem.png)
 
 1. Clique no botão Dump to file \
-    **Não precisa escolher `.text` ou `.data`** na opção Memory Segment, a ferramenta cria arquivos `.mif` para ambos os segmentos de uma só vez
+    **Não precisa escolher `.text` ou `.data`** na opção Memory Segment, a ferramenta cria arquivos `.mif` para **ambos os segmentos de uma só vez**.
 
     Garanta que a o formato selecionado é **MIF format**.
     
     ![rars_dump_to_file](src_quartus_fpga/rars_dump_to_file.png)
 
 1. Escolha um nome significativo e uma pasta prática, de preferência específica para arquivos `.mif` e dentro do seu projeto \
-    Ao fim do processo, o RARS terá criado dois arquivos, `<nome_que_vc_deu>_data.mif` e `<nome_que_vc_deu>_text.mif`.
+    Ao fim do processo, o RARS terá criado **dois arquivos, `<nome_que_vc_deu>_data.mif` e `<nome_que_vc_deu>_text.mif`**, correspondentes à memória de dados e instruções do seu programa.
 
 
 ### Criar unidades de memória no Quartus
@@ -355,7 +360,7 @@ Primeiro, abra o programa que deseja carregar no projeto no RARS e siga os passo
 
 Com o design já carregado na placa e rodando, siga os passos:
 
-1. Tools > In-System Content Editor
+1. Acesse Tools > In-System Content Editor
 
 1. Na janela aberta, deve aparecer as memórias presentes na placa \
     `F5` recarrega as memórias obtidas da placa.
