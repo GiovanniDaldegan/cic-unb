@@ -7,7 +7,7 @@ os trabalhos serão exercícios. nos últimos semestres as notas das provas eram
 
 
 
-# Módulo 1
+# Módulo 1 - Paradigma Funcional (Haskell)
 
 ## INTRODUÇÃO
 
@@ -993,7 +993,7 @@ f x y
 ```
 
 
-# Módulo 2
+# Módulo 2 - Paradigma Imperativo
 
 a história dos compiladores acompanha a história da abstração nas linguagens de programação. começa nas linguagens de máquina (baixo nível) e, para aumentar produtividade, usabilidade, simplicidade do código fonte e portabilidade, passa a abstrair os conceitos e aproximar das linguagem naturais (alto nível)
 
@@ -1098,7 +1098,11 @@ como o interpretador vai representar o programa em LI1
 Prog (SBlock [SAss (Ident "x") (EInt 1), SAss (Ident "y") (EInt 2), SAss (Ident "y") (EInt 2), SAss (Ident "z") (EAdd (Ident "x") (Ident "y"))])
 ```
 
-> EXERCÍCIO: Estenda a definição de tipos algébricos e do interpretador para implementar os comandos for e if. (tentar fazer o for como um bloco único ou como um caso específico do while)
+> EXERCÍCIO: Estenda a definição de tipos algébricos e do interpretador para implementar os comandos `for` e `if`. (tentar fazer o for como um bloco único ou como um caso específico do while)
+
+duas abordagens para o `for`:
+- normalização/desugaring, reutilizando o bloco while, adicionando a execução do comando de inicialização do `for` e passando os comandos de execução interna e o comando de atualização para controle do while
+- criando novo comando de loop, mas adicionando execução de comando a cada iteração
 
 LI1:
 - contexto dinâmico com variáveis
@@ -1171,6 +1175,7 @@ no caso de criar um bloco aninhado em um escopo maior, empilhamos um contexto de
 
 quando utilizarmos as funções de *lookup*, a busca será feita do topo da pilha para a base, dando prioridade para o escopo mais aninhado
 
+shallow vs deep
 
 #### Exemplos
 
@@ -1260,3 +1265,372 @@ int main () {
   return j;
 }
 ```
+
+#### Implementação
+
+> obs: em Haskell, podemos usar a sintaxe `newName@ (AlgType a b)` para criar um alias `newName` para `AlgType a b`
+
+ambiente: contexto de tipos
+
+funções     | parâmetros                | retorno     | utilidade
+--          | --                        | --          | --
+typeCheckP  | programa                  | [contexto]  | checa se todas as funções de um programa são válidas
+typeCheckF  | contexto, função          | contexto    | checa se função é válidas
+tk          | contexto, comando         | contexto    | checa se a expressão é válida em um contexto de tipos
+tke         | cntxt, expressão, tipo    | cntxt, expr | checa se uma expressão é do tipo alvo
+combChecks  | cntxt, expr1, expr2, tipo | tipo        | checa se duas expressões são de um mesmo tipo alvo
+tinf        | cntxt, expr               | tipo        | infere o tipo de uma expressão
+
+procedimento:
+
+devemos checar se todos os comandos de todas as funções de um programa são válidos \
+precisamos que:
+- todas as variáveis utilizadas sejam declaradas previamente
+- todos os comandos
+  - de atribuição tenham uma expressão de mesmo tipo da variável alvo
+  - de bloco contenha apenas comandos válidos
+  - if tenham expressão inteira e todos os comandos válidos 
+  - while tenham expressão inteira e comandos válidos
+- todas as chamadas de função
+  - recebam um argumento para cada parâmetro definido
+  - todos os argumentos sejam de mesmo tipo do parâmetro correspondente
+
+
+##### Garantir a promessa de retorno
+
+funções                       | parâmetros        | retorno     | utilidade
+--                            | --                | --          | --
+checkExecutionPathExhaustion  | lista de comandos | bool        | checa se uma seq de cmds tem todos caminhos terminados em `return`
+checkExecutionPathExhaustionS | comando           | bool        | checa se um comando termina em `return` (em todos caminhos)
+deadCodeFree                  | lista de comandos | bool        | checa se uma seq de cmds não tem código morto (após `return`)
+deadCodeFreeS                 | comando           | bool        | checa se um comando não é código morto
+
+
+##### Normalização
+
+dado um programa (sem erro de tipos) com "açúcar sintático", formamos um novo programa que substitui as formas alternativas de comandos pelas convencionais e suportadas pelo programa
+
+```c
+// declaração de múltiplas variáveis
+int i, j;       /*->*/    int i;
+                          int j;
+
+// inicialização e atribuição
+int i = 10;     /*->*/    int i;
+                          i = 10;
+
+// do-while
+do {blck}       /*->*/    {blck};
+while (expr);             while (expr) {blck}
+
+```
+
+outras normalizações: for, 
+
+#### Otimização estática
+
+##### Pré-avaliação
+
+a checagem de tipos passa a guardar valores de variáveis declaradas como constantes para substituir todas suas ocorrências
+
+#### Otimização dinâmica
+
+##### Memoização
+
+armazenar uma cache pra evitar computar os exatos mesmos valores novamente
+
+essa otimização transforma a execução em complexidade temporal exponencial de uma função recursiva de fatorial em complexidade linear
+
+#### curiosidade: SYB
+
+scrap boiler plate?
+
+
+# Módulo 3 - Paradigma de Orientação a Objetos
+
+## Linguagem Orientada a Objetos 1
+
+### Classes
+
+agora, um programa é uma lista de classes
+
+toda classe pode ter
+- atributos
+- métodos (construtores)
+- outras classes
+
+
+### Information Hiding
+
+restringir o acesso a informações (atributos e métodos) a contextos específicos do programa
+
+obs: o *pattern matching* fere o princípio de de information hiding, pois expôe a estrutura de uma função para o usuário da função. além de tornar o código mais acoplado, a operação da função fica dependente dos padrões da sua definição. o programa se torna mais sensível a mudanças, 
+
+
+### Contexto de tipos na execução
+
+precisamos manter um contexto de tipos durante a execução para:
+- instanciar uma classe alocando memória na heap
+- consultar os métodos e atributos de um objeto (buscando a classe da qual ele é tipo)
+
+então, durante execução, teremos um contexto para cada classe, representando seu esqueleto: atributos e seus tipos para instanciação; métodos e seus tipos para chamada de método em algum objeto
+
+
+### Contexto de objeto
+
+cada instância de uma classe deve ter um contexto de execução com seus atributos. além disso, a partir do momento que temos herança, faz bastante sentido guardar, também nesse contexto, o tipo do objeto (um identificador de sua classe).
+
+
+### Implementação
+
+novidades em relação à Linguagem Imperativa 2 Tipada
+
+expressões:
+- instanciação de classe: cria um objeto da classe indicada
+- chamada de método: chama uma função da classe do objeto sobre ele
+
+comandos:
+- um comando pode ser uma expressão \
+  uma chamada de função que não retorna nenhum valor pode ser usada como comando. sua estrutura é apenas uma chamada `objeto.metodo(args)`
+
+agora, expressões podem alterar o contexto de execução (new, chamada de método). sendo assim, a avaliação de uma função deve retornar o valor avaliado para a expressão e o contexto atualizado (novo objeto ou execução do método chamado)
+
+> EXERCÍCIO: desenhar a execução do programa da classe Aluno (instanciações na memória) + analisar a avaliação de ENew
+
+
+### Herança
+
+duplicação de código de classe
+- mais simples de realizar
+- todas as informações da nova classe estão explícitas e são de acesso imediato para quem analisa seu código
+- alto custo de manutenção de código (para cada cópia de uma classe), propensão a erros ou múltiplas implementações ("ambiguidade" de métodos)
+- 
+
+conceitualmente, as contas Conta e Poupança são muito parecidas (têm métodos creditar, debitar), mas para a linguagem são duas classes completamente diferentes. então, isso implica
+- duplicação de código das interfaces
+- 
+
+
+a herança permite
+- reutilização de código \
+  todos os atributos e métodos da superclasse são herdados pela subclasse
+
+- extensibilidade (overriding) \
+  operações da superclasse podem ser redefinidas da subclasse
+
+- múltiplas assinaturas de métodos de mesmo nome (overloading)
+
+- comportamento semelhante entre super e subclasse
+
+- substitução \
+  um objeto da superclasse podem ser substituídos por objetos da subclasse. isso vale para instanciações e assinaturas de funções
+
+  podemos criar um objeto Conta mas instanciar e atribuir a ele um objeto da classe Poupança
+  ```cpp
+  Conta c; c = new Poupanca(1, 2);
+  ```
+
+  porém, isso introduz um detalhe tratado na próxima sessão
+
+superclasse, subclasse
+redefinição de métodos
+polimorfismo de subtipo
+
+
+#### Casts
+
+caso tenhamos um objeto de uma superclasse e a ele tenha sido atribuído uma instanciação de uma subclasse, não podemos chamar um método da subclasse de forma natural para o objeto. o método será buscado na definição da superclasse e não terá correspondência.
+
+então, precisamos realizar um casting do objeto para a subclasse, de forma que um interpretador ou compilador possa buscar a definição do método na subclasse
+
+```cpp
+Conta c;
+c = new Poupanca("123.34-7");
+c.renderJuros(0.01);                // erro de método não definido
+((Poupanca c)).renderJuros(0.01);   // casting para Poupanca
+```
+
+
+#### Overriding
+
+uma subclasse pode sobrescrever o método da superclasse. se um método da subclasse possui a mesma assinatura 
+
+```cpp
+class ContaBonificada extends Conta {
+  public creditar(int valor) {
+    this.saldo += valor;
+    this.bonus += valor * 0.01;
+  }
+}
+
+Conta c;
+c = new ContaBonificada();
+c.creditar();               // vai executar a implementação mais específica do método
+```
+
+
+#### Overloading
+
+
+#### Ligações dinâmicas (dynamic biding)
+
+# Módulo 4 - Paradigma lógico (Prolog)
+
+corpo de um programa em linguagem lógica (lógica de predicados)
+- fatos
+- relações/regras
+
+Silogismo
+
+Todo homem é mortal
+Sócrates é homem
+Logo, Sócrates é mortal.
+
+```prolog
+homem(Sócrates).
+mortal(X) :- homem(X).
+
+% queries:
+% perguntar se Sócrates é mortal; fornecemos uma sentença e o interpretador avalia
+?- mortal(Sócrates).  % true
+?- mortal(João).      % false
+
+% perguntar se alguém é mortal; requisitamos que ele encontre um objeto que satisfaça a consulta
+?- mortal(Y).         % Y = Sócrates
+
+homem(João).
+
+?- mortal(Y).         % Y = Sócrates
+                      % Y = João
+```
+
+> [!note] OBS
+> a checagem do Prolog é **sequencial e recursiva**. ele checa linha a linha na busca de uma consulta e pode entrar recursivamente na checagem de uma linha
+
+processo de dedução de `?- mortal(Sócrates).`
+1. procuramos um fato que diga que `mortal(Sócrates)`
+   1. não há tal fato
+
+2. procuramos uma regra cuja cabeça case com o fato `mortal(Sócrates)`
+   1. há, a regra `mortal(X) :- homem(X).` tem cabeça `mortal(X)`, que casa com o fato da consulta
+
+   2. substituímos X por Sócrates em toda a regra
+
+   3. fazemos uma nova checagem: `homem(Sócrates)` é consequência lógica do programa?
+
+   4. dado que há o fato `homem(Sócrates)`, sim. então Sócrates satisfaz a regra, então `mortal(Sócrates)` é verdade
+
+
+processo de dedução de `?- mortal(Y).` com Sócrates e João homens
+1. procuramos um fato correspondente
+   1. não há
+2. procuramos uma regra que unifique para ao fato da consulta 
+   1. há a regra `mortal(X) :- homem(X)`
+   2. substituímos Y por X na regra
+   3. checamos: `homem(Y)` é conclusão lógica do programa?
+   4. `homem(Y)` unifica com `homem(Sócrates)` e `homem(João)` \
+      é retornada cada substituição válida de Y presente em um fato da base de conhecimento
+
+
+resumidamente, o processo se trata de atestar fatos pela base de conhecimento e as relações definidas \
+sempre pegamos um fato que queremos atestar e tentamos unificar com um fato ou a cabeça de uma regra
+- se unifica com um fato, temos uma resposta pra consulta
+- se unifica com uma regra, temos que aprofundar a busca dos objetos na cauda da regra
+
+> EXERCÍCIO: testar queries de família e criar a relação **descendente**
+
+```prolog
+% opção 0 (não serve)
+descendente(X, Y) :- pai(Y, X).
+descendente(X, Y) :- mãe(Y, X).
+descendente(X, Y) :- pai(Z, X), descendente(Z, Y).    
+descendente(X, Y) :- mãe(Z, X), descendente(Z, Y).
+
+$ opção 1
+descendente(X, Y) :- filho(X, Y).                     % caso base
+descendente(X, Y) :- filha(X, Y).
+descendente(X, Y) :- filho(X, Z), descendente(Z, Y).  % caso transitivo (fecho transitivo)
+descendente(X, Y) :- filha(X, Z), descendente(Z, Y).
+
+% a consulta ?- descendente(X, joão). mostra primeiro os filhos e depois mostra os descendentes progressivamente mais afastados
+
+% opção 2
+descendente(X, Y) :- filho(X, Z), descendente(Z, Y).
+descendente(X, Y) :- filha(X, Z), descendente(Z, Y).
+descendente(X, Y) :- filho(X, Y).
+descendente(X, Y) :- filha(X, Y).
+
+% a consulta ?- descendente(X, joão). mostra primeiro os últimos descendentes, as "folhas da árvore", para depois mostrar todos os descendentes até os filhos
+```
+
+obs: essa definição permite um ciclos no percorrimento da "estrutura" definida
+
+
+### Fatos
+uma declaração de um caso de relação entre objetos
+
+são Cláusulas de Horn com corpo vazio
+
+### Variável
+
+### Substituição
+
+### Instância
+
+### Cláusula Horn
+
+`<cabeça da cláusula> :- <corpo da cláusula>`
+
+todas as variáveis na cabeça da cláusula são universalmente quantificadas \
+todas as variáveis presentes apenas no corpo de uma cláusula são quantificadas existencialmente
+
+#### Regras
+
+são Cláusulas de Horn completas
+
+#### Questões (queries)
+
+são Cláusulas de Horn sem cabeça
+
+questão apenas com objetos:
+- responder se a questão é consequência lógica do programa -> `false`|`true`
+
+```prolog
+?- pai(joão, pedro).  % true
+```
+
+questão com variáveis:
+- responder quais instâncias das variáveis torna a consulta uma consequência lógica do programa
+
+```prolog
+?- pai(joão, X).      % pedro
+                      % clara
+                      % ...
+```
+
+### Listas
+
+Listas são termos gerados a partir de um átomo []
+
+Funtor de listas: `.`
+
+`(1,.(2,.(3,.[])))`: lista com 1, 2, 3
+
+
+### Programa
+
+- Conjunto de Cláusulas de Horn (fatos e regras)
+- Fatos e regras com mesmo nome (cabeças) definem um predicado (relação e quais são os objetos dessa relação)
+
+
+### Operadores
+
+#### `=` (operador de unificação)
+
+infixo; `T1 = T2` quando há uma substituição nos termos que os torne literalmente iguais `T1o = T2o`
+- átomos só unificam quando são exatamente iguais
+- termos compostos unificam se os **funtores principais** dos termos são iguais, de mesma aridade e seus respectivos argumentos unificam
+- uma variável unifica com qualquer termo (substituição de variável)
+
+unificação em listas: \
+[X|Y] ou [X|[Y|Z]] unificam com [a, b, c, d]
