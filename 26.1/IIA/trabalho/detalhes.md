@@ -1,6 +1,11 @@
 
 1.
-- analisar e tratar dados (matriz de correlação, detectar características redundantes)
+- tratar dados
+    - remover duplicatas
+    - remover entradas sem alguns   valores
+- analisar dados
+    - matriz de correlação
+    - comentar pelo menos uma correlação forte
 
 2.
 - comparar modelos (K-NN)
