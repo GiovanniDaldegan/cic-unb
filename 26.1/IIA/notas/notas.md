@@ -810,3 +810,17 @@ Ax (Rx -> Vx) =||= ~Ex ~(Rx -> Vx) =||= ~Ex (Rx e ~Vx)
 - Lógica de predicados de primeira ordem
 - Leis de De Morgan
 - Prolog
+
+# Métricas de avaliação de Machine Learning
+
+Contexto: classificação binária de elementos, positivo e negativo
+
+Precisão/Precision:
+$$\frac{tp}{tp+fp}$$
+
+Revocação/Recall:
+$$\frac{tp}{tp+fn}$$
+
+Acurácia/Accuracy:
+$$\frac{tp+tn}{tp+tn+fp+fn}=\frac{tp+tn}{total}$$
+
