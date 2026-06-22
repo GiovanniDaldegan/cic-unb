@@ -606,10 +606,33 @@ cada posição é checada apenas uma vez
 #### 3Sum
 
 temos 3 ponteiros, `l`, `r` e `k`
+fixamos `k` e fazemos 2Sum no sub-vetor à direita de `k`. como testamos todos as tentativas de solução que envolvem `*k`, não precisamos incluir os valores à esquerda de `k`, podemos apenas ignorá-los e considerar só a parte à direita do vetor
 
 ## Programação dinâmica
 
 busca a resposta correta, mas reutilizando resultados de computações para evitar computar dados desnecessários ou redundantes
 
+podemos guardar os resultados computados em uma estrutura como matriz, map, set... \
+podemos em cada configuração do conjunto de dados já computaddos como um estado. a cada nova computação e modificação do conjunto, temos uma transição de estados
+
+há problemas que não são facilmente resolvidos por uma abordagem gulosa
+
 vantagens:
 desvantagens:
+
+### Problema das moedas
+
+dadas n moedas, queremos escolher as moedas com soma máxima possível, de forma que não escolhemos moedas consecutivas
+
+podemos armazenar uma árvore que representa os caminhos de solução, considerando que a cada nó escolhemos pegar uma moeda \
+escolhemos uma moeda (aprofundando na árvore) escolhendo separadamente (i+1) e (i+2), de forma que não podemos escolher a moeda (j+1) dado que escolhemos a moeda j anteriormente
+- se escolhemos (i+1), não podemos escolher (i+2)
+- se escolhemos (i+2), não podemso escolher (i+2+1)
+
+daí, checamos qual caminho da raiz até uma folha tem soma acumulada máxima (basta guardar um inteiro max e comparar com a soma atual quando atingimos uma folha)
+
+### Problema do troco mínimo
+
+dadas que temos infinitas moedas, cada uma de um dos n valores definidos, queremos escolher o número mínimo de moedas tal que a soma seja exatamente um valor de troco `k`
+
+não é possível provar uma estratégia ótima para solucionar o problema. precisamos resolver por força bruta
