@@ -824,3 +824,30 @@ $$\frac{tp}{tp+fn}$$
 Acurácia/Accuracy:
 $$\frac{tp+tn}{tp+tn+fp+fn}=\frac{tp+tn}{total}$$
 
+# Prolog
+
+utilizado em sistemas: Baseados em Conhecimento, Banco de Dados, Sistemas Especialistas, PLN
+
+exercício: definir regra de neto
+
+progenitor: X gerou Y
+filho: X é gerado por Y
+avô: X é avô de Y, X é filho de Z e Z é filho de Y
+
+```prolog
+% fatos
+progenitor(a, b).
+progenitor(a, c).
+progenitor(b, d).
+progenitor(e, d).
+
+% regras
+filho(X, Y) :- progenitor(Y, X).
+
+avô(X, Y) :- filho(Y, Z), progenitor(X, Z).
+
+% questões
+?- progenitor(a, X).  % > %   X = b; X = c;
+?- filho(X, a).       % > %   X = b; X = c;
+?- avô(X, d).         % > %   X = a;
+```
