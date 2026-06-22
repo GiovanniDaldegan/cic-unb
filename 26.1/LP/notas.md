@@ -1504,6 +1504,9 @@ homem(João).
                       % Y = João
 ```
 
+> [!note] OBS
+> a checagem do Prolog é **sequencial e recursiva**. ele checa linha a linha na busca de uma consulta e pode entrar recursivamente na checagem de uma linha
+
 processo de dedução de `?- mortal(Sócrates).`
 1. procuramos um fato que diga que `mortal(Sócrates)`
    1. não há tal fato
@@ -1535,3 +1538,99 @@ sempre pegamos um fato que queremos atestar e tentamos unificar com um fato ou a
 - se unifica com uma regra, temos que aprofundar a busca dos objetos na cauda da regra
 
 > EXERCÍCIO: testar queries de família e criar a relação **descendente**
+
+```prolog
+% opção 0 (não serve)
+descendente(X, Y) :- pai(Y, X).
+descendente(X, Y) :- mãe(Y, X).
+descendente(X, Y) :- pai(Z, X), descendente(Z, Y).    
+descendente(X, Y) :- mãe(Z, X), descendente(Z, Y).
+
+$ opção 1
+descendente(X, Y) :- filho(X, Y).                     % caso base
+descendente(X, Y) :- filha(X, Y).
+descendente(X, Y) :- filho(X, Z), descendente(Z, Y).  % caso transitivo (fecho transitivo)
+descendente(X, Y) :- filha(X, Z), descendente(Z, Y).
+
+% a consulta ?- descendente(X, joão). mostra primeiro os filhos e depois mostra os descendentes progressivamente mais afastados
+
+% opção 2
+descendente(X, Y) :- filho(X, Z), descendente(Z, Y).
+descendente(X, Y) :- filha(X, Z), descendente(Z, Y).
+descendente(X, Y) :- filho(X, Y).
+descendente(X, Y) :- filha(X, Y).
+
+% a consulta ?- descendente(X, joão). mostra primeiro os últimos descendentes, as "folhas da árvore", para depois mostrar todos os descendentes até os filhos
+```
+
+obs: essa definição permite um ciclos no percorrimento da "estrutura" definida
+
+
+### Fatos
+uma declaração de um caso de relação entre objetos
+
+são Cláusulas de Horn com corpo vazio
+
+### Variável
+
+### Substituição
+
+### Instância
+
+### Cláusula Horn
+
+`<cabeça da cláusula> :- <corpo da cláusula>`
+
+todas as variáveis na cabeça da cláusula são universalmente quantificadas \
+todas as variáveis presentes apenas no corpo de uma cláusula são quantificadas existencialmente
+
+#### Regras
+
+são Cláusulas de Horn completas
+
+#### Questões (queries)
+
+são Cláusulas de Horn sem cabeça
+
+questão apenas com objetos:
+- responder se a questão é consequência lógica do programa -> `false`|`true`
+
+```prolog
+?- pai(joão, pedro).  % true
+```
+
+questão com variáveis:
+- responder quais instâncias das variáveis torna a consulta uma consequência lógica do programa
+
+```prolog
+?- pai(joão, X).      % pedro
+                      % clara
+                      % ...
+```
+
+### Listas
+
+Listas são termos gerados a partir de um átomo []
+
+Funtor de listas: `.`
+
+`(1,.(2,.(3,.[])))`: lista com 1, 2, 3
+
+
+### Programa
+
+- Conjunto de Cláusulas de Horn (fatos e regras)
+- Fatos e regras com mesmo nome (cabeças) definem um predicado (relação e quais são os objetos dessa relação)
+
+
+### Operadores
+
+#### `=` (operador de unificação)
+
+infixo; `T1 = T2` quando há uma substituição nos termos que os torne literalmente iguais `T1o = T2o`
+- átomos só unificam quando são exatamente iguais
+- termos compostos unificam se os **funtores principais** dos termos são iguais, de mesma aridade e seus respectivos argumentos unificam
+- uma variável unifica com qualquer termo (substituição de variável)
+
+unificação em listas: \
+[X|Y] ou [X|[Y|Z]] unificam com [a, b, c, d]
