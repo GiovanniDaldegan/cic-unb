@@ -1,8 +1,3 @@
-vitor.matos@aluno.unb.br
-222034360
-eduardo.melo@aluno.unb.br
-
-3 questões
 
 1.
 - analisar e tratar dados (matriz de correlação, detectar características redundantes)
