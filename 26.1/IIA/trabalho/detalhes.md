@@ -1,21 +1,21 @@
 
-1.
-- tratar dados
-    - remover duplicatas
-    - remover entradas sem alguns   valores
-- analisar dados
-    - matriz de correlação
-    - comentar pelo menos uma correlação forte
+1. setup
+    - tratar dados
+        - remover duplicatas
+        - remover entradas sem alguns   valores
+    - analisar dados
+        - matriz de correlação
+        - comentar pelo menos uma correlação forte
+            - testar resultados removendo o atributo de Gestações ?
 
-2.
-- comparar modelos (K-NN)
+1. comparar métodos clássicos
+    - K-NN
+    - Regressão Logística
 
-3.
-- regressão logística (backpropagation?)
+1. avaliação de hiperparâmetros ?
 
-- 
-
-- métricas de avaliação
+1. treinar modelo MLP
+    - métricas de avaliação
 
 
 **overfitting**: modelo é treinado de forma exagerada, de modo que ele tem altíssima acurácia para os dados de trainamento mas falha bastante em comparação para quaisquer outros dados
