@@ -178,10 +178,10 @@ por que estudar jogos?
 - representabilidade
 - medida de desempenho
 
----                   | determinístico | sorte
----                   | ---            | ---
-informação perfeita   | xadrez, damas, go, othello | gamão, banco imobiliário
-informação imperfeita |                | bridge, etc. 
+| ---                   | determinístico             | sorte                    |
+| --------------------- | -------------------------- | ------------------------ |
+| informação perfeita   | xadrez, damas, go, othello | gamão, banco imobiliário |
+| informação imperfeita |                            | bridge, etc.             |
 
 ### minimax
 maximizar a utilidade (ganho) supondo que o adversário vai tentar minimizá-la
@@ -201,11 +201,11 @@ obs
 - complexidade de tempo O(b^m)
 - complexidade de espaço O(bm)
 
-jogo          |escala | algoritmo           | ano
----           | ---   | ---                 | ---
-jogo da velha | 3x3   | minimax             | -
-xadrez        | 8x8   | minimax, alfa-beta  | 1997
-go            | 19x19 | MCTS, AI, MC, RC    | 2016
+| jogo          | escala | algoritmo          | ano  |
+| ------------- | ------ | ------------------ | ---- |
+| jogo da velha | 3x3    | minimax            | -    |
+| xadrez        | 8x8    | minimax, alfa-beta | 1997 |
+| go            | 19x19  | MCTS, AI, MC, RC   | 2016 |
 
 
 ### poda alfa-beta
@@ -460,13 +460,13 @@ uma resolução implica:
 - custo total = busca + caminho
 
 tipos de problema
-dados conhecidos:   | estado atual | efeito das ações |
---                  | --    | --        
-estados simples     | X     | X
-estados múltiplos 1 |       | X
-estados múltiplos 2 |       |
-contingencial       |       |
-exploratório        |       |
+| dados conhecidos:   | estado atual | efeito das ações |
+| ------------------- | ------------ | ---------------- |
+| estados simples     | X            | X                |
+| estados múltiplos 1 |              | X                |
+| estados múltiplos 2 |              |
+| contingencial       |              |
+| exploratório        |              |
 
 ## Busca
 
@@ -626,11 +626,11 @@ na saída, usa a curva de ativação sigmoidal \
 função de perda para um modelo de classif icação de 3 ou mais classes
 
 
-características | binary crossentropy | categorical crossentropy
---              | --                  | --
-num classes     | 2                   | 3 ou mais
-ativação        | sigmóide            | softmax
-soma das prob.  | não precisa ser 1   | 1
+| características | binary crossentropy | categorical crossentropy |
+| --------------- | ------------------- | ------------------------ |
+| num classes     | 2                   | 3 ou mais                |
+| ativação        | sigmóide            | softmax                  |
+| soma das prob.  | não precisa ser 1   | 1                        |
 
 # Transformers
 
@@ -751,23 +751,23 @@ situação do mundo: \
 fixo: W(1, 3), O(2, 3), B(3, 1), B(3, 3), B(4, 4) \
 inicial: A(1, 1), agente aponta para a direita
 
-agente      | ação    | sensores  | regras aplicadas  | novos fatos                                           | base de conhecimento (sentenças atômicas)
---          | --      | --        | --                | --                                                    | --
-A(1, 1), r  |         | ~f(1, 1)  | Mod. Ponens, RW1  | ~W(1, 1) e ~W(2, 1) e ~W(1, 2)                        | {}
-A(1, 1), r  |         |           | E-eliminação x3   | ~W(1, 1), ~W(2, 1), ~W(1, 2)                          | {~W(1, 1), ~W(2, 1), ~W(1, 2)}
-A(1, 1), r  |         | ~b(1, 1)  | Mod. Ponens, RW2  | ~B(1, 1) e ~B(2, 1) e ~B(1, 2)                        | {~W(1, 1), ~W(2, 1), ~W(1, 2)}
-A(1, 1), r  |         |           | E-eliminação x3   | ~B(1, 1), ~B(2, 1), ~B(1, 2)                          | {~W(1, 1), ~W(2, 1), ~W(1, 2), ~B(1, 1), ~B(2, 1), ~B(1, 2)}
-A(2, 1), r  | av      | ~f(2, 1)  | Mod. Ponens, RW1  | ~W(2, 2) e ~W(1, 1) e ~W(2, 1) e ~W(3, 1)             | {~W(1, 1), ~W(2, 1), ~W(1, 2), ~B(1, 1), ~B(2, 1), ~B(1, 2)}
-A(2, 1), r  |         |           | E-eliminação x3   | ~W(2, 2), ~W(1, 1), ~W(2, 1), ~W(3, 1)                | {~W(1, 1), ~W(2, 1), ~W(1, 2), ~B(1, 1), ~B(2, 1), ~B(1, 2), ~W(3, 1), ~W(2, 2)}
-A(2, 1), r  |         | b(2, 1)   | Mod. Ponens, RW2  | B(2, 2) ou B(1, 1) ou B(2, 1) ou B(3, 1)              | {~W(1, 1), ~W(2, 1), ~W(1, 2), ~B(1, 1), ~B(2, 1), ~B(1, 2), ~W(3, 1), ~W(2, 2)}
-A(2, 1), r  |         |           | Ou-eliminação x2  | B(2, 2) ou B(3, 1)                                    | {~W(1, 1), ~W(2, 1), ~W(1, 2), ~B(1, 1), ~B(2, 1), ~B(1, 2), ~W(3, 1), ~W(2, 2)}
-A(2, 1), u  | gira(l) |           |                   |                                                       | {~W(1, 1), ~W(2, 1), ~W(1, 2), ~B(1, 1), ~B(2, 1), ~B(1, 2), ~W(3, 1), ~W(2, 2)}
-A(2, 1), l  | gira(l) |           |                   |                                                       | {~W(1, 1), ~W(2, 1), ~W(1, 2), ~B(1, 1), ~B(2, 1), ~B(1, 2), ~W(3, 1), ~W(2, 2)}
-A(1, 1), l  | av      |           |                   |                                                       | {~W(1, 1), ~W(2, 1), ~W(1, 2), ~B(1, 1), ~B(2, 1), ~B(1, 2), ~W(3, 1), ~W(2, 2)}
-A(1, 1), u  | gira(r) |           |                   |                                                       | {~W(1, 1), ~W(2, 1), ~W(1, 2), ~B(1, 1), ~B(2, 1), ~B(1, 2), ~W(3, 1), ~W(2, 2)}
-A(1, 2), u  | av      | f(1, 2)   | Mod. Ponens, RW1  | W(1, 3) ou W(1, 2) ou W(2, 2) ou W(1, 1)              | {~W(1, 1), ~W(2, 1), ~W(1, 2), ~B(1, 1), ~B(2, 1), ~B(1, 2), ~W(3, 1), ~W(2, 2)}
-A(1, 2), u  |         |           | Ou-eliminação x3  | W(1, 3)                                               | {~W(1, 1), ~W(2, 1), ~W(1, 2), ~B(1, 1), ~B(2, 1), ~B(1, 2), ~W(3, 1), ~W(2, 2), W(1, 3)}
-...         | ...     | ...       | ...               | ...                                                   | {...}
+| agente     | ação    | sensores | regras aplicadas | novos fatos                               | base de conhecimento (sentenças atômicas)                                                 |
+| ---------- | ------- | -------- | ---------------- | ----------------------------------------- | ----------------------------------------------------------------------------------------- |
+| A(1, 1), r |         | ~f(1, 1) | Mod. Ponens, RW1 | ~W(1, 1) e ~W(2, 1) e ~W(1, 2)            | {}                                                                                        |
+| A(1, 1), r |         |          | E-eliminação x3  | ~W(1, 1), ~W(2, 1), ~W(1, 2)              | {~W(1, 1), ~W(2, 1), ~W(1, 2)}                                                            |
+| A(1, 1), r |         | ~b(1, 1) | Mod. Ponens, RW2 | ~B(1, 1) e ~B(2, 1) e ~B(1, 2)            | {~W(1, 1), ~W(2, 1), ~W(1, 2)}                                                            |
+| A(1, 1), r |         |          | E-eliminação x3  | ~B(1, 1), ~B(2, 1), ~B(1, 2)              | {~W(1, 1), ~W(2, 1), ~W(1, 2), ~B(1, 1), ~B(2, 1), ~B(1, 2)}                              |
+| A(2, 1), r | av      | ~f(2, 1) | Mod. Ponens, RW1 | ~W(2, 2) e ~W(1, 1) e ~W(2, 1) e ~W(3, 1) | {~W(1, 1), ~W(2, 1), ~W(1, 2), ~B(1, 1), ~B(2, 1), ~B(1, 2)}                              |
+| A(2, 1), r |         |          | E-eliminação x3  | ~W(2, 2), ~W(1, 1), ~W(2, 1), ~W(3, 1)    | {~W(1, 1), ~W(2, 1), ~W(1, 2), ~B(1, 1), ~B(2, 1), ~B(1, 2), ~W(3, 1), ~W(2, 2)}          |
+| A(2, 1), r |         | b(2, 1)  | Mod. Ponens, RW2 | B(2, 2) ou B(1, 1) ou B(2, 1) ou B(3, 1)  | {~W(1, 1), ~W(2, 1), ~W(1, 2), ~B(1, 1), ~B(2, 1), ~B(1, 2), ~W(3, 1), ~W(2, 2)}          |
+| A(2, 1), r |         |          | Ou-eliminação x2 | B(2, 2) ou B(3, 1)                        | {~W(1, 1), ~W(2, 1), ~W(1, 2), ~B(1, 1), ~B(2, 1), ~B(1, 2), ~W(3, 1), ~W(2, 2)}          |
+| A(2, 1), u | gira(l) |          |                  |                                           | {~W(1, 1), ~W(2, 1), ~W(1, 2), ~B(1, 1), ~B(2, 1), ~B(1, 2), ~W(3, 1), ~W(2, 2)}          |
+| A(2, 1), l | gira(l) |          |                  |                                           | {~W(1, 1), ~W(2, 1), ~W(1, 2), ~B(1, 1), ~B(2, 1), ~B(1, 2), ~W(3, 1), ~W(2, 2)}          |
+| A(1, 1), l | av      |          |                  |                                           | {~W(1, 1), ~W(2, 1), ~W(1, 2), ~B(1, 1), ~B(2, 1), ~B(1, 2), ~W(3, 1), ~W(2, 2)}          |
+| A(1, 1), u | gira(r) |          |                  |                                           | {~W(1, 1), ~W(2, 1), ~W(1, 2), ~B(1, 1), ~B(2, 1), ~B(1, 2), ~W(3, 1), ~W(2, 2)}          |
+| A(1, 2), u | av      | f(1, 2)  | Mod. Ponens, RW1 | W(1, 3) ou W(1, 2) ou W(2, 2) ou W(1, 1)  | {~W(1, 1), ~W(2, 1), ~W(1, 2), ~B(1, 1), ~B(2, 1), ~B(1, 2), ~W(3, 1), ~W(2, 2)}          |
+| A(1, 2), u |         |          | Ou-eliminação x3 | W(1, 3)                                   | {~W(1, 1), ~W(2, 1), ~W(1, 2), ~B(1, 1), ~B(2, 1), ~B(1, 2), ~W(3, 1), ~W(2, 2), W(1, 3)} |
+| ...        | ...     | ...      | ...              | ...                                       | {...}                                                                                     |
 
 
 ## Lógica de Predicados (de 1ª Ordem)
@@ -851,3 +851,73 @@ avô(X, Y) :- filho(Y, Z), progenitor(X, Z).
 ?- filho(X, a).       % > %   X = b; X = c;
 ?- avô(X, d).         % > %   X = a;
 ```
+
+## Variáveis
+
+sequência de caracteres iniciado em maiúscula ou "_"
+
+"_" indica que não importa o valor assumido por essa variável, é desconsiderado
+
+## Átomos
+
+constantes "textuais". são letras, números ou símbolos, incluindo expressões
+
+### Números
+
+inteiros e números em notação de ponto flutuante
+
+### Strings
+
+texto entre $ ou '
+```prolog
+$samba$
+'samba'
+```
+
+## Estruturas
+
+"tipos de dados que podem ser usados para agrupar ou expressar uma relação entre termos"
+
+```prolog
+aniversario(jose,6,maio,1985).
+nacionalidade(clarice,brasileiro).
+amigo(maria, estela).
+```
+
+#### Listas
+
+sequência ordenada de elementos, podendo ser homogênea (elementos de mesmo tipo) ou heterogênea
+
+notação: \
+`[X|Y]`: X é **cabeça** da lista, Y é **cauda** da lista. Y é lista vazia ou não \
+`[X, Y | Z]`: X é cabeça da lista [Y|Z], Y é cabeça da lista Z
+
+relação construtora de listas
+
+```prolog
+cons(X, Y, [X|Y])
+
+?- cons(a, b, Z)                % Z = [a, b]
+?- cons(a, X, [a, b, c])        % X = [b, c]
+?- cons([a, b, c], [d, e], Z)   % Z = [[a, b, c], d, e]
+```
+
+## Unificação
+
+dois termos unificam se:
+- são iguais (caso sejam átomos/objetos/constantes)
+- ou os termos podem ser instanciados para constantes que unificam
+
+### processamento de listas
+
+| lista 1        | lista 2  | unificação  |
+| -------------- | -------- | ----------- |
+| [mesa]         | [X\|Y]   | X/mesa      |
+| [a,b,c,d,e]    | [X,Y\|Z] | X/a         |
+|                |          | Y/b         |
+|                |          | Z/[c,d,e]   |
+| [ano,bissexto] | [X,Y,Z]  | não unifica |
+| [ano,bissexto] | [X,Y\|Z] | X/ano       |
+|                |          | Y/bissexto  |
+|                |          | Z/[]        |
+
