@@ -1627,10 +1627,74 @@ Funtor de listas: `.`
 
 #### `=` (operador de unificação)
 
-infixo; `T1 = T2` quando há uma substituição nos termos que os torne literalmente iguais `T1o = T2o`
+infixo; `T1 = T2` quando há 0 ou 1 substituição nos termos que os torne literalmente iguais `T1o = T2o`
 - átomos só unificam quando são exatamente iguais
 - termos compostos unificam se os **funtores principais** dos termos são iguais, de mesma aridade e seus respectivos argumentos unificam
 - uma variável unifica com qualquer termo (substituição de variável)
 
 unificação em listas: \
 [X|Y] ou [X|[Y|Z]] unificam com [a, b, c, d]
+
+
+#### Operadores aritméticos
+
+X = Y     ->  há instanciações tais que as expressões sejam literalmente iguais?
+X is Y    ->  unifica a variável X para a avaliação de Y
+X =:= Y   ->  as duas expressões têm a mesma avaliação?
+
+:- X = 1+2      % resp: X = 1+2
+:- X, X is 1+2  % resp: X = 1+2
+:- X =:= 1+2    % resp: X = 3
+
+
+```prolog
+% fibonacci
+fib(0, 0).
+fib(1, 1).
+fib(N,X) :- N > 1, N1 is N-1, fib(N1,A), N2 is N-2, fib(N2,b), X is A+B.
+
+:- fib(6, X). % resp: X = 5
+:- fib(N, 8). % resp: N = 7
+
+% como tratamos de relações e temos a avaliação de primeira ordem de Prolog, podemos usar a recursividade da resolução em mais de uma via,
+```
+
+### Comparação de listas
+
+```prolog
+Sublist(X, ) :- append(_, Z, Y), append(X, _, Z).   % [[_, X], _]
+
+append([],L,L).
+append([H|T],L,[H|T1]) :- append(T,L,T1).
+```
+
+```prolog
+sublist(X, Y) :- append(_, X, _, Y).
+
+append([], [], L, L).
+append([], [H|T], L, [H|T1]) :- append([], T, L, T1).
+append([H|T], X, L, [H|T1]) :- append(T, X, L, T1).
+
+:- sublist(X, [1,2,3]).   % sublist([], [1,2,3]), [1], [1, 2], [1, 2, 3], [], [2], [2, 3], [], [3], []?
+:- sublist([1,2,3], X).   % sublist([1, 2, 3], [1, 2, 3])
+```
+
+### Especificação e execução em Prolog (motor de inferência)
+
+- uso de linguagem formal para representação do conhecimento
+- regras de inferência para manipulação do conhecimento
+- estratégia de busca para controle de inferências: **resolução de 1ª ordem**
+
+exemplo: \
+consideremos a consulta `?- G1, G2, ..., Gn`, com n *goals*
+
+o motor de inferência do Prolog:
+- busca no programa de cima para baixo uma cabeça que unifique para G1
+- encontra regra C tal que Cθ unifica com G1θ \
+  `C :- P1, P2, ..., Pm`
+- unificamos todos os termos e inserirmos o corpo da regra na consulta \
+  `?- P1θ, P2θ, ..., Pmθ, G2θ, ..., Gnθ`
+
+- **top-down**: percorre o programa de cima pra baixo
+- **depth-first**: chega na profundidade máxima antes de entrar em ramao
+- **backtracking**: volta e tenta encontrar uma prova alternativa
