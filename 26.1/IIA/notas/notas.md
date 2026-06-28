@@ -178,10 +178,10 @@ por que estudar jogos?
 - representabilidade
 - medida de desempenho
 
----                   | determinístico | sorte
----                   | ---            | ---
-informação perfeita   | xadrez, damas, go, othello | gamão, banco imobiliário
-informação imperfeita |                | bridge, etc. 
+| ---                   | determinístico             | sorte                    |
+| --------------------- | -------------------------- | ------------------------ |
+| informação perfeita   | xadrez, damas, go, othello | gamão, banco imobiliário |
+| informação imperfeita |                            | bridge, etc.             |
 
 ### minimax
 maximizar a utilidade (ganho) supondo que o adversário vai tentar minimizá-la
@@ -201,11 +201,11 @@ obs
 - complexidade de tempo O(b^m)
 - complexidade de espaço O(bm)
 
-jogo          |escala | algoritmo           | ano
----           | ---   | ---                 | ---
-jogo da velha | 3x3   | minimax             | -
-xadrez        | 8x8   | minimax, alfa-beta  | 1997
-go            | 19x19 | MCTS, AI, MC, RC    | 2016
+| jogo          | escala | algoritmo          | ano  |
+| ------------- | ------ | ------------------ | ---- |
+| jogo da velha | 3x3    | minimax            | -    |
+| xadrez        | 8x8    | minimax, alfa-beta | 1997 |
+| go            | 19x19  | MCTS, AI, MC, RC   | 2016 |
 
 
 ### poda alfa-beta
@@ -460,13 +460,13 @@ uma resolução implica:
 - custo total = busca + caminho
 
 tipos de problema
-dados conhecidos:   | estado atual | efeito das ações |
---                  | --    | --        
-estados simples     | X     | X
-estados múltiplos 1 |       | X
-estados múltiplos 2 |       |
-contingencial       |       |
-exploratório        |       |
+| dados conhecidos:   | estado atual | efeito das ações |
+| ------------------- | ------------ | ---------------- |
+| estados simples     | X            | X                |
+| estados múltiplos 1 |              | X                |
+| estados múltiplos 2 |              |
+| contingencial       |              |
+| exploratório        |              |
 
 ## Busca
 
@@ -626,11 +626,11 @@ na saída, usa a curva de ativação sigmoidal \
 função de perda para um modelo de classif icação de 3 ou mais classes
 
 
-características | binary crossentropy | categorical crossentropy
---              | --                  | --
-num classes     | 2                   | 3 ou mais
-ativação        | sigmóide            | softmax
-soma das prob.  | não precisa ser 1   | 1
+| características | binary crossentropy | categorical crossentropy |
+| --------------- | ------------------- | ------------------------ |
+| num classes     | 2                   | 3 ou mais                |
+| ativação        | sigmóide            | softmax                  |
+| soma das prob.  | não precisa ser 1   | 1                        |
 
 # Transformers
 
@@ -664,8 +664,24 @@ Episódico ou Não-Episódico
 Estático ou Dinâmico
 Discreto ou Contínuo
 
+<!-- 
+Li Weigang
 
 namkim
+
+Li passou um exercício rapidinho pra formular sentenças em LPO
+
+eu e o colega do meu lado demos um exemplo quase idêntico ao do quadro (nem todo brasileiro gosta de futebol -> nem todo americano gosta de basquete)
+li não gostou que repetimos a ideia, descartou (dps entendi q era pq ele queria eleger uma das respostas pra aparecer na prova)
+
+alguns grupos pra frente, alguém também imita a estrutura de outro exemplo, trocando não gostar de corrupção e burocracia por não gostar de fruta e legume. Li fala que tá errado, pq tem que gostar de fruta e legume
+
+outro fala algo sobre não gostar de pregar o dedo, que é ruim. "ah, mas esse é muito estranho! não", rindo
+
+no final, ele pergunta qual foi o melhor exemplo. uma pessoa fala que é o de pregar o dedo. ele discorda pq é muito estranho
+
+esse cara é engraçado. a aula foi meio freestyle, n ajudou tanto quem não fez lógica, LC1 ou não lembra muito de FTC. achei bem cômico como o critério de validade dos exemplos variava: uma hora, a ideia era ser sempre verdadeiro para a estrutura real do mundo; outra, era o moral e certo. nunca foi se a frase era bem formada ou não, faltou contexto
+-->
 
 ### Tipos de raciocínio
 
@@ -687,3 +703,221 @@ para o agente do mundo de Wumpus...
 - as regras de inferência são as formas que ele pode obter novos fatos sobre o mapa a partir dos fatos já considerados
 
 considerando regras de inferência que permitam o agente concluir ou supor onde tem um buraco, onde está Wumpus e quais casas são seguras, ele é capaz de descobrir o que há em cada casa do mapa. no melhor dos casos, poderá fazer isso sem cair em buracos ou encontrar Wumpus
+
+### Explorando o mundo de Wumpus
+
+legenda de sentenças: \
+~a : negação de a \
+a e b: conjunção de a e b \
+a ou b: disjunlão de a e b \
+a -> b: a implica b \
+X(x, y): objeto O ocupa a posição (x, y) do mapa (x coluna, y linha) \
+s(x, y): sensor s positivo na posição (x, y)
+
+ações: \
+av: avança na direção que o agente aponta \
+gira(l|r): gira 90º para esquerda ou direita \
+pega: pega objeto na mesma posição que o agente \
+at: atira flecha na direção que o agente aponta \
+sai: o agente sai da caverna (por onde entrou)
+
+objetos: \
+A: agente \
+O: ouro \
+B: buraco
+
+sensores (e regras do mundo de Wumpus): \
+f: fedor - RW1: casa de Wumpus e adjacentes \
+b: brisa - RW2: casa de buraco e adjacentes \
+c: choque - RW3: posição bloqueada, parede \
+l: luz do ouro - RW4: casa do ouro \
+g: grito de Wumpus - RW5: casa de Wumpus
+
+regras de inferência: \
+modus ponens \
+E-eliminação \
+E-introdução \
+Ou-introdução \
+Eliminação da dupla negação \
+Resolução unidade
+
+regras de inferência e regras de sensores: \
+s(x, y): s(x, y) ou s(x-1, y) ou s(x, y-1) ou s(x+1, y) ou s(x, y+1) \
+~s(x, y): ~s(x, y) e ~s(x-1, y) e ~s(x, y-1) e ~s(x+1, y) e ~s(x, y+1)
+
+situação do mundo: \
+![mundo_de_wumpus](mundo_de_wumpus.png)
+
+fixo: W(1, 3), O(2, 3), B(3, 1), B(3, 3), B(4, 4) \
+inicial: A(1, 1), agente aponta para a direita
+
+| agente     | ação    | sensores | regras aplicadas | novos fatos                               | base de conhecimento (sentenças atômicas)                                                 |
+| ---------- | ------- | -------- | ---------------- | ----------------------------------------- | ----------------------------------------------------------------------------------------- |
+| A(1, 1), r |         | ~f(1, 1) | Mod. Ponens, RW1 | ~W(1, 1) e ~W(2, 1) e ~W(1, 2)            | {}                                                                                        |
+| A(1, 1), r |         |          | E-eliminação x3  | ~W(1, 1), ~W(2, 1), ~W(1, 2)              | {~W(1, 1), ~W(2, 1), ~W(1, 2)}                                                            |
+| A(1, 1), r |         | ~b(1, 1) | Mod. Ponens, RW2 | ~B(1, 1) e ~B(2, 1) e ~B(1, 2)            | {~W(1, 1), ~W(2, 1), ~W(1, 2)}                                                            |
+| A(1, 1), r |         |          | E-eliminação x3  | ~B(1, 1), ~B(2, 1), ~B(1, 2)              | {~W(1, 1), ~W(2, 1), ~W(1, 2), ~B(1, 1), ~B(2, 1), ~B(1, 2)}                              |
+| A(2, 1), r | av      | ~f(2, 1) | Mod. Ponens, RW1 | ~W(2, 2) e ~W(1, 1) e ~W(2, 1) e ~W(3, 1) | {~W(1, 1), ~W(2, 1), ~W(1, 2), ~B(1, 1), ~B(2, 1), ~B(1, 2)}                              |
+| A(2, 1), r |         |          | E-eliminação x3  | ~W(2, 2), ~W(1, 1), ~W(2, 1), ~W(3, 1)    | {~W(1, 1), ~W(2, 1), ~W(1, 2), ~B(1, 1), ~B(2, 1), ~B(1, 2), ~W(3, 1), ~W(2, 2)}          |
+| A(2, 1), r |         | b(2, 1)  | Mod. Ponens, RW2 | B(2, 2) ou B(1, 1) ou B(2, 1) ou B(3, 1)  | {~W(1, 1), ~W(2, 1), ~W(1, 2), ~B(1, 1), ~B(2, 1), ~B(1, 2), ~W(3, 1), ~W(2, 2)}          |
+| A(2, 1), r |         |          | Ou-eliminação x2 | B(2, 2) ou B(3, 1)                        | {~W(1, 1), ~W(2, 1), ~W(1, 2), ~B(1, 1), ~B(2, 1), ~B(1, 2), ~W(3, 1), ~W(2, 2)}          |
+| A(2, 1), u | gira(l) |          |                  |                                           | {~W(1, 1), ~W(2, 1), ~W(1, 2), ~B(1, 1), ~B(2, 1), ~B(1, 2), ~W(3, 1), ~W(2, 2)}          |
+| A(2, 1), l | gira(l) |          |                  |                                           | {~W(1, 1), ~W(2, 1), ~W(1, 2), ~B(1, 1), ~B(2, 1), ~B(1, 2), ~W(3, 1), ~W(2, 2)}          |
+| A(1, 1), l | av      |          |                  |                                           | {~W(1, 1), ~W(2, 1), ~W(1, 2), ~B(1, 1), ~B(2, 1), ~B(1, 2), ~W(3, 1), ~W(2, 2)}          |
+| A(1, 1), u | gira(r) |          |                  |                                           | {~W(1, 1), ~W(2, 1), ~W(1, 2), ~B(1, 1), ~B(2, 1), ~B(1, 2), ~W(3, 1), ~W(2, 2)}          |
+| A(1, 2), u | av      | f(1, 2)  | Mod. Ponens, RW1 | W(1, 3) ou W(1, 2) ou W(2, 2) ou W(1, 1)  | {~W(1, 1), ~W(2, 1), ~W(1, 2), ~B(1, 1), ~B(2, 1), ~B(1, 2), ~W(3, 1), ~W(2, 2)}          |
+| A(1, 2), u |         |          | Ou-eliminação x3 | W(1, 3)                                   | {~W(1, 1), ~W(2, 1), ~W(1, 2), ~B(1, 1), ~B(2, 1), ~B(1, 2), ~W(3, 1), ~W(2, 2), W(1, 3)} |
+| ...        | ...     | ...      | ...              | ...                                       | {...}                                                                                     |
+
+
+## Lógica de Predicados (de 1ª Ordem)
+
+termos: constantes e variáveis \
+
+funções: tomam n termos e são avaliadas para apenas um termo, sendo n inteiro tal que 0 <= n \
+
+predicados: tomam uma sentença e são avaliadas para um valor de verdade (verdadeiro, falso) \
+
+sentenças: atômicas ou complexas
+- atômicas: formadas por apenas 1 predicado
+- complexas: formadas por predicados unidos por conectivos (operadores)
+
+conectivos:
+- negação: não A
+- conjunção: A e B
+- disjunção: A ou B
+- implicação: se A, então B
+- bi-implicação / equivalência: A = B, (A e B) ou (não A e não B)
+
+quantificadores:
+- universal: Ax, para todo x; x assume todo termo
+- existencial: Ex, existe x; x assume um termo
+
+Ax (Rx -> Vx) dado que Rx: x respira, Vx: x é vivo
+Ax (Rx -> Vx) =||= ~Ex ~(Rx -> Vx) =||= ~Ex (Rx e ~Vx)
+
+
+"LPO não faz engajamentos ontológicos para coisas como tempo, categorias, e eventos"
+
+## Conteúdos P2
+
+- RNN
+- Árvore de decisão
+- BERT
+  - Classificação Binária
+  - CrossEntropy
+- Lógica proposicional
+- Lógica de predicados de primeira ordem
+- Leis de De Morgan
+- Prolog
+
+# Métricas de avaliação de Machine Learning
+
+Contexto: classificação binária de elementos, positivo e negativo
+
+Precisão/Precision:
+$$\frac{tp}{tp+fp}$$
+
+Revocação/Recall:
+$$\frac{tp}{tp+fn}$$
+
+Acurácia/Accuracy:
+$$\frac{tp+tn}{tp+tn+fp+fn}=\frac{tp+tn}{total}$$
+
+# Prolog
+
+utilizado em sistemas: Baseados em Conhecimento, Banco de Dados, Sistemas Especialistas, PLN
+
+exercício: definir regra de neto
+
+progenitor: X gerou Y
+filho: X é gerado por Y
+avô: X é avô de Y, X é filho de Z e Z é filho de Y
+
+```prolog
+% fatos
+progenitor(a, b).
+progenitor(a, c).
+progenitor(b, d).
+progenitor(e, d).
+
+% regras
+filho(X, Y) :- progenitor(Y, X).
+
+avô(X, Y) :- filho(Y, Z), progenitor(X, Z).
+
+% questões
+?- progenitor(a, X).  % > %   X = b; X = c;
+?- filho(X, a).       % > %   X = b; X = c;
+?- avô(X, d).         % > %   X = a;
+```
+
+## Variáveis
+
+sequência de caracteres iniciado em maiúscula ou "_"
+
+"_" indica que não importa o valor assumido por essa variável, é desconsiderado
+
+## Átomos
+
+constantes "textuais". são letras, números ou símbolos, incluindo expressões
+
+### Números
+
+inteiros e números em notação de ponto flutuante
+
+### Strings
+
+texto entre $ ou '
+```prolog
+$samba$
+'samba'
+```
+
+## Estruturas
+
+"tipos de dados que podem ser usados para agrupar ou expressar uma relação entre termos"
+
+```prolog
+aniversario(jose,6,maio,1985).
+nacionalidade(clarice,brasileiro).
+amigo(maria, estela).
+```
+
+#### Listas
+
+sequência ordenada de elementos, podendo ser homogênea (elementos de mesmo tipo) ou heterogênea
+
+notação: \
+`[X|Y]`: X é **cabeça** da lista, Y é **cauda** da lista. Y é lista vazia ou não \
+`[X, Y | Z]`: X é cabeça da lista [Y|Z], Y é cabeça da lista Z
+
+relação construtora de listas
+
+```prolog
+cons(X, Y, [X|Y])
+
+?- cons(a, b, Z)                % Z = [a, b]
+?- cons(a, X, [a, b, c])        % X = [b, c]
+?- cons([a, b, c], [d, e], Z)   % Z = [[a, b, c], d, e]
+```
+
+## Unificação
+
+dois termos unificam se:
+- são iguais (caso sejam átomos/objetos/constantes)
+- ou os termos podem ser instanciados para constantes que unificam
+
+### processamento de listas
+
+| lista 1        | lista 2  | unificação  |
+| -------------- | -------- | ----------- |
+| [mesa]         | [X\|Y]   | X/mesa      |
+| [a,b,c,d,e]    | [X,Y\|Z] | X/a         |
+|                |          | Y/b         |
+|                |          | Z/[c,d,e]   |
+| [ano,bissexto] | [X,Y,Z]  | não unifica |
+| [ano,bissexto] | [X,Y\|Z] | X/ano       |
+|                |          | Y/bissexto  |
+|                |          | Z/[]        |
+
