@@ -1,0 +1,162 @@
+<mxfile host="app.diagrams.net" pages="2">
+  <diagram name="Página-1" id="hjTbNTtcPkWqW-cdOPd7">
+    <mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="2WbAixaRN6zAZxSWlihN-1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;spacingTop=0;spacingLeft=0;spacingRight=0;spacing=6;fillColor=#fff2cc;strokeColor=#d6b656;align=center;" value="Controle de progresso de missão" vertex="1">
+          <mxGeometry height="70" width="170" x="40" y="620" as="geometry" />
+        </mxCell>
+        <mxCell id="2WbAixaRN6zAZxSWlihN-2" parent="1" style="rounded=0;whiteSpace=wrap;html=1;spacingTop=0;spacingLeft=0;spacingRight=0;spacing=6;fillColor=#dae8fc;strokeColor=#6c8ebf;align=center;" value="Robô sempre comunica o estado atual da missão ao sistema" vertex="1">
+          <mxGeometry height="70" width="170" x="40" y="710" as="geometry" />
+        </mxCell>
+        <mxCell id="2WbAixaRN6zAZxSWlihN-3" parent="1" style="rounded=0;whiteSpace=wrap;html=1;spacingTop=0;spacingLeft=0;spacingRight=0;spacing=6;fillColor=#dae8fc;strokeColor=#6c8ebf;align=center;" value="Sistema fornece estimativa de tempo para conclusão da missão" vertex="1">
+          <mxGeometry height="70" width="170" x="230" y="710" as="geometry" />
+        </mxCell>
+        <mxCell id="2WbAixaRN6zAZxSWlihN-4" parent="1" style="rounded=0;whiteSpace=wrap;html=1;spacingTop=0;spacingLeft=0;spacingRight=0;spacing=6;fillColor=#d5e8d4;strokeColor=#82b366;align=left;" value="&lt;b&gt;Dado&lt;/b&gt; um robô em missão&lt;div&gt;&lt;b&gt;Quando&lt;/b&gt; ele recebe os recursos do armazém&lt;/div&gt;&lt;div&gt;&lt;b&gt;Então&lt;/b&gt; ele termina a fase de coleta e avisa o Sistema.&lt;/div&gt;" vertex="1">
+          <mxGeometry height="80" width="170" x="40" y="800" as="geometry" />
+        </mxCell>
+        <mxCell id="2WbAixaRN6zAZxSWlihN-5" parent="1" style="rounded=0;whiteSpace=wrap;html=1;spacingTop=0;spacingLeft=0;spacingRight=0;spacing=6;fillColor=#d5e8d4;strokeColor=#82b366;align=left;" value="&lt;b&gt;Dado&lt;/b&gt; um robô em missão&lt;br&gt;&lt;b&gt;Quando&lt;/b&gt; entrega os recursos ao destino&lt;div&gt;&lt;b&gt;Então&lt;/b&gt; ele completa a missão e avisa o Sistema.&lt;/div&gt;" vertex="1">
+          <mxGeometry height="80" width="170" x="40" y="900" as="geometry" />
+        </mxCell>
+        <mxCell id="2WbAixaRN6zAZxSWlihN-6" parent="1" style="rounded=0;whiteSpace=wrap;html=1;spacingTop=0;spacingLeft=0;spacingRight=0;spacing=6;fillColor=#d5e8d4;strokeColor=#82b366;align=left;" value="&lt;b&gt;Dado&lt;/b&gt; nova missão iniciada&lt;br&gt;&lt;b&gt;Quando&lt;/b&gt; sistema atribui missão a robô&lt;div&gt;&lt;b&gt;Então&lt;/b&gt; é calculado o tempo estimado da missão.&lt;/div&gt;" vertex="1">
+          <mxGeometry height="80" width="170" x="230" y="800" as="geometry" />
+        </mxCell>
+        <mxCell id="2WbAixaRN6zAZxSWlihN-7" parent="1" style="rounded=0;whiteSpace=wrap;html=1;spacingTop=0;spacingLeft=0;spacingRight=0;spacing=6;fillColor=#d5e8d4;strokeColor=#82b366;align=left;" value="&lt;b&gt;Dado&lt;/b&gt; robô em missão&lt;br&gt;&lt;b&gt;Quando&lt;/b&gt; há um atraso na coleta&lt;div&gt;&lt;b&gt;Então&lt;/b&gt; o Sistema recalcula o tempo estimado.&amp;nbsp;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="80" width="170" x="230" y="900" as="geometry" />
+        </mxCell>
+        <mxCell id="2WbAixaRN6zAZxSWlihN-10" parent="1" style="rounded=0;whiteSpace=wrap;html=1;spacingTop=0;spacingLeft=0;spacingRight=0;spacing=6;fillColor=#fff2cc;strokeColor=#d6b656;align=center;" value="Monitoramento de bateria de robô" vertex="1">
+          <mxGeometry height="70" width="170" x="1120" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="2WbAixaRN6zAZxSWlihN-11" parent="1" style="rounded=0;whiteSpace=wrap;html=1;spacingTop=0;spacingLeft=0;spacingRight=0;spacing=6;fillColor=#dae8fc;strokeColor=#6c8ebf;align=center;" value="Se chegar a 10% na fase de coleta, o robô retorna para recarga" vertex="1">
+          <mxGeometry height="70" width="170" x="1120" y="130" as="geometry" />
+        </mxCell>
+        <mxCell id="2WbAixaRN6zAZxSWlihN-12" parent="1" style="rounded=0;whiteSpace=wrap;html=1;spacingTop=0;spacingLeft=0;spacingRight=0;spacing=6;fillColor=#dae8fc;strokeColor=#6c8ebf;align=center;" value="Se chegar a 30% na entrega, o robô deposita recurso em ponto de controle e retorna para recarga" vertex="1">
+          <mxGeometry height="70" width="170" x="1310" y="130" as="geometry" />
+        </mxCell>
+        <mxCell id="2WbAixaRN6zAZxSWlihN-13" parent="1" style="rounded=0;whiteSpace=wrap;html=1;spacingTop=0;spacingLeft=0;spacingRight=0;spacing=6;fillColor=#d5e8d4;strokeColor=#82b366;align=left;" value="&lt;b&gt;Dado&lt;/b&gt; robô em fase de coleta&lt;br&gt;&lt;b&gt;Quando&lt;/b&gt;&amp;nbsp;bateria chega a 10%&lt;div&gt;&lt;b&gt;Então&lt;/b&gt;&amp;nbsp;retorna para estação de recarga.&lt;/div&gt;" vertex="1">
+          <mxGeometry height="80" width="170" x="1120" y="220" as="geometry" />
+        </mxCell>
+        <mxCell id="2WbAixaRN6zAZxSWlihN-14" parent="1" style="rounded=0;whiteSpace=wrap;html=1;spacingTop=0;spacingLeft=0;spacingRight=0;spacing=6;fillColor=#d5e8d4;strokeColor=#82b366;align=left;" value="&lt;b&gt;Dado&lt;/b&gt;&amp;nbsp;robô em fase de coleta com 50% de carga&lt;br&gt;&lt;b&gt;Quando&lt;/b&gt;&amp;nbsp;chega em ponto de controle&lt;div&gt;&lt;b&gt;Então&lt;/b&gt;&amp;nbsp;segue para entrega.&lt;/div&gt;" vertex="1">
+          <mxGeometry height="80" width="170" x="1120" y="320" as="geometry" />
+        </mxCell>
+        <mxCell id="2WbAixaRN6zAZxSWlihN-15" parent="1" style="rounded=0;whiteSpace=wrap;html=1;spacingTop=0;spacingLeft=0;spacingRight=0;spacing=6;fillColor=#d5e8d4;strokeColor=#82b366;align=left;" value="&lt;b&gt;Dado&lt;/b&gt;&amp;nbsp;robô em fase de entrega&lt;br&gt;&lt;b&gt;Quando&lt;/b&gt;&amp;nbsp;chega a 30%&amp;nbsp;&lt;div&gt;&lt;b&gt;Então&lt;/b&gt;&amp;nbsp;vai até ponto de controle, deposita recursos e volta para a estação de recarga&lt;/div&gt;" vertex="1">
+          <mxGeometry height="110" width="170" x="1310" y="220" as="geometry" />
+        </mxCell>
+        <mxCell id="2WbAixaRN6zAZxSWlihN-16" parent="1" style="rounded=0;whiteSpace=wrap;html=1;spacingTop=0;spacingLeft=0;spacingRight=0;spacing=6;fillColor=#d5e8d4;strokeColor=#82b366;align=left;" value="&lt;b&gt;Dado&lt;/b&gt;&amp;nbsp;robô em fase de entrega com 60% de carga&lt;br&gt;&lt;b&gt;Quando&lt;/b&gt;&amp;nbsp;chega ao local de entrega&lt;div&gt;&lt;b&gt;Então&lt;/b&gt;&amp;nbsp;deposita os recursos e volta para a estação de recarga&lt;/div&gt;" vertex="1">
+          <mxGeometry height="110" width="170" x="1310" y="350" as="geometry" />
+        </mxCell>
+        <mxCell id="2WbAixaRN6zAZxSWlihN-17" parent="1" style="rounded=0;whiteSpace=wrap;html=1;spacingTop=0;spacingLeft=0;spacingRight=0;spacing=6;fillColor=#fff2cc;strokeColor=#d6b656;align=center;" value="Atribuição de missão" vertex="1">
+          <mxGeometry height="70" width="170" x="580" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="2WbAixaRN6zAZxSWlihN-18" parent="1" style="rounded=0;whiteSpace=wrap;html=1;spacingTop=0;spacingLeft=0;spacingRight=0;spacing=6;fillColor=#dae8fc;strokeColor=#6c8ebf;align=center;" value="Sistema deve alocar mais de um robô para missão com múltiplos recursos solicitados" vertex="1">
+          <mxGeometry height="70" width="170" x="770" y="130" as="geometry" />
+        </mxCell>
+        <mxCell id="2WbAixaRN6zAZxSWlihN-19" parent="1" style="rounded=0;whiteSpace=wrap;html=1;spacingTop=0;spacingLeft=0;spacingRight=0;spacing=6;fillColor=#dae8fc;strokeColor=#6c8ebf;align=center;" value="Sistema deve atribuir missão não completa a robô livre na estação de recarga" vertex="1">
+          <mxGeometry height="70" width="170" x="580" y="130" as="geometry" />
+        </mxCell>
+        <mxCell id="2WbAixaRN6zAZxSWlihN-20" parent="1" style="rounded=0;whiteSpace=wrap;html=1;spacingTop=0;spacingLeft=0;spacingRight=0;spacing=6;fillColor=#d5e8d4;strokeColor=#82b366;align=left;" value="&lt;b&gt;Dado&lt;/b&gt;&amp;nbsp;missão iniciada&lt;br&gt;&lt;b&gt;Quando&lt;/b&gt;&amp;nbsp;não há robô alocado para missão&lt;div&gt;&lt;b&gt;Então&lt;/b&gt;&amp;nbsp;atribuir missão a robô na estação de recarga.&lt;/div&gt;" vertex="1">
+          <mxGeometry height="80" width="170" x="580" y="220" as="geometry" />
+        </mxCell>
+        <mxCell id="2WbAixaRN6zAZxSWlihN-21" parent="1" style="rounded=0;whiteSpace=wrap;html=1;spacingTop=0;spacingLeft=0;spacingRight=0;spacing=6;fillColor=#d5e8d4;strokeColor=#82b366;align=left;" value="&lt;b&gt;Dado&lt;/b&gt;&amp;nbsp;missão iniciada&lt;br&gt;&lt;b&gt;Quando&lt;/b&gt;&amp;nbsp;não há robô na estação de recarga&lt;div&gt;&lt;b&gt;Então&lt;/b&gt;&amp;nbsp;esperar robô livre na estação de recarga&lt;/div&gt;" vertex="1">
+          <mxGeometry height="90" width="170" x="580" y="320" as="geometry" />
+        </mxCell>
+        <mxCell id="2WbAixaRN6zAZxSWlihN-22" parent="1" style="rounded=0;whiteSpace=wrap;html=1;spacingTop=0;spacingLeft=0;spacingRight=0;spacing=6;fillColor=#d5e8d4;strokeColor=#82b366;align=left;" value="&lt;b&gt;Dado&lt;/b&gt; missão iniciada para entrega de 2 recursos&lt;br&gt;&lt;b&gt;Quando&lt;/b&gt; há um robô em fase de coleta&lt;div&gt;&lt;b&gt;Então&lt;/b&gt; atribuir a missão a robô na estação de recarga&lt;/div&gt;" vertex="1">
+          <mxGeometry height="100" width="170" x="770" y="220" as="geometry" />
+        </mxCell>
+        <mxCell id="2WbAixaRN6zAZxSWlihN-23" parent="1" style="rounded=0;whiteSpace=wrap;html=1;spacingTop=0;spacingLeft=0;spacingRight=0;spacing=6;fillColor=#d5e8d4;strokeColor=#82b366;align=left;" value="&lt;b&gt;Dado&lt;/b&gt;&amp;nbsp;missão para entrega de 3 recursos&lt;br&gt;&lt;b&gt;Quando&lt;/b&gt;&amp;nbsp;há 1 robô livre na estação e 2 em entrega&lt;div&gt;&lt;b&gt;Então&lt;/b&gt;&amp;nbsp;atribuir missão a robô livre na estação.&lt;/div&gt;" vertex="1">
+          <mxGeometry height="100" width="170" x="770" y="340" as="geometry" />
+        </mxCell>
+        <mxCell id="2WbAixaRN6zAZxSWlihN-24" parent="1" style="rounded=0;whiteSpace=wrap;html=1;spacingTop=0;spacingLeft=0;spacingRight=0;spacing=6;fillColor=#fff2cc;strokeColor=#d6b656;align=center;" value="Disparo de alerta" vertex="1">
+          <mxGeometry height="70" width="170" x="600" y="620" as="geometry" />
+        </mxCell>
+        <mxCell id="2WbAixaRN6zAZxSWlihN-25" parent="1" style="rounded=0;whiteSpace=wrap;html=1;spacingTop=0;spacingLeft=0;spacingRight=0;spacing=6;fillColor=#dae8fc;strokeColor=#6c8ebf;align=center;" value="Sistema&amp;nbsp;deve enviar relatório a gerente em caso de falha na missão" vertex="1">
+          <mxGeometry height="70" width="170" x="600" y="710" as="geometry" />
+        </mxCell>
+        <mxCell id="2WbAixaRN6zAZxSWlihN-26" parent="1" style="rounded=0;whiteSpace=wrap;html=1;spacingTop=0;spacingLeft=0;spacingRight=0;spacing=6;fillColor=#dae8fc;strokeColor=#6c8ebf;align=center;" value="Sistema deve reatribuir missão em caso de falha" vertex="1">
+          <mxGeometry height="70" width="170" x="790" y="710" as="geometry" />
+        </mxCell>
+        <mxCell id="2WbAixaRN6zAZxSWlihN-27" parent="1" style="rounded=0;whiteSpace=wrap;html=1;spacingTop=0;spacingLeft=0;spacingRight=0;spacing=6;fillColor=#d5e8d4;strokeColor=#82b366;align=left;" value="&lt;b&gt;Dado&lt;/b&gt;&amp;nbsp;robô em fase de entrega&lt;br&gt;&lt;b&gt;Quando&lt;/b&gt;&amp;nbsp;robô não deposita recurso no ponto de controle&lt;div&gt;&lt;b&gt;Então&lt;/b&gt;&amp;nbsp;Sistema envia relatório a gerente.&lt;/div&gt;" vertex="1">
+          <mxGeometry height="100" width="170" x="600" y="800" as="geometry" />
+        </mxCell>
+        <mxCell id="2WbAixaRN6zAZxSWlihN-28" parent="1" style="rounded=0;whiteSpace=wrap;html=1;spacingTop=0;spacingLeft=0;spacingRight=0;spacing=6;fillColor=#d5e8d4;strokeColor=#82b366;align=left;" value="&lt;b&gt;Dado&lt;/b&gt;&amp;nbsp;robô em fase de coleta&lt;br&gt;&lt;b&gt;Quando&lt;/b&gt;&amp;nbsp;robô não chega a armazém&lt;div&gt;&lt;b&gt;Então&lt;/b&gt;&amp;nbsp;Sistema envia relatório a gerente.&lt;/div&gt;" vertex="1">
+          <mxGeometry height="80" width="170" x="600" y="920" as="geometry" />
+        </mxCell>
+        <mxCell id="2WbAixaRN6zAZxSWlihN-29" parent="1" style="rounded=0;whiteSpace=wrap;html=1;spacingTop=0;spacingLeft=0;spacingRight=0;spacing=6;fillColor=#d5e8d4;strokeColor=#82b366;align=left;" value="&lt;b&gt;Dado&lt;/b&gt;&amp;nbsp;robô em fase de coleta&lt;br&gt;&lt;b&gt;Quando&lt;/b&gt;&amp;nbsp;robô falha&lt;div&gt;&lt;b&gt;Então&lt;/b&gt;&amp;nbsp;recomeçar processo de atribuição para coleta em armazém.&lt;/div&gt;" vertex="1">
+          <mxGeometry height="80" width="170" x="790" y="800" as="geometry" />
+        </mxCell>
+        <mxCell id="2WbAixaRN6zAZxSWlihN-30" parent="1" style="rounded=0;whiteSpace=wrap;html=1;spacingTop=0;spacingLeft=0;spacingRight=0;spacing=6;fillColor=#d5e8d4;strokeColor=#82b366;align=left;" value="&lt;b&gt;Dado&lt;/b&gt;&amp;nbsp;robô em fase de entrega&lt;br&gt;&lt;b&gt;Quando&lt;/b&gt;&amp;nbsp;robô falha&lt;div&gt;&lt;b&gt;Então&lt;/b&gt;&amp;nbsp;recomeçar processo de atribuição para coleta em armazém.&lt;/div&gt;" vertex="1">
+          <mxGeometry height="90" width="170" x="790" y="890" as="geometry" />
+        </mxCell>
+        <mxCell id="2WbAixaRN6zAZxSWlihN-31" parent="1" style="rounded=0;whiteSpace=wrap;html=1;spacingTop=0;spacingLeft=0;spacingRight=0;spacing=6;fillColor=#fff2cc;strokeColor=#d6b656;align=center;" value="Requisição de recursos" vertex="1">
+          <mxGeometry height="70" width="170" x="40" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="2WbAixaRN6zAZxSWlihN-32" parent="1" style="rounded=0;whiteSpace=wrap;html=1;spacingTop=0;spacingLeft=0;spacingRight=0;spacing=6;fillColor=#dae8fc;strokeColor=#6c8ebf;align=center;" value="Sistema deve consultar estoque de recursos requisitados no armazém" vertex="1">
+          <mxGeometry height="70" width="170" x="40" y="130" as="geometry" />
+        </mxCell>
+        <mxCell id="2WbAixaRN6zAZxSWlihN-33" parent="1" style="rounded=0;whiteSpace=wrap;html=1;spacingTop=0;spacingLeft=0;spacingRight=0;spacing=6;fillColor=#dae8fc;strokeColor=#6c8ebf;align=center;" value="Sistema deve iniciar missão para atender requisição pendente" vertex="1">
+          <mxGeometry height="70" width="170" x="230" y="130" as="geometry" />
+        </mxCell>
+        <mxCell id="2WbAixaRN6zAZxSWlihN-34" parent="1" style="rounded=0;whiteSpace=wrap;html=1;spacingTop=0;spacingLeft=0;spacingRight=0;spacing=6;fillColor=#d5e8d4;strokeColor=#82b366;align=left;" value="&lt;b&gt;Dado&lt;/b&gt;&amp;nbsp;Sistema esperando requisição&lt;br&gt;&lt;b&gt;Quando&lt;/b&gt;&amp;nbsp;recebe requisição de um recurso&lt;div&gt;&lt;b&gt;Então&lt;/b&gt;&amp;nbsp;envia pedido de consulta de estoque d&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;o recurso solicitado&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;a armazém.&lt;/span&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="120" width="170" x="40" y="220" as="geometry" />
+        </mxCell>
+        <mxCell id="2WbAixaRN6zAZxSWlihN-35" parent="1" style="rounded=0;whiteSpace=wrap;html=1;spacingTop=0;spacingLeft=0;spacingRight=0;spacing=6;fillColor=#d5e8d4;strokeColor=#82b366;align=left;" value="&lt;b&gt;Dado&lt;/b&gt;&amp;nbsp;Sistema em missão&lt;br&gt;&lt;b&gt;Quando&lt;/b&gt;&amp;nbsp;recebe requisição de 3 recursos diferentes&lt;div&gt;&lt;b&gt;Então&lt;/b&gt;&amp;nbsp;envia pedido de consulta de estoque dos recursos solicitados a armazéns.&lt;/div&gt;" vertex="1">
+          <mxGeometry height="110" width="170" x="40" y="360" as="geometry" />
+        </mxCell>
+        <mxCell id="2WbAixaRN6zAZxSWlihN-36" parent="1" style="rounded=0;whiteSpace=wrap;html=1;spacingTop=0;spacingLeft=0;spacingRight=0;spacing=6;fillColor=#d5e8d4;strokeColor=#82b366;align=left;" value="&lt;b&gt;Dado&lt;/b&gt;&amp;nbsp;Sistema sem missão&lt;br&gt;&lt;b&gt;Quando&lt;/b&gt;&amp;nbsp;recebe requisição de recursos&lt;div&gt;&lt;b&gt;Então&lt;/b&gt;&amp;nbsp;inicia missão.&lt;/div&gt;" vertex="1">
+          <mxGeometry height="80" width="170" x="230" y="220" as="geometry" />
+        </mxCell>
+        <mxCell id="2WbAixaRN6zAZxSWlihN-37" parent="1" style="rounded=0;whiteSpace=wrap;html=1;spacingTop=0;spacingLeft=0;spacingRight=0;spacing=6;fillColor=#d5e8d4;strokeColor=#82b366;align=left;" value="&lt;b&gt;Dado&lt;/b&gt;&amp;nbsp;Sistema em missão&lt;br&gt;&lt;b&gt;Quando&lt;/b&gt;&amp;nbsp;recebe requisição de recursos&lt;div&gt;&lt;b&gt;Então&lt;/b&gt;&amp;nbsp;adiciona missão na fila.&lt;/div&gt;" vertex="1">
+          <mxGeometry height="80" width="170" x="230" y="320" as="geometry" />
+        </mxCell>
+        <mxCell id="ADhdGS2gj1P6rOT5UbFd-1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;spacingTop=0;spacingLeft=0;spacingRight=0;spacing=6;fillColor=#f8cecc;strokeColor=#b85450;align=center;" value="Robô em fase de coleta com 25% de carga deve fazer o que quando passa para entrega?" vertex="1">
+          <mxGeometry height="80" width="140" x="1500" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="ADhdGS2gj1P6rOT5UbFd-2" parent="1" style="rounded=0;whiteSpace=wrap;html=1;spacingTop=0;spacingLeft=0;spacingRight=0;spacing=6;fillColor=#f8cecc;strokeColor=#b85450;align=center;" value="Como detectar falha na coleta/entrega? Bateria? Ausência de atualizações da entrega?" vertex="1">
+          <mxGeometry height="100" width="120" x="980" y="620" as="geometry" />
+        </mxCell>
+        <mxCell id="ADhdGS2gj1P6rOT5UbFd-3" parent="1" style="rounded=0;whiteSpace=wrap;html=1;spacingTop=0;spacingLeft=0;spacingRight=0;spacing=6;fillColor=#f8cecc;strokeColor=#b85450;align=center;" value="Que informações devem constar no relatório para o gerente solucionar o problema?" vertex="1">
+          <mxGeometry height="100" width="120" x="980" y="740" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="gaOfVAjgNYuuGYPDLVDe" name="Página-2">
+    <mxGraphModel dx="1414" dy="821" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="aH_u6QuxqINIDHgwhKYM-11" parent="1" style="rounded=0;whiteSpace=wrap;html=1;spacingTop=0;spacingLeft=0;spacingRight=0;spacing=6;fillColor=#fff2cc;strokeColor=#d6b656;" value="História de Usuário" vertex="1">
+          <mxGeometry height="100" width="140" x="40" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="aH_u6QuxqINIDHgwhKYM-12" parent="1" style="rounded=0;whiteSpace=wrap;html=1;spacingTop=0;spacingLeft=0;spacingRight=0;spacing=6;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Regra 1" vertex="1">
+          <mxGeometry height="100" width="140" x="40" y="210" as="geometry" />
+        </mxCell>
+        <mxCell id="aH_u6QuxqINIDHgwhKYM-13" parent="1" style="rounded=0;whiteSpace=wrap;html=1;spacingTop=0;spacingLeft=0;spacingRight=0;spacing=6;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Regra 2" vertex="1">
+          <mxGeometry height="100" width="140" x="220" y="210" as="geometry" />
+        </mxCell>
+        <mxCell id="aH_u6QuxqINIDHgwhKYM-14" parent="1" style="rounded=0;whiteSpace=wrap;html=1;spacingTop=0;spacingLeft=0;spacingRight=0;spacing=6;fillColor=#d5e8d4;strokeColor=#82b366;" value="Ex 1.1" vertex="1">
+          <mxGeometry height="100" width="140" x="40" y="340" as="geometry" />
+        </mxCell>
+        <mxCell id="aH_u6QuxqINIDHgwhKYM-15" parent="1" style="rounded=0;whiteSpace=wrap;html=1;spacingTop=0;spacingLeft=0;spacingRight=0;spacing=6;fillColor=#d5e8d4;strokeColor=#82b366;" value="Ex 1.2" vertex="1">
+          <mxGeometry height="100" width="140" x="40" y="470" as="geometry" />
+        </mxCell>
+        <mxCell id="aH_u6QuxqINIDHgwhKYM-16" parent="1" style="rounded=0;whiteSpace=wrap;html=1;spacingTop=0;spacingLeft=0;spacingRight=0;spacing=6;fillColor=#d5e8d4;strokeColor=#82b366;" value="Ex 2.1" vertex="1">
+          <mxGeometry height="100" width="140" x="220" y="340" as="geometry" />
+        </mxCell>
+        <mxCell id="aH_u6QuxqINIDHgwhKYM-17" parent="1" style="rounded=0;whiteSpace=wrap;html=1;spacingTop=0;spacingLeft=0;spacingRight=0;spacing=6;fillColor=#d5e8d4;strokeColor=#82b366;" value="Ex 2.2" vertex="1">
+          <mxGeometry height="100" width="140" x="220" y="470" as="geometry" />
+        </mxCell>
+        <mxCell id="aH_u6QuxqINIDHgwhKYM-18" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;rounded=0;" value="Modelo KAOS&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;Goal Achieve [&amp;lt;nome&amp;gt;]&lt;br&gt;&lt;div&gt;Dado &amp;lt;inicial&amp;gt;&lt;/div&gt;&lt;div&gt;Quando &amp;lt;gatilho&amp;gt;&lt;/div&gt;&lt;div&gt;Então &amp;lt;resposta&amp;gt;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;Goal Mantain [&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&amp;lt;nome&amp;gt;&lt;/span&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;]&lt;/span&gt;&lt;/div&gt;&lt;div&gt;Enquanto &amp;lt;estadoX&amp;gt;&lt;/div&gt;&lt;div&gt;Mantenha &amp;lt;estadoY&amp;gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;Goal Avoid [&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&amp;lt;nome&amp;gt;&lt;/span&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;]&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;Enquanto &amp;lt;estadoX&amp;gt;&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;Evite &amp;lt;estadoY&amp;gt;&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&lt;br&gt;&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;temporalidade da ação:&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;- eventually&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;- dentro de &amp;lt;tempo&amp;gt;&lt;/span&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="270" width="190" x="597" y="110" as="geometry" />
+        </mxCell>
+        <mxCell id="aH_u6QuxqINIDHgwhKYM-19" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=top;rounded=0;" value="features possíveis&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;traçar rota do robô&lt;/div&gt;&lt;div&gt;- destino&lt;/div&gt;&lt;div&gt;- robô disponível e carregado com mais de 30%&lt;/div&gt;&lt;div&gt;-&amp;nbsp;&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;calcular tempo de entrega&lt;/div&gt;&lt;div&gt;- tempo de espera&lt;/div&gt;&lt;div&gt;- tempo de viagem&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;definir entrega como completa&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;atribuir entrega a robô&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;reatribuir entrega a outro robô&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;depositar recursos em ponto de controle&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;avisar&amp;nbsp;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="430" width="150" x="430" y="110" as="geometry" />
+        </mxCell>
+        <mxCell id="aH_u6QuxqINIDHgwhKYM-20" parent="1" style="rounded=0;whiteSpace=wrap;html=1;spacingTop=0;spacingLeft=0;spacingRight=0;spacing=6;fillColor=#f8cecc;strokeColor=#b85450;align=center;" value="Dúvida" vertex="1">
+          <mxGeometry height="70" width="140" x="130" y="595" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
