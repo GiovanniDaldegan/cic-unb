@@ -1,0 +1,4 @@
+DSU
+
+- o que é o swap(a, b) na união?
+  é a troca do representante (parent) de a e b (?), para garantir que sempre unimos o menor componente para o maior componente. essa otimização garante que a árvore gerada nas uniões sempre têm a menor profundidade possível e menor número de filhos adicionados nas folhas da ávore já existente
