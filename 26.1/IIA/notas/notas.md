@@ -830,8 +830,8 @@ utilizado em sistemas: Baseados em Conhecimento, Banco de Dados, Sistemas Especi
 
 exercício: definir regra de neto
 
-progenitor: X gerou Y
-filho: X é gerado por Y
+progenitor: X gerou Y \
+filho: X é gerado por Y \
 avô: X é avô de Y, X é filho de Z e Z é filho de Y
 
 ```prolog
@@ -846,10 +846,10 @@ filho(X, Y) :- progenitor(Y, X).
 
 avô(X, Y) :- filho(Y, Z), progenitor(X, Z).
 
-% questões
-?- progenitor(a, X).  % > %   X = b; X = c;
-?- filho(X, a).       % > %   X = b; X = c;
-?- avô(X, d).         % > %   X = a;
+% questões / queries
+?- progenitor(a, X).  %   >   X = b; X = c;
+?- filho(X, a).       %   >   X = b; X = c;
+?- avô(X, d).         %   >   X = a;
 ```
 
 ## Variáveis
@@ -910,14 +910,117 @@ dois termos unificam se:
 
 ### processamento de listas
 
-| lista 1        | lista 2  | unificação  |
-| -------------- | -------- | ----------- |
-| [mesa]         | [X\|Y]   | X/mesa      |
-| [a,b,c,d,e]    | [X,Y\|Z] | X/a         |
-|                |          | Y/b         |
-|                |          | Z/[c,d,e]   |
-| [ano,bissexto] | [X,Y,Z]  | não unifica |
-| [ano,bissexto] | [X,Y\|Z] | X/ano       |
-|                |          | Y/bissexto  |
-|                |          | Z/[]        |
+| lista 1        | lista 2     | unificação  |
+| -------------- | ----------- | ----------- |
+| [mesa]         | [X \| Y]    | X/mesa      |
+|                |             | Y/[  ]      |
+| [a,b,c,d,e]    | [X, Y \| Z] | X/a         |
+|                |             | Y/b         |
+|                |             | Z/[c,d,e]   |
+| [ano,bissexto] | [X, Y, Z]   | não unifica |
+| [ano,bissexto] | [X, Y \| Z] | X/ano       |
+|                |             | Y/bissexto  |
+|                |             | Z/[]        |
 
+```prolog
+% Pertencimento
+
+pertence(Elem, Lista).
+
+pertence(Elem, [Elem | _]).                             % condição de parada
+pertence(Elem, [_ | Cauda]) :- pertence(Elem, Cauda).   % caso recursivo
+
+
+% Último elmento
+
+ultimo([Elemento], Elemento).
+ultimo([_ | Cauda], Elemento) :- ultimo(Cauda, Elemento).
+
+?- ultimo([1, 3, 5, 1, 4], Y)
+
+% resolução:
+% ultimo([1 | 3, 5, 1, 4], Y) :- ultimo([3, 5, 1, 4], Y)  % 5: Y = 4 resposta
+% ultimo([3 | 5, 1, 4], Y) :- ultimo([5, 1, 4], Y)        % 4: Y = 4 ↑
+% ultimo([5 | 1, 4], Y) :- ultimo([1, 4], Y)              % 3: Y = 4 ↑
+% ultimo([1 | 4], Y) :- ultimo([4], Y)                    % 2: Y = 4 ↑
+% ultimo([4], Y) :- ultimo(4, Y)                          % 1: Y = 4 ↑
+
+
+% Soma
+
+soma([], 0).
+soma([Elem | Cauda], S) = soma(Cauda, S1), S is S1 + Elem.
+
+% no percorrimento percursivo acima, a resolução de primeira ordem primeiro
+% percorre todas as "chamadas" de soma; para quando o corpo recursivo unifica
+% com o caso de parada, "retornando" S1 = 0, que é somado com o último,
+% penúltimo, ..., segundo, primeiro elementos
+
+?- soma([2, 3, 5, 10, 2], S).
+
+% resolução
+% soma([2 | 3, 5, 10, 2], S) :- soma([3, 5, 10, 2], S1), S is S1 + 2.
+% soma([3 | 5, 10, 2], S) :- soma([5, 10, 2], S1), S is S1 + 3.
+% soma([5 | 10, 2], S) :- soma([10, 2], S1), S is S1 + 5.
+% soma([10 |  2], S) :- soma([2], S1), S is S1 + 10.
+% soma([2], S) :- soma([], S1), S is S1 + 2.
+% soma([], S) :- soma([], 0).
+
+% voltando: S is (((((0) +2) +10) +5) +3) +2   >   S is 22
+
+
+% Consecutivos
+
+consecutivos(Elem1, Elem2, [Elem1, Elem2 | _]).
+consecutivos(Elem1, Elem2, [_ | Cauda]) :- consecutivos(Elem1, Elem2, Cauda).
+
+
+% Concatenação
+
+concat([], L, L).
+concat([X | L1], L2, [X | L3]) :- concat(L1, L2, L3).
+
+?- conc(L1,L2,[a,b,c]).   % gera todas as listas que concatenadas geran [a, b, c]
+
+?- concat(T, [sab | _], [seg, ter, qua, qui, sex, sab, dom])
+                          % T = [seg, ter, qua, qui, sex]
+
+
+% Remoção
+
+remover(X, [X | L], L).
+remover(X, [Y | L1], [Y | L2]) :- remover(X, L1, L2).
+
+% busca todas as possíveis combinações de listas; se pensarmos que é uma
+% função, os resultados parecem ambíguos, não há uma resposta única objetiva
+
+?-remover(a,[a,b,a,a],L).
+% L = [b,a,a];
+% L = [a,b,a];
+% L = [a,b,a];
+% no
+
+?-remover(a,L,[b,c,d]).
+% L=[a,b,c,d];
+% L=[b,a,c,d];
+% L=[b,c,a,d];
+% L=[b,c,d,a];
+% no
+
+% definições a partir da relação de remoção
+
+inserir(X,L,L1):- remover(X,L1,L).
+membro2(X,L) :- remover(X,L,_).
+
+
+% Inversão
+
+% versão ingênua, O(N²)
+inverter([], []).
+inverter([X | Y], Z) :- inverter(Y, Y1), concat(Y1, [X], Z).
+
+% versão otimizada, O(N)
+inverter(X, Y) :- aux([], X, Y).
+aux(L, [], L).
+aux(L, [X | Y], Z) :- aux([X | L], Y, Z).
+```
