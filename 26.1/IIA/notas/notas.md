@@ -15,7 +15,7 @@ treino massivo de dados que prepara um modelo pra funcionamento
 
 18/03/26
 
-GPT      - consulta (teoricamente) de todos os dados
+GPT      - consulta (teoricamente) de todos os dados \
 DeepSeek - MoE: Mixture-of-Experts, consulta de "especialistas", entradas de dados mais significativas para o assunto requisitado
 
 LoRA - treinamento secundário da LLM com novos dados, obtidos em um chat por exemplo, para expandir lacunas no repertório. por ex conversar com o ChatGPT pra melhorar sua escrita em português
@@ -46,7 +46,7 @@ busca: mecanismo universal de solução de problemas
 - explora as alternativas sistematicamente
 - encontra a sequência de passos para a solução
 
-uma atividade simbólica orientada a objetivo ocorre em um *espaço de problemas*
+uma atividade simbólica orientada a objetivo ocorre em um *espaço de problemas* \
 busca em espaço de problemas é tido como um modelo geral de inteligência
 
 problema em IA é definido em termos de
@@ -57,7 +57,7 @@ problema em IA é definido em termos de
 
 uma solução tem um custo, denotando a qualidade da solução
 
--> árvore representando o espaço de estados possíveis a partir de uma posição inicial
+-> árvore representando o espaço de estados possíveis a partir de uma posição inicial \
 conforme os ramos se estendem, podem ter estados sem ações restantes que não são o final, então é necessário retomar o estado anterior e testar outra ação (backtracking)
 
 
@@ -75,7 +75,7 @@ X| | | | | | |
  | | | | | | | 
 ```
 
-custo de caminho: 
+custo de caminho:  \
 custo de busca:
 
 problemas de estados simples
@@ -92,7 +92,7 @@ problemas contigenciais
 problemas exploratórios
 
 
-algoritmo completo: garantidamente chega à solução
+algoritmo completo: garantidamente chega à solução \
 algoritmo ótimo: garantidamente chega à melhor solução (de acordo com um critério)
 
 > aula 30/04/26
@@ -137,13 +137,13 @@ hdd(n) : distância direta entre o nó n e o nó final (não representa o custo 
   - caso chegue ao fim sem atingir o nó final, volta e tenta achar outro caminho (backtracking)
 
 
-o que fiz no passado? g(n)
+o que fiz no passado? g(n) \
 o que fazer no futuro? h(n)
 
 - BFS de custo mínimo "olha o passado"
 - busca gulosa (heurística) "olha o futuro"
 
-função de avaliação
+função de avaliação \
 f(x) = g(x) + h(x)
 
 - algoritmo A*
@@ -297,9 +297,11 @@ teoricamente, é possível aplicar a retropropragação em uma rede com n camada
 
 > [ ] DEVER: leitura do material Neural Networks - A Comprehensive Foundation - Simon Haykin, ch. 4 182-195
 
+<!--
 "você não é cabelo?" (rede neural para diferenciar uma pessoa cabeluda de uma não cabeluda)
 "ele era aluno muito bom. eu falava 1, 2, 3... ele falava como? 4, 5, 6"
 "quando eu apontar pra você, te perguntar e você não acertar, não fica chateado. [...] quando a gente sair pela porta, esquece tudo. eu como professor tenho o dever de te chatear um pouquinho [...]"
+-->
 
 **Two passes**:
 - forward pass começa na camada de entrada; os pesos permanecem constantes, e as entradas são computadas até a saída
@@ -359,7 +361,7 @@ imagem original     res. convolução     res. max pooling
 0 0 0 0 1 0         0 0 0 0 2 0         
 ```
 
-linha 1, coluna 1 da matriz resultante: o máximo entre 0 0 0 0 é 0
+linha 1, coluna 1 da matriz resultante: o máximo entre 0 0 0 0 é 0 \
 linha 2, coluna 3 da matriz resultante: o máximo entre 3 0 3 0 é 3
 
 ### flatten / "linearizar" para entradas
@@ -371,25 +373,25 @@ passar na CNN e gerar um resultado do reconhecimento da imagem
 
 ## CNN avançado
 
-obs 1: detectar padrão representativo
+obs 1: detectar padrão representativo \
 podemos definir um padrão que esperamos encontrar na imagem, em geral mais simples que o elemento que queremos identificar na imagem. ex: queremos identificar um pássaro, então definimos um padrão representativo para bicos, considerando que se reconhecemos um bico, temos um potencial pássaro na imagem
 
-obs 2: reutilizar parâmetros
+obs 2: reutilizar parâmetros \
 compartilhar parâmetros entre detectores de padrões para diferentes áreas de uma imagem
 
-obs 3: subsampling, comprimir imagem sem perder padrões
+obs 3: subsampling, comprimir imagem sem perder padrões \
 barateia o reduz o número de parâmetros para a rede processar a imagem, barateando o processamento
 
 
-BNF (recursivo)
+BNF (recursivo) \
 SWPC-BNF
 
 ## RNN - Recurrent Neural Network
 
 ### 1-of-N enconding
 
-definimos um léxico (ordenado) para que o sistema diferencie coisas. por exemplo {maçã, bolsa, gato, cachorro, elefante}
-então, para cada coisa presente no léxico, ela será representada por um vetor com 0 para
+definimos um léxico (ordenado) para que o sistema diferencie $n$ objetos. por exemplo {maçã, bolsa, gato, cachorro, elefante} \
+representamos objetos por vetores de dimensão $n$, de forma que cada dimensão corresponde a um objeto e, na $i$-ésima posição, 1 significa que o objeto corresponde àquele objeto e 0 que não corresponde
 
 muito simples, mas custo desastroso de memória (matriz n x n, n sendo o número de coisas representadas)
 
@@ -400,8 +402,8 @@ muito simples, mas custo desastroso de memória (matriz n x n, n sendo o número
 
 utilizamos um vetor para representar 
 
-word embedding
-image embedding
+word embedding \
+image embedding \
 -> multi model embedding
 
 ### Mecanismo de RNN
@@ -419,12 +421,12 @@ n1     n2  <-   m1    m2
 |   X  |
 x1     x2
 
-entradas x1 e x2
-nós n1, n2, n3, n4
-memórias m1 e m2
-n1 recebe x1 e m1
-n2 recebe x2 e m2
-n3 e n4 recebe saídas de n1 e n2
+entradas x1 e x2 \
+nós n1, n2, n3, n4 \
+memórias m1 e m2 \
+n1 recebe x1 e m1 \
+n2 recebe x2 e m2 \
+n3 e n4 recebe saídas de n1 e n2 \
 todos os pesos são 1
 
 ### Elman Network vs Jordan Network
@@ -616,7 +618,7 @@ o valor real é 0 ou 1. se a previsão do modelo é próxima da realidade, a per
 
 
 fórmula
-loss = - [y * log (^y) + (1 - y) * log (1 - ^y)]
+$$loss = - [y * log (^y) + (1 - y) * log (1 - ^y)]$$
 
 na saída, usa a curva de ativação sigmoidal \
 é fácil de se implementar e 
@@ -658,11 +660,11 @@ o agente tem 5 sensores:
 
 ## Características do ambiente
 
-Acessível ou Inacessível (sabemos o estado atual e os possíveis?)
-Determinístico ou Não-Determinístico (sabemos quais resultados cada ação implica?)
-Episódico ou Não-Episódico
-Estático ou Dinâmico
-Discreto ou Contínuo
+- Acessível ou Inacessível (sabemos o estado atual e os possíveis?)
+- Determinístico ou Não-Determinístico (sabemos quais resultados cada ação implica?)
+- Episódico ou Não-Episódico
+- Estático ou Dinâmico
+- Discreto ou Contínuo
 
 <!-- 
 Li Weigang
@@ -676,7 +678,7 @@ li não gostou que repetimos a ideia, descartou (dps entendi q era pq ele queria
 
 alguns grupos pra frente, alguém também imita a estrutura de outro exemplo, trocando não gostar de corrupção e burocracia por não gostar de fruta e legume. Li fala que tá errado, pq tem que gostar de fruta e legume
 
-outro fala algo sobre não gostar de pregar o dedo, que é ruim. "ah, mas esse é muito estranho! não", rindo
+outro fala algo sobre não gostar de pregar o dedo, que é ruim. li: "ah, mas esse é muito estranho! não", rindo
 
 no final, ele pergunta qual foi o melhor exemplo. uma pessoa fala que é o de pregar o dedo. ele discorda pq é muito estranho
 
@@ -793,8 +795,8 @@ quantificadores:
 - universal: Ax, para todo x; x assume todo termo
 - existencial: Ex, existe x; x assume um termo
 
-Ax (Rx -> Vx) dado que Rx: x respira, Vx: x é vivo
-Ax (Rx -> Vx) =||= ~Ex ~(Rx -> Vx) =||= ~Ex (Rx e ~Vx)
+`Ax (Rx -> Vx)` dado que Rx: x respira, Vx: x é vivo \
+`Ax (Rx -> Vx) =||= ~Ex ~(Rx -> Vx) =||= ~Ex (Rx e ~Vx)`
 
 
 "LPO não faz engajamentos ontológicos para coisas como tempo, categorias, e eventos"
