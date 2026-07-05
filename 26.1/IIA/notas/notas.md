@@ -397,6 +397,21 @@ muito simples, mas custo desastroso de memória (matriz n x n, n sendo o número
 
 ### Beyond 1-of-N enconding
 
+#### Dimensão "other"
+
+adicionar uma dimensão "outro" ao vetor, para incluir elementos além dos $n$ pré-definidos
+
+#### Word hashing
+
+representar sequências de dados por uma matriz e convolucionar os dados de entrada para iterativamente localizar os pontos da matriz correspondentes a cada trecho da entrada
+
+exemplo: representação de palavras \
+temos uma matriz 26x26x26, em que cada posição representa sequências de caracteres: a-a-a, a-a-b, a-a-c, ..., z-z-x, z-z-y, z-z-z \
+queremos classificar a palavra "apple". se convolucionamos a palavra com stride=1 (passo), teremos que
+- "app" corresponde à posição (0, 17, 17)
+- "ppl", à posição (17, 17, 12)
+- "ple", à posição (17, 12, 5)
+
 
 #### Embedding
 
@@ -408,7 +423,7 @@ image embedding \
 
 ### Mecanismo de RNN
 
-saídas de camadas escondidas são guardadas para lembrar o contexto, e servem como um novo tipo de entrada
+saídas de camadas escondidas são guardadas para lembrar o contexto e servem como um novo tipo de entrada
 
 uma rede sem memória não diferencia as sequências de entradas [1 1], [1 1], [2 2] de [1 1], [2 2], [1 1]. mas redes com memória podem apresentar resultados sensíveis à ordem das entradas
 
@@ -557,15 +572,17 @@ precisamos "medir" informações
 ### Entropia
 
 podemos definir entropia como um "grau de incerteza" \
-`Entropy(S) = -p1 * log2 (p1) - p2 * log2 (p2)`, considerando `S = (p1, p2)`
+$Entropy(S) = -p_1 * \log_2(p_1) - p_2 * \log_2(p_2)$, considerando $S = (p1, p2)$
 
 ![entropia_formula](entropia_formula.png)
 
-se S é uma tupla de n probabilidades, teremos n termos `- pi * logn (pi)`, com `1 <= i <= n` e `logn` é o logarítmo na base n
+se S é uma tupla de n probabilidades, teremos n termos $-p_i*\log_n (\pi)$, com $1 \leq i \leq n$
+
+$$Entropy(S) = \sum_{i=1}^{n} -p_i * \log_n(p_1)$$
 
 ### Ganho
 
-`Gain(S,A) = Entropy(S) - sum[v pertence A](|Sv|/|S| * Entropy(Sv))`
+$$Gain(S,A) = Entropy(S) - \sum_{v \in Values(A)} \frac{|S_v|}{|S|} * Entropy(S_v))$$
 
 ![ganho_formula](ganho_formula.png)
 
@@ -611,21 +628,25 @@ como medir confiabilidade de um modelo treinado?
 
 binary crossentropy é uma função de perda (loss function) para medir a confiabilidade de um modelo de classificação para duas classes (binário)
 
-y: rótulo verdadeiro \
-^y: rótulo previsto
+$y$: rótulo verdadeiro \
+$y_{prev}$: rótulo previsto
 
 o valor real é 0 ou 1. se a previsão do modelo é próxima da realidade, a perda é baixa e confiável; caso contrário, é alta e pouco confiável
 
 
 fórmula
-$$loss = - [y * log (^y) + (1 - y) * log (1 - ^y)]$$
+$$loss = - [y * log (y_{prev}) + (1 - y) * log (1 - y_{prev})]$$
 
 na saída, usa a curva de ativação sigmoidal \
 é fácil de se implementar e 
 
+### Média de *loss* para um Lote (Batch)
+
+$$- \frac{1}{n} \sum_{i=1}^{n} [y_i * log (y_{i_{prev}}) + (1 - y_i) * log (1 - y_{i_{prev}})]$$
+
 ## Categorical Crossentropy
 
-função de perda para um modelo de classif icação de 3 ou mais classes
+função de perda para um modelo de classificação de 3 ou mais classes
 
 
 | características | binary crossentropy | categorical crossentropy |
@@ -646,6 +667,45 @@ para linguagens ideogramáticas, é preciso uma etapa de codificação dos ideog
 # Abordagem simbólica de IA
 
 ## Agentes baseados em conhecimento
+
+Agentes baseados em busca são eficientes para problemas em que podemos formalizar
+- um estado inicial
+- ações (operadores)
+- conjunto de estados finais
+
+porém não resolvem problemas que exigem raciocínio baseado em conhecimento sobre o mundo. esses problemas não podem ser modelados por um espaço de estados
+
+agentes baseados em conhecimento conhecem o mundo e raciocínam sobre ele e suas possíveis ações. eles sabem:
+- o estado atual do mundo (propriedades)
+- como o mundo evolui
+- avaliar o resultado das ações
+- identificar estados desejáveis do mundo
+- conhecimento sobre seu conhecimento (meta-conhecimento)
+
+### Base de Conhecimento
+conjunto de fatos sobre o mundo, expressos por sentenças
+
+### Mecanismo de Inferência
+método de inferir novos fatos a partir dos fatos presentes na base de conhecimento
+
+### Arquitetura de agentes baseados em conhecimento
+
+sensores - obtenção de fatos (propriedades) do mundo \
+{base de conhecimento, mecanismo de inferência, mecanismo de aprendizagem} - inferência e interpretação do mundo \
+efetuadores - saída do sistema
+
+**Tell**: adiciona sentenças não inferíveis pelo sistema (fatos básicos/axiomas, mesmo que temporários) - aferições dos sensores e resposta dos efetuadores após ação \
+**Ask**: consulta à base de conhecimento
+
+![agentes_conhecimento_arquitetura](agentes_conhecimento_arquitetura.png)
+
+### Tipos de raciocínio
+
+**dedução**: fatos &rarr; novos fatos por regras de inferência \
+**abdução**: novo fato1 &larr; fato0 que é necessariamente deduzido de fato1 \
+**indução**: generalização de fatos para criar regras \
+**analogia**: casos análogos por regras de adaptação
+
 
 ### Mundo de Wumpus
 
@@ -856,7 +916,7 @@ avô(X, Y) :- filho(Y, Z), progenitor(X, Z).
 
 ## Variáveis
 
-sequência de caracteres iniciado em maiúscula ou "_"
+sequência de caracteres iniciado em maiúscula ou simplesmente o caractere "_"
 
 "_" indica que não importa o valor assumido por essa variável, é desconsiderado
 
