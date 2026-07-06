@@ -1692,8 +1692,28 @@ o motor de inferência do Prolog:
 - busca no programa de cima para baixo uma cabeça que unifique para G1
 - encontra regra C tal que Cθ unifica com G1θ \
   `C :- P1, P2, ..., Pm`
-- unificamos todos os termos e inserirmos o corpo da regra na consulta \
+- unificamos todos os termos e substituímos G1 na consulta pelo corpo da regra encontrada \
   `?- P1θ, P2θ, ..., Pmθ, G2θ, ..., Gnθ`
+
+  como se empilhássemos os goals à medida que avançamos na busca
+
+ex:
+```prolog
+?- filha(clara, pedro)
+%casa com a regra
+filha(X, Y) :- pai(X, Y), mulher(X).
+
+% θ: {X = clara, Y = pedro}
+?- pai(clara, pedro), mulher(clara)
+
+% pai(clara, pedro) está presente na base de conhecimento
+
+?- mulher(clara)
+
+% mulher(clara) é um fato
+
+% a query termina sem contradições e com todos os goals satisfeitos (exauridos), então é satisfeita
+```
 
 - **top-down**: percorre o programa de cima pra baixo
 - **depth-first**: chega na profundidade máxima antes de entrar em ramao
