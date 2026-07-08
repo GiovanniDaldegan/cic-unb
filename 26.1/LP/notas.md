@@ -1117,7 +1117,7 @@ motivação da LI2: a LI1 não oferece nenhum tipo de modularização
 
 novidades: chamadas de função e retorno, literais e operadores booleanos e de string
 
-agora, um programa é uma lista de funções e, por padrão, executa apenas a que for identificada como "main". no seu corpo, ela pode executar comandos de atribuição, bloco de comandos, condicional, ou chamar outra função 
+agora, um programa é uma **lista de funções** e, por padrão, executa apenas a que for identificada como "main". no seu corpo, ela pode executar comandos de atribuição, bloco de comandos, condicional, ou chamar outra função 
 
 todo contexto local de uma função deve conter também todas as funções existentes, pois podemos chamar qualquer função em seu corpo de execução (exceto a main, preferencialmente, para evitar ciclos)
 
@@ -1275,7 +1275,7 @@ ambiente: contexto de tipos
 funções     | parâmetros                | retorno     | utilidade
 --          | --                        | --          | --
 typeCheckP  | programa                  | [contexto]  | checa se todas as funções de um programa são válidas
-typeCheckF  | contexto, função          | contexto    | checa se função é válidas
+typeCheckF  | contexto, função          | contexto    | checa se função é válida
 tk          | contexto, comando         | contexto    | checa se a expressão é válida em um contexto de tipos
 tke         | cntxt, expressão, tipo    | cntxt, expr | checa se uma expressão é do tipo alvo
 combChecks  | cntxt, expr1, expr2, tipo | tipo        | checa se duas expressões são de um mesmo tipo alvo
@@ -1364,7 +1364,7 @@ toda classe pode ter
 
 restringir o acesso a informações (atributos e métodos) a contextos específicos do programa
 
-obs: o *pattern matching* fere o princípio de de information hiding, pois expôe a estrutura de uma função para o usuário da função. além de tornar o código mais acoplado, a operação da função fica dependente dos padrões da sua definição. o programa se torna mais sensível a mudanças, 
+obs: o *pattern matching* fere o princípio de de information hiding, pois expôe a estrutura de uma função para o usuário da função. além de tornar o código mais acoplado, de forma que a operação da função fica dependente dos padrões da sua definição. o programa se torna mais sensível a mudanças
 
 
 ### Contexto de tipos na execução
@@ -1393,7 +1393,7 @@ comandos:
 - um comando pode ser uma expressão \
   uma chamada de função que não retorna nenhum valor pode ser usada como comando. sua estrutura é apenas uma chamada `objeto.metodo(args)`
 
-agora, expressões podem alterar o contexto de execução (new, chamada de método). sendo assim, a avaliação de uma função deve retornar o valor avaliado para a expressão e o contexto atualizado (novo objeto ou execução do método chamado)
+agora, expressões podem ter um efeito colateral: alterar o contexto de execução e a *heap*, atualizando ou instanciando objetos (new, chamada de método). sendo assim, a avaliação de uma função deve retornar o valor avaliado para a expressão e o contexto atualizado (novo objeto ou execução do método chamado)
 
 > EXERCÍCIO: desenhar a execução do programa da classe Aluno (instanciações na memória) + analisar a avaliação de ENew
 
@@ -1416,14 +1416,16 @@ a herança permite
   todos os atributos e métodos da superclasse são herdados pela subclasse
 
 - extensibilidade (overriding) \
-  operações da superclasse podem ser redefinidas da subclasse
+  métodos da superclasse podem ser redefinidas na subclasse
 
 - múltiplas assinaturas de métodos de mesmo nome (overloading)
 
-- comportamento semelhante entre super e subclasse
+- comportamento semelhante entre super e subclasse \
+  atributos e representação/função abstrata semelhantes \
+  *dynamic biding*/ligação dinâmica pode determinar de qual classe será utilizada uma implementação
 
 - substitução \
-  um objeto da superclasse podem ser substituídos por objetos da subclasse. isso vale para instanciações e assinaturas de funções
+  um objeto da superclasse pode ser substituído por um objeto da subclasse. isso vale para instanciações e assinaturas de funções
 
   podemos criar um objeto Conta mas instanciar e atribuir a ele um objeto da classe Poupança
   ```cpp
@@ -1447,7 +1449,7 @@ então, precisamos realizar um casting do objeto para a subclasse, de forma que 
 Conta c;
 c = new Poupanca("123.34-7");
 c.renderJuros(0.01);                // erro de método não definido
-((Poupanca c)).renderJuros(0.01);   // casting para Poupanca
+((Poupanca) c).renderJuros(0.01);   // casting para Poupanca
 ```
 
 
@@ -1465,14 +1467,29 @@ class ContaBonificada extends Conta {
 
 Conta c;
 c = new ContaBonificada();
-c.creditar();               // vai executar a implementação mais específica do método
+c.creditar(20.0);                       // vai executar o método de acordo com
+                                        // o tipo do objeto (Conta)
+
+((ContaBonificada) c).creditar(20.0)    // vai executar o método de acordo com
+                                        // o tipo do casting (ContaBonificada),
+                                        // pois é subclasse do tipo do objeto
 ```
 
 
 #### Overloading
 
+uma classe tem métodos de mesmo nome mas assinaturas diferentes. podemos então chamar diferentes implementações com o mesmo nome de método, especificando apenas quais os argumentos que ele recebe (podemos ter uma subclasse sobrecarregando um métod de uma superclasse)
+
+assim, a "escolha do método a ser executado é baseada no tipo dos parâmetros passados"
 
 #### Ligações dinâmicas (dynamic biding)
+
+um método da superclasse e subclasse tem a mesma assinatura em ambas, mas quando chamamos o método para um objeto, será executado o método mais específico na cadeia de herança da classe. se um objeto é de uma superclasse e é instanciado numa subclasse, por padrão ele chama apenas os métodos da superclasse. é necessário casting para acessar métodos da subclasse
+
+em outras palavras, "escolha (de que método de objeto executar) é baseada no tipo do objeto que recebe a chamada do método e não da variável"
+
+isso é feito em tempo de execução, por isso ligação dinâmica. \
+em C++, os métodos static, private, e final são ligados de forma estática, na compilação. agora, métodos públicos são ligados apenas em tempo de execução pois nunca sabemos a qual implementação de método um objeto deve fazer referência
 
 # Módulo 4 - Paradigma lógico (Prolog)
 
