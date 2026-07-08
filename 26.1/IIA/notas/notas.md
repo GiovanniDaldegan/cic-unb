@@ -15,7 +15,7 @@ treino massivo de dados que prepara um modelo pra funcionamento
 
 18/03/26
 
-GPT      - consulta (teoricamente) de todos os dados
+GPT      - consulta (teoricamente) de todos os dados \
 DeepSeek - MoE: Mixture-of-Experts, consulta de "especialistas", entradas de dados mais significativas para o assunto requisitado
 
 LoRA - treinamento secundário da LLM com novos dados, obtidos em um chat por exemplo, para expandir lacunas no repertório. por ex conversar com o ChatGPT pra melhorar sua escrita em português
@@ -46,7 +46,7 @@ busca: mecanismo universal de solução de problemas
 - explora as alternativas sistematicamente
 - encontra a sequência de passos para a solução
 
-uma atividade simbólica orientada a objetivo ocorre em um *espaço de problemas*
+uma atividade simbólica orientada a objetivo ocorre em um *espaço de problemas* \
 busca em espaço de problemas é tido como um modelo geral de inteligência
 
 problema em IA é definido em termos de
@@ -57,7 +57,7 @@ problema em IA é definido em termos de
 
 uma solução tem um custo, denotando a qualidade da solução
 
--> árvore representando o espaço de estados possíveis a partir de uma posição inicial
+-> árvore representando o espaço de estados possíveis a partir de uma posição inicial \
 conforme os ramos se estendem, podem ter estados sem ações restantes que não são o final, então é necessário retomar o estado anterior e testar outra ação (backtracking)
 
 
@@ -75,7 +75,7 @@ X| | | | | | |
  | | | | | | | 
 ```
 
-custo de caminho: 
+custo de caminho:  \
 custo de busca:
 
 problemas de estados simples
@@ -92,7 +92,7 @@ problemas contigenciais
 problemas exploratórios
 
 
-algoritmo completo: garantidamente chega à solução
+algoritmo completo: garantidamente chega à solução \
 algoritmo ótimo: garantidamente chega à melhor solução (de acordo com um critério)
 
 > aula 30/04/26
@@ -137,13 +137,13 @@ hdd(n) : distância direta entre o nó n e o nó final (não representa o custo 
   - caso chegue ao fim sem atingir o nó final, volta e tenta achar outro caminho (backtracking)
 
 
-o que fiz no passado? g(n)
+o que fiz no passado? g(n) \
 o que fazer no futuro? h(n)
 
 - BFS de custo mínimo "olha o passado"
 - busca gulosa (heurística) "olha o futuro"
 
-função de avaliação
+função de avaliação \
 f(x) = g(x) + h(x)
 
 - algoritmo A*
@@ -297,9 +297,11 @@ teoricamente, é possível aplicar a retropropragação em uma rede com n camada
 
 > [ ] DEVER: leitura do material Neural Networks - A Comprehensive Foundation - Simon Haykin, ch. 4 182-195
 
+<!--
 "você não é cabelo?" (rede neural para diferenciar uma pessoa cabeluda de uma não cabeluda)
 "ele era aluno muito bom. eu falava 1, 2, 3... ele falava como? 4, 5, 6"
 "quando eu apontar pra você, te perguntar e você não acertar, não fica chateado. [...] quando a gente sair pela porta, esquece tudo. eu como professor tenho o dever de te chatear um pouquinho [...]"
+-->
 
 **Two passes**:
 - forward pass começa na camada de entrada; os pesos permanecem constantes, e as entradas são computadas até a saída
@@ -359,7 +361,7 @@ imagem original     res. convolução     res. max pooling
 0 0 0 0 1 0         0 0 0 0 2 0         
 ```
 
-linha 1, coluna 1 da matriz resultante: o máximo entre 0 0 0 0 é 0
+linha 1, coluna 1 da matriz resultante: o máximo entre 0 0 0 0 é 0 \
 linha 2, coluna 3 da matriz resultante: o máximo entre 3 0 3 0 é 3
 
 ### flatten / "linearizar" para entradas
@@ -371,42 +373,57 @@ passar na CNN e gerar um resultado do reconhecimento da imagem
 
 ## CNN avançado
 
-obs 1: detectar padrão representativo
+obs 1: detectar padrão representativo \
 podemos definir um padrão que esperamos encontrar na imagem, em geral mais simples que o elemento que queremos identificar na imagem. ex: queremos identificar um pássaro, então definimos um padrão representativo para bicos, considerando que se reconhecemos um bico, temos um potencial pássaro na imagem
 
-obs 2: reutilizar parâmetros
+obs 2: reutilizar parâmetros \
 compartilhar parâmetros entre detectores de padrões para diferentes áreas de uma imagem
 
-obs 3: subsampling, comprimir imagem sem perder padrões
+obs 3: subsampling, comprimir imagem sem perder padrões \
 barateia o reduz o número de parâmetros para a rede processar a imagem, barateando o processamento
 
 
-BNF (recursivo)
+BNF (recursivo) \
 SWPC-BNF
 
 ## RNN - Recurrent Neural Network
 
 ### 1-of-N enconding
 
-definimos um léxico (ordenado) para que o sistema diferencie coisas. por exemplo {maçã, bolsa, gato, cachorro, elefante}
-então, para cada coisa presente no léxico, ela será representada por um vetor com 0 para
+definimos um léxico (ordenado) para que o sistema diferencie $n$ objetos. por exemplo {maçã, bolsa, gato, cachorro, elefante} \
+representamos objetos por vetores de dimensão $n$, de forma que cada dimensão corresponde a um objeto e, na $i$-ésima posição, 1 significa que o objeto corresponde àquele objeto e 0 que não corresponde
 
 muito simples, mas custo desastroso de memória (matriz n x n, n sendo o número de coisas representadas)
 
 ### Beyond 1-of-N enconding
+
+#### Dimensão "other"
+
+adicionar uma dimensão "outro" ao vetor, para incluir elementos além dos $n$ pré-definidos
+
+#### Word hashing
+
+representar sequências de dados por uma matriz e convolucionar os dados de entrada para iterativamente localizar os pontos da matriz correspondentes a cada trecho da entrada
+
+exemplo: representação de palavras \
+temos uma matriz 26x26x26, em que cada posição representa sequências de caracteres: a-a-a, a-a-b, a-a-c, ..., z-z-x, z-z-y, z-z-z \
+queremos classificar a palavra "apple". se convolucionamos a palavra com stride=1 (passo), teremos que
+- "app" corresponde à posição (0, 17, 17)
+- "ppl", à posição (17, 17, 12)
+- "ple", à posição (17, 12, 5)
 
 
 #### Embedding
 
 utilizamos um vetor para representar 
 
-word embedding
-image embedding
+word embedding \
+image embedding \
 -> multi model embedding
 
 ### Mecanismo de RNN
 
-saídas de camadas escondidas são guardadas para lembrar o contexto, e servem como um novo tipo de entrada
+saídas de camadas escondidas são guardadas para lembrar o contexto e servem como um novo tipo de entrada
 
 uma rede sem memória não diferencia as sequências de entradas [1 1], [1 1], [2 2] de [1 1], [2 2], [1 1]. mas redes com memória podem apresentar resultados sensíveis à ordem das entradas
 
@@ -419,12 +436,12 @@ n1     n2  <-   m1    m2
 |   X  |
 x1     x2
 
-entradas x1 e x2
-nós n1, n2, n3, n4
-memórias m1 e m2
-n1 recebe x1 e m1
-n2 recebe x2 e m2
-n3 e n4 recebe saídas de n1 e n2
+entradas x1 e x2 \
+nós n1, n2, n3, n4 \
+memórias m1 e m2 \
+n1 recebe x1 e m1 \
+n2 recebe x2 e m2 \
+n3 e n4 recebe saídas de n1 e n2 \
 todos os pesos são 1
 
 ### Elman Network vs Jordan Network
@@ -555,15 +572,17 @@ precisamos "medir" informações
 ### Entropia
 
 podemos definir entropia como um "grau de incerteza" \
-`Entropy(S) = -p1 * log2 (p1) - p2 * log2 (p2)`, considerando `S = (p1, p2)`
+$Entropy(S) = -p_1 * \log_2(p_1) - p_2 * \log_2(p_2)$, considerando $S = (p1, p2)$
 
 ![entropia_formula](entropia_formula.png)
 
-se S é uma tupla de n probabilidades, teremos n termos `- pi * logn (pi)`, com `1 <= i <= n` e `logn` é o logarítmo na base n
+se S é uma tupla de n probabilidades, teremos n termos $-p_i*\log_n (\pi)$, com $1 \leq i \leq n$
+
+$$Entropy(S) = \sum_{i=1}^{n} -p_i * \log_n(p_1)$$
 
 ### Ganho
 
-`Gain(S,A) = Entropy(S) - sum[v pertence A](|Sv|/|S| * Entropy(Sv))`
+$$Gain(S,A) = Entropy(S) - \sum_{v \in Values(A)} \frac{|S_v|}{|S|} * Entropy(S_v))$$
 
 ![ganho_formula](ganho_formula.png)
 
@@ -609,21 +628,25 @@ como medir confiabilidade de um modelo treinado?
 
 binary crossentropy é uma função de perda (loss function) para medir a confiabilidade de um modelo de classificação para duas classes (binário)
 
-y: rótulo verdadeiro \
-^y: rótulo previsto
+$y$: rótulo verdadeiro \
+$y_{prev}$: rótulo previsto
 
 o valor real é 0 ou 1. se a previsão do modelo é próxima da realidade, a perda é baixa e confiável; caso contrário, é alta e pouco confiável
 
 
 fórmula
-loss = - [y * log (^y) + (1 - y) * log (1 - ^y)]
+$$loss = - [y * log (y_{prev}) + (1 - y) * log (1 - y_{prev})]$$
 
 na saída, usa a curva de ativação sigmoidal \
 é fácil de se implementar e 
 
+### Média de *loss* para um Lote (Batch)
+
+$$- \frac{1}{n} \sum_{i=1}^{n} [y_i * log (y_{i_{prev}}) + (1 - y_i) * log (1 - y_{i_{prev}})]$$
+
 ## Categorical Crossentropy
 
-função de perda para um modelo de classif icação de 3 ou mais classes
+função de perda para um modelo de classificação de 3 ou mais classes
 
 
 | características | binary crossentropy | categorical crossentropy |
@@ -645,6 +668,45 @@ para linguagens ideogramáticas, é preciso uma etapa de codificação dos ideog
 
 ## Agentes baseados em conhecimento
 
+Agentes baseados em busca são eficientes para problemas em que podemos formalizar
+- um estado inicial
+- ações (operadores)
+- conjunto de estados finais
+
+porém não resolvem problemas que exigem raciocínio baseado em conhecimento sobre o mundo. esses problemas não podem ser modelados por um espaço de estados
+
+agentes baseados em conhecimento conhecem o mundo e raciocínam sobre ele e suas possíveis ações. eles sabem:
+- o estado atual do mundo (propriedades)
+- como o mundo evolui
+- avaliar o resultado das ações
+- identificar estados desejáveis do mundo
+- conhecimento sobre seu conhecimento (meta-conhecimento)
+
+### Base de Conhecimento
+conjunto de fatos sobre o mundo, expressos por sentenças
+
+### Mecanismo de Inferência
+método de inferir novos fatos a partir dos fatos presentes na base de conhecimento
+
+### Arquitetura de agentes baseados em conhecimento
+
+sensores - obtenção de fatos (propriedades) do mundo \
+{base de conhecimento, mecanismo de inferência, mecanismo de aprendizagem} - inferência e interpretação do mundo \
+efetuadores - saída do sistema
+
+**Tell**: adiciona sentenças não inferíveis pelo sistema (fatos básicos/axiomas, mesmo que temporários) - aferições dos sensores e resposta dos efetuadores após ação \
+**Ask**: consulta à base de conhecimento
+
+![agentes_conhecimento_arquitetura](agentes_conhecimento_arquitetura.png)
+
+### Tipos de raciocínio
+
+**dedução**: fatos &rarr; novos fatos por regras de inferência \
+**abdução**: novo fato1 &larr; fato0 que é necessariamente deduzido de fato1 \
+**indução**: generalização de fatos para criar regras \
+**analogia**: casos análogos por regras de adaptação
+
+
 ### Mundo de Wumpus
 
 o agente é um caçador de tesouros. ele vai partir de uma caverna para encontrar ouro e voltar, mas deve evitar buracos e uma criatura fedorenta: Wumpus
@@ -658,11 +720,11 @@ o agente tem 5 sensores:
 
 ## Características do ambiente
 
-Acessível ou Inacessível (sabemos o estado atual e os possíveis?)
-Determinístico ou Não-Determinístico (sabemos quais resultados cada ação implica?)
-Episódico ou Não-Episódico
-Estático ou Dinâmico
-Discreto ou Contínuo
+- Acessível ou Inacessível (sabemos o estado atual e os possíveis?)
+- Determinístico ou Não-Determinístico (sabemos quais resultados cada ação implica?)
+- Episódico ou Não-Episódico
+- Estático ou Dinâmico
+- Discreto ou Contínuo
 
 <!-- 
 Li Weigang
@@ -676,7 +738,7 @@ li não gostou que repetimos a ideia, descartou (dps entendi q era pq ele queria
 
 alguns grupos pra frente, alguém também imita a estrutura de outro exemplo, trocando não gostar de corrupção e burocracia por não gostar de fruta e legume. Li fala que tá errado, pq tem que gostar de fruta e legume
 
-outro fala algo sobre não gostar de pregar o dedo, que é ruim. "ah, mas esse é muito estranho! não", rindo
+outro fala algo sobre não gostar de pregar o dedo, que é ruim. li: "ah, mas esse é muito estranho! não", rindo
 
 no final, ele pergunta qual foi o melhor exemplo. uma pessoa fala que é o de pregar o dedo. ele discorda pq é muito estranho
 
@@ -793,8 +855,8 @@ quantificadores:
 - universal: Ax, para todo x; x assume todo termo
 - existencial: Ex, existe x; x assume um termo
 
-Ax (Rx -> Vx) dado que Rx: x respira, Vx: x é vivo
-Ax (Rx -> Vx) =||= ~Ex ~(Rx -> Vx) =||= ~Ex (Rx e ~Vx)
+`Ax (Rx -> Vx)` dado que Rx: x respira, Vx: x é vivo \
+`Ax (Rx -> Vx) =||= ~Ex ~(Rx -> Vx) =||= ~Ex (Rx e ~Vx)`
 
 
 "LPO não faz engajamentos ontológicos para coisas como tempo, categorias, e eventos"
@@ -830,8 +892,8 @@ utilizado em sistemas: Baseados em Conhecimento, Banco de Dados, Sistemas Especi
 
 exercício: definir regra de neto
 
-progenitor: X gerou Y
-filho: X é gerado por Y
+progenitor: X gerou Y \
+filho: X é gerado por Y \
 avô: X é avô de Y, X é filho de Z e Z é filho de Y
 
 ```prolog
@@ -846,15 +908,15 @@ filho(X, Y) :- progenitor(Y, X).
 
 avô(X, Y) :- filho(Y, Z), progenitor(X, Z).
 
-% questões
-?- progenitor(a, X).  % > %   X = b; X = c;
-?- filho(X, a).       % > %   X = b; X = c;
-?- avô(X, d).         % > %   X = a;
+% questões / queries
+?- progenitor(a, X).  %   >   X = b; X = c;
+?- filho(X, a).       %   >   X = b; X = c;
+?- avô(X, d).         %   >   X = a;
 ```
 
 ## Variáveis
 
-sequência de caracteres iniciado em maiúscula ou "_"
+sequência de caracteres iniciado em maiúscula ou simplesmente o caractere "_"
 
 "_" indica que não importa o valor assumido por essa variável, é desconsiderado
 
@@ -910,14 +972,117 @@ dois termos unificam se:
 
 ### processamento de listas
 
-| lista 1        | lista 2  | unificação  |
-| -------------- | -------- | ----------- |
-| [mesa]         | [X\|Y]   | X/mesa      |
-| [a,b,c,d,e]    | [X,Y\|Z] | X/a         |
-|                |          | Y/b         |
-|                |          | Z/[c,d,e]   |
-| [ano,bissexto] | [X,Y,Z]  | não unifica |
-| [ano,bissexto] | [X,Y\|Z] | X/ano       |
-|                |          | Y/bissexto  |
-|                |          | Z/[]        |
+| lista 1        | lista 2     | unificação  |
+| -------------- | ----------- | ----------- |
+| [mesa]         | [X \| Y]    | X/mesa      |
+|                |             | Y/[  ]      |
+| [a,b,c,d,e]    | [X, Y \| Z] | X/a         |
+|                |             | Y/b         |
+|                |             | Z/[c,d,e]   |
+| [ano,bissexto] | [X, Y, Z]   | não unifica |
+| [ano,bissexto] | [X, Y \| Z] | X/ano       |
+|                |             | Y/bissexto  |
+|                |             | Z/[]        |
 
+```prolog
+% Pertencimento
+
+pertence(Elem, Lista).
+
+pertence(Elem, [Elem | _]).                             % condição de parada
+pertence(Elem, [_ | Cauda]) :- pertence(Elem, Cauda).   % caso recursivo
+
+
+% Último elmento
+
+ultimo([Elemento], Elemento).
+ultimo([_ | Cauda], Elemento) :- ultimo(Cauda, Elemento).
+
+?- ultimo([1, 3, 5, 1, 4], Y)
+
+% resolução:
+% ultimo([1 | 3, 5, 1, 4], Y) :- ultimo([3, 5, 1, 4], Y)  % 5: Y = 4 resposta
+% ultimo([3 | 5, 1, 4], Y) :- ultimo([5, 1, 4], Y)        % 4: Y = 4 ↑
+% ultimo([5 | 1, 4], Y) :- ultimo([1, 4], Y)              % 3: Y = 4 ↑
+% ultimo([1 | 4], Y) :- ultimo([4], Y)                    % 2: Y = 4 ↑
+% ultimo([4], Y) :- ultimo(4, Y)                          % 1: Y = 4 ↑
+
+
+% Soma
+
+soma([], 0).
+soma([Elem | Cauda], S) = soma(Cauda, S1), S is S1 + Elem.
+
+% no percorrimento percursivo acima, a resolução de primeira ordem primeiro
+% percorre todas as "chamadas" de soma; para quando o corpo recursivo unifica
+% com o caso de parada, "retornando" S1 = 0, que é somado com o último,
+% penúltimo, ..., segundo, primeiro elementos
+
+?- soma([2, 3, 5, 10, 2], S).
+
+% resolução
+% soma([2 | 3, 5, 10, 2], S) :- soma([3, 5, 10, 2], S1), S is S1 + 2.
+% soma([3 | 5, 10, 2], S) :- soma([5, 10, 2], S1), S is S1 + 3.
+% soma([5 | 10, 2], S) :- soma([10, 2], S1), S is S1 + 5.
+% soma([10 |  2], S) :- soma([2], S1), S is S1 + 10.
+% soma([2], S) :- soma([], S1), S is S1 + 2.
+% soma([], S) :- soma([], 0).
+
+% voltando: S is (((((0) +2) +10) +5) +3) +2   >   S is 22
+
+
+% Consecutivos
+
+consecutivos(Elem1, Elem2, [Elem1, Elem2 | _]).
+consecutivos(Elem1, Elem2, [_ | Cauda]) :- consecutivos(Elem1, Elem2, Cauda).
+
+
+% Concatenação
+
+concat([], L, L).
+concat([X | L1], L2, [X | L3]) :- concat(L1, L2, L3).
+
+?- conc(L1,L2,[a,b,c]).   % gera todas as listas que concatenadas geran [a, b, c]
+
+?- concat(T, [sab | _], [seg, ter, qua, qui, sex, sab, dom])
+                          % T = [seg, ter, qua, qui, sex]
+
+
+% Remoção
+
+remover(X, [X | L], L).
+remover(X, [Y | L1], [Y | L2]) :- remover(X, L1, L2).
+
+% busca todas as possíveis combinações de listas; se pensarmos que é uma
+% função, os resultados parecem ambíguos, não há uma resposta única objetiva
+
+?-remover(a,[a,b,a,a],L).
+% L = [b,a,a];
+% L = [a,b,a];
+% L = [a,b,a];
+% no
+
+?-remover(a,L,[b,c,d]).
+% L=[a,b,c,d];
+% L=[b,a,c,d];
+% L=[b,c,a,d];
+% L=[b,c,d,a];
+% no
+
+% definições a partir da relação de remoção
+
+inserir(X,L,L1):- remover(X,L1,L).
+membro2(X,L) :- remover(X,L,_).
+
+
+% Inversão
+
+% versão ingênua, O(N²)
+inverter([], []).
+inverter([X | Y], Z) :- inverter(Y, Y1), concat(Y1, [X], Z).
+
+% versão otimizada, O(N)
+inverter(X, Y) :- aux([], X, Y).
+aux(L, [], L).
+aux(L, [X | Y], Z) :- aux([X | L], Y, Z).
+```
