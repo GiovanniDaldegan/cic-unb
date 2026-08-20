@@ -80,3 +80,54 @@ substituímos signos de uma mensagem
 
 espaço de busca: espaço de possibilidades para descobrir a cifra
 
+
+### Cifra de Transposição
+
+não transformamos os símbolos em si, mas reordenamos eles
+
+podemos organizar os caracteres de um texto de 25 caracteres de em uma tabela 5x5, reordenamos as colunas da tabela, de forma que a chave é a nova ordem das colunas, e formamos de volta um texto linear cifrado, desordenado
+
+### Cifra de Bloco
+
+difusão: desorganização e despadronização dos dados
+confusão: mapeamento aleatório
+
+considerando um mapeamento aleatório de mensagens em bits (pra demonstrar espaço de busca)
+
+| entrada | saída |
+| ------- | ----- |
+| 000     | 010   |
+| 001     | 111   |
+| 010     | 101   |
+| 011     | 000   |
+| 100     | 110   |
+| 101     | 001   |
+| 110     | 100   |
+| 111     | 011   |
+
+temos 8! tabelas possíveis para 3 bits
+são (2k)! possíveis chaves caso seja possível mapear k bits para outros k bits aleatórios
+
+se fosse possível escolher um k enorme, 64 por ex, teríamos um algoritmo quase totalmente aleatório e muito confuso, então seguro
+
+**Estrutura de Feistel**
+
+![estrutura_feistel](estrutura_feistel.png)
+
+1. divide 64 bits em blocos de 8
+2. passa cada bloco por uma tabela de mapeamento aleatório
+3. reordena os blocos entre si
+4. repete o processo n vezes (ciclos/iterações)
+
+porém, podemos ter repetições na mensagem, o que causa cifras repetidas. para evitar isso, podemos operar os blocos bit-a-bit com uma palavra binária aleatória do tamanho do bloco, mascarando as repetições após a criptografia
+
+cifra = K(mensasgem op random)
+c(i) = K(m(i) op r(i)) \
+aqui, op é XOR
+
+para não precisarmos criar uma palavra binária aleatória para cada bloco de uma mensagem, podemos utilizar a saída da operação do primeiro bloco com a primeira palavra aleatória (**vetor de inicialização**) como palavra aleatória pra operar com o próximo bloco
+
+para descriptografia, precisamos de:
+- cifra
+- vetor de inicialização
+- padding (lixo adicionado, caso o tamanho da mensagem n seja múltiplo do tamanho de bloco)
