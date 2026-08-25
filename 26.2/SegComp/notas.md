@@ -110,9 +110,7 @@ são (2k)! possíveis chaves caso seja possível mapear k bits para outros k bit
 
 se fosse possível escolher um k enorme, 64 por ex, teríamos um algoritmo quase totalmente aleatório e muito confuso, então seguro
 
-**Estrutura de Feistel**
-
-![estrutura_feistel](estrutura_feistel.png)
+![cifra_bloco_estrutura_feistel_0](media/cifra_bloco_estrutura_feistel_0.png)
 
 1. divide 64 bits em blocos de 8
 2. passa cada bloco por uma tabela de mapeamento aleatório
@@ -127,7 +125,58 @@ aqui, op é XOR
 
 para não precisarmos criar uma palavra binária aleatória para cada bloco de uma mensagem, podemos utilizar a saída da operação do primeiro bloco com a primeira palavra aleatória (**vetor de inicialização**) como palavra aleatória pra operar com o próximo bloco
 
-para descriptografia, precisamos de:
+caso a entrada seja menor que 64 bits, aplicamos um padding: preenchemo-la (?) com lixo até que ocupe 64 bits
+
+então, para descriptografar podemos precisar de:
 - cifra
 - vetor de inicialização
 - padding (lixo adicionado, caso o tamanho da mensagem n seja múltiplo do tamanho de bloco)
+
+#### Estrutura de Feistel
+
+Difusão e Confusão
+- queremos cifras que não transpareçam propriedades estáticas
+- Difusão: aumentar a complexidade da relação entre texto cifrado e texto claro
+- Confusão: aumenta a complexidade da relação entre texto cifrado e o
+valor da chave
+
+![cifra_bloco_estrutura_feistel_1](media/cifra_bloco_estrutura_feistel_1.png)
+
+exemplo:
+1. dividimos a entrada em 2
+2. movemos a segunda metade para a nova primeira posição
+3. pegamos a segunda metade e operamos $XOR$ com a chave da rodada $K_i$
+4. passamos esse resultado na tabela de substituição
+5. operamos a palavra substituída com a primeira metade
+6. faz outras n rodadas idênticas, atualizando a chave da rodada
+7. no final, **trocamos as metades** uma última vez
+
+$S(X):$ passar X na tabela de substituição \
+$F(R, K) = S(R \oplus K)$ \
+$LE_{i+1} = RE_i$ \
+$RE_{i+1} = LE_i \oplus F(R, K)$
+
+
+#### Data Encryption Standard (DES)
+
+quebrado em meados da década de 90
+
+- entrada de 64 bits
+- chave de 56 bits
+- 16 rodadas na rede de Feistel
+- $F(R_i, K_i)$
+    - expansão de 32 para 48 bits (repetimos determinados bits)
+    - $XOR$ com subchave (da rodada)
+    - passagem pelas S-boxes (não linearidade)
+    - permitação final (mistura os bits)
+
+obtenção da chave:
+1. dividimos a entrada em blocos de 8 bits
+2. para cada bloco, seu último bit é um bit de paridade, sobrando 7 bits efetivos de cada bloco (56 no total)
+3. para cada rodada:
+    1. passamos esses 56 bits pela tabela de substituição e temos a chave da rodada ($K_i, 1 \leq i \leq 16$)
+    2. aplicamos um shift circular pra esquerda nos 56 bits (sem passar na tabela) para a próxima rodada
+
+aplicamos a cifra na rede de Feistel. F():
+1. dividimos a entrada de 64 bits em 2 metades de 32
+2. aplicamos $F(RE_i, K_i)$, as operações $XOR$, etc.
