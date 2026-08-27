@@ -159,8 +159,10 @@ $RE_{i+1} = LE_i \oplus F(R, K)$
 
 #### Data Encryption Standard (DES)
 
-quebrado em meados da década de 90
+- foi bastante utilizado, até ser quebrado em meados da década de 90
+- ainda utilizado em hardware pelo baixo custo
 
+implementação
 - entrada de 64 bits
 - chave de 56 bits
 - 16 rodadas na rede de Feistel
@@ -180,3 +182,70 @@ obtenção da chave:
 aplicamos a cifra na rede de Feistel. F():
 1. dividimos a entrada de 64 bits em 2 metades de 32
 2. aplicamos $F(RE_i, K_i)$, as operações $XOR$, etc.
+
+
+#### Advanced Encryption Standard (AES)
+
+- padrão pelo NIST (EUA), substituindo DES
+- mais utilizado hoje em dia (Wi-Fi, HTTPS, VPNs, disc)
+- baseado na "rede de substituição-permutação"
+
+implementação
+- blocos de 128 bits (16 bytes)
+- cada bloco é processado em rodadas de transformação, a depender do tamanho da chave
+    - AES-128 10 rodadas; AES-192 12 rodadas, AES-256 14 rodadas
+- a cada rodada os blocos são: misturados, substituídos, embaralhados
+
+s_box (constante de rodada): tabela que garante a variação da chave a cada rodada (aumenta difusão garantindo que elas não são linearmente dependentes?)
+
+rodada:
+- SubBytes: substituir byte através da s_box
+- ShiftRows: aplica deslocamento à esquerda gradual em cada linha da matriz
+- MixColumns: aplica uma multiplicação de matriz com a 
+- AddRoundKey: aplica XOR entre subchaves
+
+![bloco_aes_ops](media/bloco_aes_ops.png)
+
+na primeira rodada: apenas AddRoundKey \
+na última: não fazemos MixColumns
+
+
+tabela de substituição s_box (fixa, uma para criptografar, outra pra descriptografar)
+
+obtenção da subchave (exemplo)
+- temos uma chave de 128 bits, 16 bytes/pares de caracteres hex
+- separamos ela em uma matriz 4x4 (1 byte por posição), obtendo w[0], w[1], w[2] e w[3]
+- para obter a próxima chave $i$, realizamos 4 operações:
+    - deslocamento circular à esquerda em w[i-1]
+    - substituir o resultado através da s_box
+
+![bloco_aes_fluxo](media/bloco_aes_fluxo.png)
+
+Rodada 0
+
+Rodada 1
+- SubByte: aplicar s_box
+- ShiftRows: deslocar 1, 2, 3 bytes circularmente à esquerda
+- 
+
+#### side-channel attacks
+
+pegar vazamentos de informação paralelos a um sistema. utilizar formas alternativas/periféricas pra obter algo de dentro do canal alvo
+
+#### Abordagem Flush + Reload
+
+temos um programa alvo e um programa atacante (que quer descobrir a chave privada de criptografia do sistema)
+
+programa atacante executa um flush (s_box), limpando todas as referências da s_box em cache
+
+logo em seguida, o programa atacante fornece um texto plano e pede ao programa alvo que o criptografe
+
+logo que o processo do programa alvo tenta ler a s_box da memória, o processo do programa atacante requisita dados da s_box. os dados da s_box que tiverem uma resposta mais rápida devem ser os dados que já estavam na cache, atentendo ao processo alvo, e tem chance de serem referências da posição da tabela s_box
+
+então, o programa atacante precisa sincronizar com as rodadas do AES, conseguir ter seu processo escalonado pra logo depois do processo alvo, ter chance de achar referências à posição na s_box (ao invés de lixo)
+
+assim, o atacante tem
+- o texto plano
+- posições da s_box (das quais pode inferir as chaves de rodada) que pode usar pra montar a chave completa
+
+hoje em dia, os SOs têm uma stack pra impedir essa chance, mas hardwares mais antigos tem mais chance de ser possível. pra replicar, é mais fácil remover proteções do kernel do sistema pra que seja possível e replicável
