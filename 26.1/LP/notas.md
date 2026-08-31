@@ -1,11 +1,4 @@
-**horário monitoria**
-Terça-feira, 10:00-11:00h presencial, sala de monitoria do prédio CIC/EST
-Sexta-feira, 11:00-12:00h, online, Teams - Erick Rodrigues Fraga
-
-
 os trabalhos serão exercícios. nos últimos semestres as notas das provas eram mais baixas e dos trabalhos sempre acima de 9, então a partir desse semestre o Vander não vai mais avaliá-los
-
-
 
 # Módulo 1 - Paradigma Funcional (Haskell)
 
@@ -56,7 +49,7 @@ tendência: integração de paradigmas
 - forte fundamentação teórica (facilita provas)
 - traz conceitos fundamentais da computação moderna: abstração (em funções), abstração de dados (tipos), genericidade, polimorfismo, overloading
 
-### Haskell
+## Haskell
 
 conceitos importantes:
 - Sistema de tipos fortes
@@ -71,13 +64,13 @@ características
 
 
 definições
-< answer::Int // answer = 42
-< greater::Bool // grater = (answer > 71)
-< square::Int -> Int // square x = x * x	/// o escopo de x é apenas essa linha, representando uma entrada qualquer; se ocorrer em outro lugar, será uma constante
-< allEqual :: Int -> Int -> Int -> Int -> Bool // allEqual n m p = (n == m) && (m == p)
-< maxi :: Int -> Int -> Int
-< maxi n m	| n >= m	= n	/// | são guardas, a primeira que for válida define o retorno
-		| otherwise	= m	/// otherwise é uma constante True, como um default num switch; se nenhuma guarda for avaliada como verdadeira, haverá erro por tempo de execução
+< answer::Int // answer = 42 \
+< greater::Bool // grater = (answer > 71) \
+< square::Int -> Int // square x = x * x	/// o escopo de x é apenas essa linha, representando uma entrada qualquer; se ocorrer em outro lugar, será uma constante \
+< allEqual :: Int -> Int -> Int -> Int -> Bool // allEqual n m p = (n == m) && (m == p) \
+< maxi :: Int -> Int -> Int \
+< maxi n m	| n >= m	= n	/// | são guardas, a primeira que for válida define o retorno \
+		| otherwise	= m	/// otherwise é uma constante True, como um default num switch; se nenhuma guarda for avaliada como verdadeira, haverá erro por tempo de execução \
 < f y = y	/// função polimórfica; se checarmos o tipo no interpretador com :t f, teremos f :: a -> a, sendo a qualquer tipo
 
 tecnicamente, todas funções têm apenas um parâmetro e retornam uma função ou valor com uma saída. Int -> Int -> Bool recebe um inteiro e retorna uma função Int -> Bool, que por sua vez retorna um Bool - aplicação parcial de funções, courificação? de funções
@@ -115,7 +108,7 @@ processo de compilação até a chamada de uma função válida:
 -> chega no resultado, obtém um valor e checa sua validade
 -> chega-se no estágio terminal, um valor de retorno numa forma normal. fim da execução
 
-lazy evaluation; pilha de expressões, não apenas valores
+lazy evaluation; pilha de expressões, não apenas valores \
 a linguagem avalia primeiramente os argumentos mais internos da função. numa chamada recursiva, ele armazena as expressões numa pilha
 
 fat 2   // 2 * fat 1   // 2 * 1 * fat 0   // 2 * 1 * 1   // 2
@@ -126,12 +119,13 @@ Maybe : uma forma de definir de funções parciais, possibilitanto uma restriç�
 
 > aula 04 25/03
 
-
+```hs
 maxSales :: Int -> Int
 maxSales n
 	| n == 0 	= sales 0
 	| otherwise 	= maxi 	(maxSales (n-1))
 				(sales n)
+```
 
 maxSales 2   // maxi (maxSales 1) sales 2   // maxi (maxi (maxSales 0) sales 1) sales 2  // (supondo sales n = n)  maxi (maxi 0 1) 2   // maxi 1 2   // 2
 
@@ -186,7 +180,7 @@ countSales s n  | n == 0 && (s == sales 0) = 1
                 | n >  0 && (s /= sales n) = countSales 2 (n-1)
 ```
 
-obs. as checagens de se s é igual a sales n podem ser omitidas nessa ordem de declaração, mas por alguns motivos podem ser mantidas: legibilidade, se quisermos reordenar as guardas (otimização, caso comum em primeiro), se for um sistema que for mantido por anos ou desenvolvido em colaboração
+obs. as checagens de se s é igual a sales n podem ser omitidas nessa ordem de declaração, mas por alguns motivos podem ser mantidas: legibilidade, se quisermos reordenar as guardas (otimização, caso comum em primeiro), se for um sistema que for mantido por anos ou desenvolvido em colaboração \
 muitas vezes é interessante ser mais explícito, pra ter mais flexibilidade. apenas em casos específicos é mais benéfico fazer omissões
 
 
@@ -840,12 +834,12 @@ class (Ord t, Visible t) => OrdVis t          -- interseção de typeClasses
 se assemelha ao conceito de Herança Múltipla
 
 
-## Dúvidas
+### Dúvidas
 
 - oq acontece se aplicar `snd` a uma tupla de 3 elementos ou mais?
 - typeClasses trazem a ideia de conjuntos de tipos, mas tecnicamente não são uma lista de tipos que cumprem o contrato, mas são o padrão pra checar em tempo de execução se tais tipos cumprem o contrato ou não, né? é possível ter erro de compilação 
 
-## Tipos algébricos
+### Tipos algébricos
 
 Com tipos algébricos
 - cada objeto do tipo tem um label explícito
@@ -941,7 +935,7 @@ depth (Node _ l r) = 1 + maxi (depth l) (depth r)
 
 > 06/05
 
-## Funções parciais - Maybe
+### Funções parciais - Maybe
 
 até agora, deixamos funções parciais indefinidas para os casos fora do domínio, mas sem explicitar que não são entradas válidas. assim, chamando uma função para um valor que não encaixa em nenhum padrão da função, teríamos um erro em tempo de execução indicando que, testando exaustivamente, não há padrão que case com o valor de input
 
