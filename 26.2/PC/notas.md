@@ -327,7 +327,8 @@ void* pthread_func(void* arg) {
 
 ```
 
-**Problema dos Escritores e Leitores** \
+### Problema dos Escritores e Leitores
+
 a escrita de um dado exige exclusão mútua, pois o dado é inconsistente/incompleto durante a escrita (mas podemos ter várias leituras independentes e paralelas)
 
 - em alguns casos, basta garantir a exclusividade de execução do escritor
@@ -335,6 +336,8 @@ a escrita de um dado exige exclusão mútua, pois o dado é inconsistente/incomp
   solução: o primeiro leitor fecha o lock de escrita e o último abre
 
   porém, precisamos garantir uma sincronização dos leitores pra saber qual é o primeiro, qual o último: lock de leitores
+
+fonte: [leitores_escritores_mutex.c](examples/leitores_escritores_mutex.c)
 
 ```c
 pthread_mutex_t db_write = PTHREAD_MUTEX_INITIALIZER;
@@ -370,3 +373,70 @@ void* reader(void* arg) {
 
 problema: **starvation**, se tiver um alto fluxo de leitores, o lock de escritores pode nunca ser aberto \
 solução: lock de leitores na escrita?, escalonamento de leitores e escritores? (talvez com uma política que favoreça levemente leitores)
+
+tentativa 1: ecritores travam lock de leitores
+
+pseudocódigo do fluxo das threads:
+```
+1. leitor:
+  1.1 tranca pra leitores
+  1.2 se for primeiro leitor: tranca pra escritores
+  1.3 destranca pra leitores
+  1.4 lê bd
+  1.5 tranca pra leitores
+  1.6 se for último leitor: destranca pra escritores
+  1.7 destranca pra leitores
+
+2. escritor:
+  2.1 tranca pra leitores
+  2.2 tranca pra escritores
+  2.3 escreve
+  2.4 destranca pra escritores
+  2.5 destranca para leitores
+```
+
+nessa implementação ocorre deadlock! é possível que:
+1. um leitor trave locks de leitores e escritores
+2. um escritor fica bloqueado ao tentar travar lock de leitores, 
+3. leitor destrava lock de leitores
+4. escritor trava lock de leitores e fica travado pelo lock de escritores (indefinidamente)
+5. leitor lê e fica bloqueado ao tentar travar lock de leitores (indefinidamente)
+
+dúvida: quando uma thread quer abrir um lock aberto, fica bloqueada? provavelmente
+
+solução correta: criar uma lock para turno
+
+ao invés dos escritores travarem para leitores, eles travam a lock turno (garantem que é turno dos escritores) e travam lock de escritores (um por vez); e quando terminam, abrem a lock turno. quando o primeiro leitor quiser ler, trava lock turno (turno dos leitores), trava a lock de escritores (bloqueia escrita durante fluxo de leitores) síncronamente (lock de leitores, um por vez) e abre lock de escritores; o último leitor checa síncronamente se é o último e destrava a lock de escritores
+
+pseudocódigo do fluxo das threads:
+```
+1. leitor:
+  1.1 tranca turno
+  1.2 tranca pra leitores
+  1.3 se for priemiro leitor: tranca pra escritores
+  1.4 destranca pra leitores
+  1.5 destranca turno
+  1.6 lê bd
+  1.7 tranca pra leitores
+  1.8 se for último leitor: destranca pra escritores
+  1.9 destranca pra leitores
+
+1. escritor:
+  2.1 tranca turno
+  2.2 tranca pra escritores
+  2.3 escreve
+  2.4 destranca pra escritores
+  2.5 destranca turno
+```
+
+obs: na execução de leitor, é possível destrancar turno logo depois de trancar, em 1.2. o que importa é que a thread de escritor possa garantir sua execução entre fluxos de leitores sem ter conflito de locks de sincronização entre leitores. escritor já não executa durante fluxo de leitores, e também leitores ficam bloqueados por lock de turno quando escritor tenta escrever
+
+
+### Problema dos macacos
+
+há duas rochas, A e B, separadas por um penhasco e ligadas por uma corda
+
+há um grupo de macacos em cada rocha e cada um quer atravessar para o outro lado. não é possível dois macacos de lados diferentes atravessarem ao mesmo tempo, mas vários macacos de um mesmo lado podem atravessar a corda no mesmo sentido
+
+implemente um sistema de locks que permita que os macacos de um mesmo lado atravessem em grupo, sem atravessar ao mesmo tempo que um macaco do outro lado e sem starvation (os grupos se revezam)
+
