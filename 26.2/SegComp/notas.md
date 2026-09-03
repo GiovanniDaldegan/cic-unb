@@ -249,3 +249,28 @@ assim, o atacante tem
 - posições da s_box (das quais pode inferir as chaves de rodada) que pode usar pra montar a chave completa
 
 hoje em dia, os SOs têm uma stack pra impedir essa chance, mas hardwares mais antigos tem mais chance de ser possível. pra replicar, é mais fácil remover proteções do kernel do sistema pra que seja possível e replicável
+
+## Criptografia Assimétrica
+
+### Criptografia de chave pública
+Diffie-Hellman76, RSA78
+
+- remetende e destinatário não compartilham chave secreta
+- todos reconhecem a chave pública
+- apenas o receptor tem a chave privada de decriptação de uma mensagem criptografada com a chave pública de criptação
+
+precisamos de
+- $K_B^-$ e $K_B^+$ tais que $K_B^-(K_B^+(m)) = m$
+- dada chave pública K, é impossível obter a chave privada K
+
+
+### RSA (Algoritmo de Rivest, Shamir, Adelson)
+
+ganharam prêmio Turing pelo algoritmo
+
+relembrando, $b/\Z_b$ é fechado para $+$, $-$, $\times$, $\div$
+- $(a \mod n) + (b \mod n)] \mod n = (a+b) \mod n$
+- $[(a \mod n) - (b \mod n)] \mod n = (a-b) \mod n$
+- $[(a \mod n) * (b \mod n)] \mod n = (a*b) \mod n$
+- $(a \mod n)^d \mod n = a^d \mod n$
+
