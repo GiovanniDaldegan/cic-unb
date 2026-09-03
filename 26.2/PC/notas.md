@@ -440,3 +440,14 @@ há um grupo de macacos em cada rocha e cada um quer atravessar para o outro lad
 
 implemente um sistema de locks que permita que os macacos de um mesmo lado atravessem em grupo, sem atravessar ao mesmo tempo que um macaco do outro lado e sem starvation (os grupos se revezam)
 
+solução: ![macacos_mutex.c](./exercices/macacos_mutex.c)
+
+precisamos dos locks:
+- lock_turno, pra garantir execução de uma thread/macaco - **evitar starvation**
+- lock_corda, garantindo acesso exclusivo de um tipo de thread (grupo de macacos: macacoAB, macacoBA, gorilaAB, gorilaBA) - **área crítica de recurso compartilhado**
+- lock_\<macaco\>, pra garantir sincronicidade do contador de cada tipo de macaco - **área crítica de variável compartilhada**
+
+1. todo macaco tranca turno pra ter sua vez
+2. todo início de fluxo de macaco tranca a corda, seja só um macaco/gorila ou um grupo de macacos
+3. cada macaco que vai em grupo tranca as atualizações do seu respectivo contador de macacos
+
