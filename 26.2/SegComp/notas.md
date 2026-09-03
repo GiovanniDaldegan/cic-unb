@@ -274,3 +274,48 @@ relembrando, $b/\Z_b$ é fechado para $+$, $-$, $\times$, $\div$
 - $[(a \mod n) * (b \mod n)] \mod n = (a*b) \mod n$
 - $(a \mod n)^d \mod n = a^d \mod n$
 
+### Diffie-Hellman 
+
+#### Raiz primitiva (gerador) e logarítmo discreto
+
+Conjunto resto módulo $p$: $\Z_p^* = \{ 1, 2, 3, ..., p-1 \}$
+
+Para todo primo $p$, há um $g \in \Z_p^*$ gerador, ou raiz primitiva, tal que seja possível gerar todos os elementos de $\Z_p^*$ por potências de $g$
+
+$\Z_p^* = <g> = \{ g^i \mod p | i \in \{ 0, 1, ..., p-1\} \}$
+
+![diffie_hellman_raiz](media/diffie_hellman_raiz.png)
+
+a operação de **logaritmo discreto** é: \
+dado um $b = g^i \mod p$, $dlog_{g,p}(b) = i$, com $0 \le i \le p-1$
+
+por exemplo, $dlog_{g,p}(4) = 4$, $dlog_{g,p}(1) = 3$, como mostrado acima
+
+##### Procedimento
+
+usuários A e B querem estabelecer uma chave simétrica num canal não seguro. para isso:
+- compartilham um primo $q$ (idealmente 2048b) e uma raiz primitiva $g$ de $\Z_q^*$
+- calculam "chaves públicas" e, com base nelas, forma-se uma chave simétrica útil apenas para os dois
+
+Geração da chave simétrica:
+1. A escolhe um número aleatório $X_A < q$, B um número aleatório $X_B < q$. $X_A$ e $X_B$ são secretos e não compartilhados
+2. A calcula um número $Y_A \in \Z_q^*$, e B, $Y_B \in \Z_q^*$
+3. ambos compartilham $Y_A$ e $Y_B$, que carregam propriedades matemáticas de $X_A$ e $X_B$
+4. ambos geram uma mesma chave $K$: \
+    para A, derivado de $X_A$ e $Y_B$; para B, $X_B$ e $Y_A$
+
+    $K_A = (Y_B)^{X_A} \mod q$ \
+    $K_B = (Y_A)^{X_B} \mod q$
+
+    temos que $K_A = K_B$ pois
+    
+    $$(Y_B)^{X_A} \mod q \\ = (g^{X_B} \mod q)^{X_A} \mod q \\ = (g^{X_B * X_A} \mod q) \mod q \\ = (g^{X_A} \mod q)^{X_B} \mod q \\ = (Y_A \mod q)^{X_B} \mod q \\ = (Y_A)^{X_B} \mod q$$
+
+**força**: o custo de $dlog_{g,q}$ é altíssimo, então é inviável tentar achar $X_A$ **e** $X_B$ \
+**fragilidade**: sucetível a person-in-the-middle
+
+quaisquer dois interlocutores podem combinar um conjunto resto p e um gerador. é possível se passar por um dos interlocutores alvo e se inserir entre a comunicação dos dois, enganando-os e fingindo que o atacante deve fazer parte da formação da chave
+
+![diffie_hellman_p_in_the_middle](media/diffie_hellman_p_in_the_middle.png)
+
+<!-- ### Elgamal -->
