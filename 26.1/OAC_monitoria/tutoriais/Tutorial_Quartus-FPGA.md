@@ -5,6 +5,9 @@ TODO:
 - análise de requisitos temporais (tempos dos processadores RISC-V 24.1)
 - seção simulação Quartus + troubleshooting
 - problema -voptargs="+acc" no Quartus 24.1
+- testar: um .vwf funciona em outra máquina/versão da compilação, dado que os pinos são iguais e com mesmo nome?
+- um .vwf pode fazer referência a ele mesmo dentro de uma pasta? no Waveform3.vwf do LAB4, as configs funcionais fazem referência a Waveform3.vwf.vt e não têm -novopt; nas temporais, faz referência a Testes/Waveform3.vwf.vt e tem -novopt. tô assumindo q a temporal é como o Quartus deixa assim que se cria o vwf, e a funcional é a versão corrigida do Lamar para que rodasse no PC dele
+- tabela completa de formatos de instrução, com opcode (talvez functs) e seccionamento dos dados da instrução
 
 extra
 - projeto para teste de instalação do Quartus com exemplos de Verilog (com comentários didáticos para codificação e simulação)
@@ -38,6 +41,7 @@ extra
         - [Análise dos requisitos físicos](#análise-dos-requisitos-físicos)
         - [Análise dos requisitos temporais](#análise-dos-requisitos-temporais)
     - [Simulação - Quartus](#simulação---quartus)
+        - [Criação de Waveform](#criação-de-waveform)
     - [Execução - FPGA DE1-SoC (Cyclone V)](#execução---fpga-de1-soc-cyclone-v)
         - [Carregar design na placa](#carregar-design-na-placa)
         - [Gerar arquivos de inicialização de memória](#gerar-arquivos-de-inicialização-de-memória)
@@ -227,6 +231,28 @@ Anote os valores mostrados no Flow Summary depois da compilação:
 <br>
 
 ## Simulação - Quartus
+
+### Criação de Waveform
+
+Com o design definido como Top-Level já compilado, siga os passos:
+
+1. Crie um novo arquivo VWF \
+    Abra o menu File > New e crie um novo arquivo `University Program VWF`.
+
+    Será criado um novo arquivo `Waveform*.vwf`, numerado com o menor número disponível. \
+    Ex: Se seu projeto tem Waveform.vwf e Waveform1.vwf na raíz, ele vai criar Waveform2.vwf.
+
+    ![sim_new_vwf](src_quartus_fpga/sim_new_vwf.png)
+
+2. Assim que abrir a janela de edição de VWF, insira todos os pinos necessários do seu design. \
+    Clique em Edit > Insert > Insert Node or Bus...
+    ![sim_insert_node_or_bus](src_quartus_fpga/sim_insert_node_or_bus_0.png)
+
+3. Liste os pinos do design \
+    ![alt text](src_quartus_fpga/sim_insert_node_or_bus_1.png)
+
+4. 
+
 
 [em desenvolvimento]
 
