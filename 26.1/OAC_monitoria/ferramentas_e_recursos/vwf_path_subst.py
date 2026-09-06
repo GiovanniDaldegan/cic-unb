@@ -74,3 +74,11 @@ if __name__ == "__main__":
                 os.rename(file_path, new_path)
         except Exception as e:
             print
+
+
+# TODO:
+#   - lidar com caminhos relivos dentro do arquivo
+#       localizar auto-referência ao arquvio em --vector_source e referência ao resultado da sim em --testbench_file
+#   - pesquisar se as conexões dos pinos são mantidas ou se perdem de toda forma (exigindo refazer o waveform de todo jeito)
+#   - tratar caminhos encapsulados em "" ou mal-formados
+#   - bug: [os.rename()] colisão de nomes de arquivos com .lower() idêntico -> muda o conteúdo mas não renomeia o arquivo
