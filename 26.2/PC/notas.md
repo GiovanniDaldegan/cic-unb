@@ -451,3 +451,56 @@ precisamos dos locks:
 2. todo início de fluxo de macaco tranca a corda, seja só um macaco/gorila ou um grupo de macacos
 3. cada macaco que vai em grupo tranca as atualizações do seu respectivo contador de macacos
 
+
+### Deadlocks
+
+exercício com base em (questão duma prova 1 passada mas em pseudo-código): [leitores_escritores_deadlock.c](./examples/leitores_escritores_deadlock.c)
+
+a) explique como é possível ocorrer um deadlock nessa solução
+
+tabela de ações de leitores e escritores durante execução
+
+| t   | L1                 | L2              | E1                |
+| --- | ------------------ | --------------- | ----------------- |
+| 1   | linhas 7-12        |                 |                   |
+|     | leitores = 1       |                 |                   |
+|     | fechado: bd        |                 |                   |
+|     |                    |                 |                   |
+| 2   | linha 13-14        | linha 7         |                   |
+|     | fechado: mutex     | fechado: turno  |                   |
+|     |                    |                 |                   |
+| 3   |                    | linha 8         | linhas 37-38      |
+|     |                    | leitores = 2    | BLOQUEADO (turno) |
+|     |                    |                 |                   |
+| 4   | linha 15           |                 |                   |
+|     | leitores           |                 |                   |
+|     |                    |                 |                   |
+| 5   | linha 16-18        | linha 9-10      |                   |
+|     | abrir: mutex       | BLOEQUEADO (bd) |                   |
+|     |                    |                 |                   |
+| 6   | linha 20,7;        |                 |                   |
+|     | BLOEQUEADO (turno) |                 |                   |
+
+b) explique como é possível um escritor estar editanto o bd durante sua leitura
+
+| t   | L1                | L2            | E1                 |
+| --- | ----------------- | ------------- | ------------------ |
+| 1   | linhas 7-12       |               |                    |
+|     | leitores = 1      |               |                    |
+|     | fechado: bd       |               |                    |
+|     |                   |               |                    |
+| 2   | linhas 13-14 (lê) |               |                    |
+|     | fechado: mutex    |               |                    |
+|     |                   |               |                    |
+| 3   |                   | linhas 7-8,12 |                    |
+|     |                   | leitores = 2  |                    |
+|     |                   |               |                    |
+| 4   | linha 15,16-19    |               |                    |
+|     | leitores = 0      |               |                    |
+|     | aberto: bd        |               |                    |
+|     |                   |               |                    |
+| 5   |                   |               | linha 37-39        |
+|     |                   |               | fechado: turno, bd |
+|     |                   |               |                    |
+| 6   |                   | linha 13 (lê) | linha 40 (escreve) |
+
