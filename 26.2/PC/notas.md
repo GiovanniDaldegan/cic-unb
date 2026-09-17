@@ -30,7 +30,8 @@ CPU e threads virtuais: um mesmo processador pode executar apenas uma instruçã
 
 ![media/proc_multiprogramacao_0](media/proc_multiprogramacao_0.png)
 
-obs: mesmo que seja uma organização pipeline, cada estágio do pipeline é dedicado a apenas 1 instrução
+> [!note] observação:
+> mesmo que seja uma organização pipeline, cada estágio do pipeline é dedicado a apenas 1 instrução
 
 **espera ocupada**: uma thread travada por uma asserção, só avança caso ela seja satisfeita, **gastando recursos** de acesso à memória e avaliação de expressões enquanto **espera**
 
@@ -429,7 +430,8 @@ pseudocódigo do fluxo das threads:
   2.5 destranca turno
 ```
 
-obs: na execução de leitor, é possível destrancar turno logo depois de trancar, em 1.2. o que importa é que a thread de escritor possa garantir sua execução entre fluxos de leitores sem ter conflito de locks de sincronização entre leitores. escritor já não executa durante fluxo de leitores, e também leitores ficam bloqueados por lock de turno quando escritor tenta escrever
+> [!note] observação:
+> na execução de leitor, é possível destrancar turno logo depois de trancar, em 1.2. o que importa é que a thread de escritor possa garantir sua execução entre fluxos de leitores sem ter conflito de locks de sincronização entre leitores. escritor já não executa durante fluxo de leitores, e também leitores ficam bloqueados por lock de turno quando escritor tenta escrever
 
 
 ### Problema dos macacos
@@ -440,7 +442,7 @@ há um grupo de macacos em cada rocha e cada um quer atravessar para o outro lad
 
 implemente um sistema de locks que permita que os macacos de um mesmo lado atravessem em grupo, sem atravessar ao mesmo tempo que um macaco do outro lado e sem starvation (os grupos se revezam)
 
-solução: ![macacos_mutex.c](./exercices/macacos_mutex.c)
+solução: [macacos_mutex.c](./exercices/macacos_mutex.c)
 
 precisamos dos locks:
 - lock_turno, pra garantir execução de uma thread/macaco - **evitar starvation**
@@ -526,3 +528,25 @@ assim, lidar com variáveis condição produz regiões críticas, que devem ser 
 porém, é necessário que um sleep libere o lock correspondente à região crítica, pois se uma processo/thread fecha um lock e fica preso n
 
 exemplo: [produtor_consumidor_condicao.c](./examples/produtor_consumidor_condicao.c)
+
+#### problema dos canibais
+
+há N canibais e todos querem tomar ensopado de missionário, mas só podem comer se houver porções disponíveis. sempre que acabarem as porções, os canibais devem acordar o cozinheiro para cozinhar mais. quando ele termina de cozinhar, acorda todos os canibais. enquanto tiver porções, o cozinheiro dorme
+
+os canibais fazem fila para pegar a porção, mas podem comer ao mesmo tempo
+
+implementação: [problema dos canibais](exercises/canibais.c)
+
+> [!note] observação:
+> em alguns casos, é essencial utilizar `while` em regiões críticas controladas por variáveis condição
+> 
+> no caso do problema dos canibais, o cozinheiro pode acordar 10 canibais, mas só ter 8 porções. se os canibais tiverem um `if(porcoes <= 0) {..._wait(&rango_pronto, ...) }` pra dormir esperando por comida, todos serão acordados pelo `broadcast` do cozinheiro e vão comer mesmo que agora seja `porcoes <= 0`, e teremos `porcoes == -2`
+
+> [!warning] dúvida:
+> porque apenas com `while` os canibais não se repetem? por que com `if` eles acabam estragando o controle da região crítica, permitindo `porcoes < 0`? não era pra isso ser impedido pelo lock comum entre threads de canibais?
+
+com while:\
+![cond_canibais_while](media/cond_canibais_while.png)
+
+com if:\
+![cond_canibais_if](media/cond_canibais_if.png)
