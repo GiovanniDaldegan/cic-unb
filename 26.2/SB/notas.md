@@ -115,10 +115,151 @@ obs: no início do desenvolvimento dos compiladores, não era possível otimizar
 
     então podemos executá-las antes do loop
 
-# Máquina de Turing Hipotética
+#### Máquina de Turing Hipotética
 
 ![maquina_instrucoes](media/maquina_instrucoes.png)
 
 obs: copy é a única instrução que não se implementa em assembly real, pois acessa duas
 
 ![maquina_diretivas_0](media/maquina_diretivas_0.png)
+
+### Montador
+
+nosso montador deve gerar um código (intermediário ou objeto) para nosso assembly inventado, realizando as tarefas:
+- tradução de pseudo-instruções para opcodes e expansão de macros
+- reserva espaço para dados
+- resolver referências a endereços de memória no programa
+- registrar informações para a ligação do programa
+  - tabela de definições: símbolos externos utilizados no programa
+  - tabela de uso: símbolos exportados e atributos
+
+para isso, o montador deve percorrer o código fonte linha a linha para gerar o binário correspondente. é possível fazer isso em duas passagens ou uma única
+
+hoje em dia, em geral, os compiladores usam apenas o algoritmo de duas passagens (a diferença de tempo costuma ser imperceptível para o usuário e deve adiantar processos de otimização)
+
+*forward reference problem*: como resolver o endereço de um rótulo usado numa instrução sem ter chegado na definição do rótulo ainda?
+
+#### Algoritmo de duas passagens (two-pass assembler)
+
+um símbolo é um rótulo ou nome de uma variável declarada
+
+primeira passagem: identifica símbolos, rótulos, etc. e os armazena numa tabela de símbolos (TS)
+
+segunda passagem: determina os endereços dos símbolos e gera código de máquina a partir da tabela
+
+vamos utilizar:
+- contador de linhas \
+    indica linha do código fonte que está sendo analisada (para relatar erros)
+- contador de posições \
+    indica posição de memória no código a ser gerado
+- tabela de símbolos (TS) \
+    acumula todos os símbolos definidos e seus atributos
+- tabela de diretivas \
+    guarda definições de rotina de todas diretivas da linguagem
+
+passos da 1ª passsagem:
+1. obtém e decodifica linha do fonte, separando rótulo, operação, operandos, comentários
+2. caso tenha rótulo: indica erro se já está definido; adiciona na TS caso não esteja definido
+3. se operação estiver na tabela de instruções:
+   1. atualizar contador de posição (+= tamanho da instrução atual)
+4. senão, se operação estiver na tabela de diretivas:
+   1. chama subrotina da diretiva
+   2. atualiza contador de posição para o valor retornado pela subrotina
+5. senão: erro de operação não identificada
+6. atualizar o contador de linha (+= 1)
+
+passos da 2ª passagem:
+1. obtém e decodifica uma linha do fonte
+2. para cada operando que é símbolo:
+   1. se não estiver na TS: erro símbolo indefinido
+3. procura operação na tabela de instruções:
+   1. atualiza contador de posição (+= tamanho da instrução)
+   2. se número e tipo dos operandos estão corretos: gera código objeto da instrução
+   3. caso contrário: erro, operando inválido
+4. senão:
+   1. se estiver na tabela de diretivas:
+      1. chama subrotina da diretiva
+      2. atualiza contador de posulão para o valor retornado pela subrotina
+   2. senão: erro, operação desconhecida
+5. atualiza contador de linha (+= 1)
+
+![montador_two_pass_diagr](media/montador_two_pass_diagr.png)
+
+![montador_geracao_codigo](media/montador_two_pass_geracao.png)
+
+> [!note] obs:
+> um program sempre vai começar em alguma posição específica da memória, então, o contador de posição do programa sempre vai iniciar no início da seção de memória reservada pra ele
+>
+> porém, podemos indicar as posições do código que contêm endereços (**informação de relocação**) e passar a tarefa de indicar o início correto do programa para o **carregador**, deixando em função do ponto de carga (relocação do programa)
+
+vantagens:
+- mais simples
+- se todos os símbolos de uma instrução já estiverem definidos, seu código de máquina é gerado diretamente
+
+desvantagens:
+- toma mais tempo para leitura
+
+#### Algoritmo de passagem única
+
+na passagem única, o montador insere um símbolo não definidos na tabela de símbolos, mas também guarda na tabela uma **flag** indicando se está **definido ou não** e um ponteiro para uma lista de endereços que referenciam esse símbolo (**lista de pendências**)
+
+assim, para cada símbolo identificado:
+- se não estiver na TS:
+  - se for rótulo: adiciona na TS como definido e insere seu valor
+  - se for referência: adiciona na TS como não definido e insere posição na lista de pendências
+- se estiver na TS:
+  - se está definido: insere seu valor no código gerado
+  - senão: insere a posição atual na lista de pendências
+
+ao final da passagem, o montador confere se todos os símbolos foram definidos. se sim, insere o valor de cada rótulo nas posições indicadas na sua respectiva lista de pendências; caso contrário, erro de símbolo não definido
+
+![montador_one_pass_diagr0.png](media/montador_one_pass_diagr0.png)
+
+![montador_one_pass_diagr1.png](media/montador_one_pass_diagr1.png)
+
+![montador_one_pass_diagr2.png](media/montador_one_pass_diagr2.png)
+
+![montador_one_pass_diagr3.png](media/montador_one_pass_diagr3.png)
+
+![montador_tabela_simb.png](media/montador_one_pass_geracao.png)
+
+vantages:
+- economiza em uma leitura completa do código fonte
+
+desvantages:
+- mais complexo
+- gasta mais memória (flags, listas encadeadas)
+
+#### Algoritmo de indexação (no próprio código)
+
+
+#### Diretivas
+
+passagem 0 ou passagem de pré-processamento: consideração de todas as diretivas de pré-processamento
+
+- `SPACE (X)`: reserva o próximo endereço (opcionalmente, +X endereços seguintes a ele) 
+- `+X`: soma um valor X ao endereço logo antes
+- `ORG X`: define a posição do contador para as instruções a seguir \
+    exemplo: definir segmento de texto e dados fixamente
+
+    ```
+    ORG 0
+    <instruções>
+
+    ORG 32768
+    <variáveis>
+    ```
+
+- `[SIMB] EQU X` ("equate"): cria um sinônimo para um símbolo, semelhante a uma macro
+- `IF [FLAG]` (*conditional assembly*): determina se um trecho do código deve ser montado ou ignorado a partir do valor de uma flag
+    ```
+    FLAG EQU 1
+    . . .
+
+    IF FLAG
+    JMP XXX     # se FLAG não é satisfeita, descarta a linha seguinte
+    ```
+
+    > [!note] obs:
+    > a diretiva age apenas sobre a instrução seguinte
+
