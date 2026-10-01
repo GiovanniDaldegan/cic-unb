@@ -123,7 +123,7 @@ obs: copy é a única instrução que não se implementa em assembly real, pois 
 
 ![maquina_diretivas_0](media/maquina_diretivas_0.png)
 
-### Montador
+# Montador
 
 nosso montador deve gerar um código (intermediário ou objeto) para nosso assembly inventado, realizando as tarefas:
 - tradução de pseudo-instruções para opcodes e expansão de macros
@@ -139,7 +139,7 @@ hoje em dia, em geral, os compiladores usam apenas o algoritmo de duas passagens
 
 *forward reference problem*: como resolver o endereço de um rótulo usado numa instrução sem ter chegado na definição do rótulo ainda?
 
-#### Algoritmo de duas passagens (two-pass assembler)
+## Algoritmo de duas passagens (two-pass assembler)
 
 um símbolo é um rótulo ou nome de uma variável declarada
 
@@ -199,7 +199,7 @@ vantagens:
 desvantagens:
 - toma mais tempo para leitura
 
-#### Algoritmo de passagem única
+## Algoritmo de passagem única
 
 na passagem única, o montador insere um símbolo não definidos na tabela de símbolos, mas também guarda na tabela uma **flag** indicando se está **definido ou não** e um ponteiro para uma lista de endereços que referenciam esse símbolo (**lista de pendências**)
 
@@ -230,36 +230,148 @@ desvantages:
 - mais complexo
 - gasta mais memória (flags, listas encadeadas)
 
-#### Algoritmo de indexação (no próprio código)
+## Algoritmo de indexação (no próprio código)
 
 
-#### Diretivas
+## Diretivas
+
+diretivas são subrotinas para o montador executar. pode haver diretivas para qualquer passagem de um montador
 
 passagem 0 ou passagem de pré-processamento: consideração de todas as diretivas de pré-processamento
 
 - `SPACE (X)`: reserva o próximo endereço (opcionalmente, +X endereços seguintes a ele) 
 - `+X`: soma um valor X ao endereço logo antes
 - `ORG X`: define a posição do contador para as instruções a seguir \
-    exemplo: definir segmento de texto e dados fixamente
+  exemplo: definir segmento de texto e dados fixamente
 
-    ```
-    ORG 0
-    <instruções>
+  ```
+  ORG 0
+  <instruções>
 
-    ORG 32768
-    <variáveis>
-    ```
+  ORG 32768
+  <variáveis>
+  ```
 
 - `[SIMB] EQU X` ("equate"): cria um sinônimo para um símbolo, semelhante a uma macro
-- `IF [FLAG]` (*conditional assembly*): determina se um trecho do código deve ser montado ou ignorado a partir do valor de uma flag
-    ```
-    FLAG EQU 1
-    . . .
+- `IF [FLAG]` (*conditional assembly*): determina se uma instrução do código deve ser montada ou ignorada a partir do valor de uma flag
+  ```
+  FLAG EQU 1
+  . . .
 
-    IF FLAG
-    JMP XXX     # se FLAG não é satisfeita, descarta a linha seguinte
-    ```
+  IF FLAG
+  JMP XXX     # se FLAG não é satisfeita, descarta a linha seguinte
+  ```
 
-    > [!note] obs:
-    > a diretiva age apenas sobre a instrução seguinte
+  > [!note] obs:
+  > a diretiva age apenas sobre a instrução logo abaixo
+
+## MACROs
+
+associam nomes a trechos de código. toda vez que o nome é referenciado no código, o montador deve substituí-lo pelo trecho de código definido. permite a definição de parâmetros e passagem de argumentos
+
+traz um **custo maior de memória** do que chamar uma subrotina, mas costuma ser **mais rápido do que realizar essa chamada** (jump para a subrotina), executar esse código e retornar para o código principal (sem contar com a chance de empilhamento de dados em memória e desempilhamento ao final da subrotina, transferência de execução)
+
+exemplo de definição de MACRO:
+
+```
+SWAP:   MACRO           # diretiva de definição de macro
+        COPY A, TEMP
+        COPY B, A
+        COPY TEMP, B
+        ENDMACRO        # diretiva de finalização de macro
+```
+
+como é meio inútil ter apenas macros com endereços fixos, as macros podem ser parametrizadas
+
+```
+SWAP:   MACRO &A, &B, &T    # vamos utilizar & pra denotar parâmetros
+        COPY &A, &T
+        COPY &B, &A
+        COPY &T, &B
+        ENDMACRO
+```
+
+Macro Name Table (MNT): contém linhas com os nomes de todas macros utilizadas e, opcionalmente
+  - o número de argumentos que a macro usa
+  - uma referência à linha em que a definição da macro se inicia na MDT
+  - referência à última linha da definição da macro (desnecessário se a definição na MDT tem uma diretiva terminal de macro)
+
+Macro Definition Table (MDT): guarda todas as definições das macros do programa
+
+```
+MNT                   |   MDT
+linha 1: SWAP 3 25    |   linha 25: COPY #1, #3
+                      |             COPY #2, #1
+                      |             COPY #3, #2
+                      |             ENDMACRO
+```
+
+os fluxogramas abaixo representam o pré-processamento considerando macros. pra adicionar os 
+
+![montador_proc_macro0](media/montador_proc_macro0.png)
+
+![montador_proc_macro1](media/montador_proc_macro1.png)
+
+obs: no último passo do fluxograma acima partindo de 3, 
+
+> [!note] observações:
+> - tecnicamente, macros também são consideradas no pré-processamento. porém, como as passagens 0, 1 e 2 (a depender do montador) são sequenciais, é possível embutir a expansão de macros na passagem única ou na primeira das passagens (pelo que entendi do q o Bruno falou, é mais uma escolha de design, não é necessariamente mais ou menos otimizado)
+> 
+> - tipicamente, processadores exigem que macros sejam definidas antes de suas chamadas, permitindo que o processador de macros as expanda em uma única passagem pelo programa
+
+## Fases de compilação do montador
+
+toda linha do assembly inventado tem a estrutura:\
+`<rótulo> : <operação> <operandos>; <comentário>`
+
+considerando o algoritmo de duas passagens:
+- a passagem 1 é mais próxima da fase de análise, identificando tokens e coletando símbolos do programa
+- a passagem 2 é mais próxima da síntese, gerando um código intermediário/objeto correspondente ao fonte
+
+## Acesso a memória (tabelas)
+
+a maior parte do tempo gasto na montagem do programa é o acesso à memória (tabelas de instruções, diretivas e símbolos)
+
+![montador_traducao](media/montador_traducao.png)
+
+para otimizar esse acesso, precisamos ordernar esses recursos em estruturas de dados adequadas para busca rápida
+
+- lista encadeada: \
+  busca sequencial. tempo $\mathcal{O}(N)$; memória $\mathcal{O}(N)$\
+  bastante simples, porém muito lento
+
+- árvore binária: \
+  busca binária. tempo $\mathcal{O}(\log_2(N))$; memória $\mathcal{O}(N)$ \
+  ganho considerável de desempenho, mas **exige que a árvore esteja ordenada**
+
+  | algoritmo      | caso médio         | pior caso                  |
+  | -------------- | ------------------ | -------------------------- |
+  | selection sort | $\mathcal{O}(N^2)$ | $\mathcal{O}(N^2)$         |
+  | quick sort     | $\mathcal{O}(N^2)$ | $\mathcal{O}(N \log_2(N))$ |
+
+- hash table: \
+  busca por função hash. tempo $\mathcal{O}(1)$; memória $\mathcal{O}(1)$\
+  ótimo para o desempenho, mas complexo (exige a estrutura de hash table, uma função de hash com controle de colisões)
+
+  a função de hash recebe a chave (nome na tabela), gera um número e opera módulo nele (resultado idealmente único), retornando o endereço correspondente na tabela de hash. caso haja colisão de endereços, é formado uma lista encadeada dos resultados das chaves que colidem
+
+  idealmente, a função é boa o suficiente pra distribuir os dados uniformemente e as listas possuem praticamente o mesmo tamanho
+
+  ![montador_hash_table](media/montador_hash_table.png)
+
+  por exemplo, numa tabela de hash de macros, usamos o nome da macro como chave da função
+
+## Código relocável
+
+para programas maiores, por conveniência, podemos montá-los e armazená-los em partes, para que sejam ligadas posteriormente, antes da execução
+
+após a montagem, podemos indicar quais valores em são absolutos e quais são relativos (referenciam endereços que dependem de onde começa o programa)
+
+abaixo, os valores com sufixo `a` são absolutos e com `r` são relativos (devem ser somados ao endereço inicial do programa)
+
+![carregador_valor_abs_rel0](media/carregador_valor_abs_rel0.png)
+
+![carregador_valor_abs_rel1](media/carregador_valor_abs_rel1.png)
+
+# Carregador
 
