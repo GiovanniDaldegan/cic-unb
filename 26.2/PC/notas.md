@@ -562,3 +562,98 @@ com while:\
 com if:\
 ![cond_canibais_if](media/cond_canibais_if.png)
 
+### Locks recursivos
+
+imagine que queremos fazer um programa com várias funções diferentes que compartilham um mesmo lock, e ainda que algumas dessas funções possam chamar umas às outras. isso vai gerar um conflito: uma função pode fechar um lock, chamar outra que quer acessar um lock e ambas ficam presas num **deadlock da mesma thread!**
+
+para resolver isso, podemos criar um controle de um lock utilizando:
+- uma variável condição para alternar a posse do lock pelas threads
+- um contador indicando em quantas camadas recursivas ele está sendo utilizado
+  - `== 0`: está aberto
+  - `>= 1`: está sendo usado em tantas camadas **na mesma thread**
+- um lock para gerenciar o acesso ao lock recursivo
+- e um dado de `pthread_t` pra indicar qual thread tá com o lock
+
+assim, teremos funções próprias para travar e liberar locks recursivos:
+
+lock:
+1. tenta pegar o lock (`pthread_mutex_lock`)
+2. checa se a flag do lock está ativa
+   1. se estiver inativa: \
+      ativa a flag e atualiza o valor `pthread_t` pra indicar qual thread pegou o lock
+   2. se estiver ativa:
+      1. se a thread em posse do lock é a mesma que quer pegá-lo: \
+        soma 1 no contador (+1 camada)
+      1. se a thread não é a mesma que está em posse dele: \
+        espera a variável condição
+3. libera o lock
+
+unlock:
+1. tenta pegar o lock
+2. **[identificação de erro]** \
+    retorna erro e libera o lock caso: [ou]
+    - o lock já esteja livre
+    - o lock tenha sido travado por outra thread
+3. subtrai 1 do contador (-1 camada)
+4. caso contador valha 0, acorda a próxima thread pela variável condição (`pthread_cond_signal`)
+
+<br>
+
+implementação:
+
+```c
+// estrutura de controle do lock recursivo
+typedef struct {
+  pthread_t thr;
+  cond_t cond;
+  mutex_t lock;
+  int c;
+} rec_mutex_t;
+
+int rec_mutex_lock(rec_mutex_t *rec_m) {
+  pthread_mutex_lock(&rec_m->lock);
+
+  // checa se o lock está livre e se está na mesma thread
+  if (rec_m->c == 0) { // Lock livre
+    rec_m->c = 1;
+    rec_m->thr = pthread_self();
+  }
+  else { // Lock travado, mesma thread */
+    if (pthread_equal(rec_m->thr, pthread_self())) {
+      rec_m->c++;
+    }
+    else { // Lock travado, outra thread: esta thread deve esperar (var. condição)
+      while (rec_m->c != 0)
+        pthread_cond_wait(&rec_m->cond,&rec_m->lock);
+      rec_m->thr = pthread_self();
+      rec_m->c = 1;
+    }
+  }
+  
+  pthread_mutex_unlock(&rec_m->lock);
+  return 0;
+}
+
+int rec_mutex_unlock(rec_mutex_t *rec_m) {
+  pthread_mutex_lock(&rec_m->lock);
+
+  // identificação de erros
+  if (rec_m->c == 0 || !pthread_equal(rec_m->thr, pthread_self())) {
+    pthread_mutex_unlock(&rec_m->lock);
+    return ERROR;
+  }
+  else {
+    rec_m->c--;
+    if (rec_m->c == 0)
+      pthread_cond_signal(&rec_m->cond);
+  }
+  
+  pthread_mutex_unlock(&rec_m->lock);
+  return 0;
+}
+```
+
+> [!note] obs:
+> o lock é utilizado de fato para gerenciar as áreas críticas que querem usar o lock recursivo. o controle do uso do lock em uma mesma thread é na verdade controlado pelo contador e variável condição
+>
+> é esperado que uma mesma thread primeiro trave o lock (n vezes recursivamente) e depois o libere (n vezes, voltando a recursão); não deveria ser possível outra thread [2] tentar liberá-lo sendo que a thread [1] está em posse dele. por isso que essa tentativa deve emitir um erro
