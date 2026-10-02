@@ -68,7 +68,7 @@ void * canibal (void* pi){
     pthread_mutex_unlock(&caldeirao);
 
     printf("%d: vou comer a porcao que peguei\n", *(int *)(pi));
-    //sleep(8);
+    sleep(6);
   }
   
 }
@@ -84,7 +84,7 @@ void *cozinheiro (int m){
     pthread_cond_wait(&boia_cabou, &caldeirao);
 
       printf("cozinheiro: vou cozinhar\n");
-      sleep(1);
+      sleep(5);
       porcoes += m;
       printf("cozinheiro: rango pronto\n");
 

@@ -509,23 +509,34 @@ b) explique como é possível um escritor estar editanto o bd durante sua leitur
 
 ### Variáveis condição
 
-processos concorrentes interdependentes podem usar as primitivas sleep e wakeup revezar seus papéis. em C, por exemplo, pode ser implementado por
-- `wait`: se uma variável condição não for satisfeita, para a execução da thread/processo e coloca como pronto
-- `signal`: avisa que uma variável condição está satisfeita, permitindo outras threads/processos a usarem
-- `broadcast`: 
+processos concorrentes interdependentes podem usar as primitivas "sleep" e "wakeup" para revezar seus papéis. em C, isso é feito usando as funções:
 
-essas ações devem ser desempenhadas entre locks (explicação abaixo)
+- `pthread_cond_wait(&cond, &lock)`: interrompe a execução da thread/processo até que receba um sinal pela condição `cond` e abre o `lock`; quando receber um sinal na condição, recebe novamente o `lock` para executar com exclusividade
+
+- `pthread_cond_signal(&cond)`: alerta o primeiro processo que está esperando pela condição (política de escalonamento)
+
+- `pthread_cond_broadcast(&cond)`: alerta todos os processos/threads que esperam pela condição
+
+essas funções **devem ser executadas entre locks** (explicação abaixo)
+
+
+> [!warning] atenção:
+> `wait()` vai interromper a execução da thread/processo, mas eventualmente pode receber um sinal pela condição e voltar a executar. porém, há situações que o processo pode ser acordado mas não deveria continuar sua execução
+> 
+> na maioria dos casos, a **forma correta de utilizar** a função é encapsulá-la em um `while(expr)` com uma expressão apenas válida enquanto a execução não deve continuar, então o processo deve voltar a "dormir" somente enquanto a condição continuar válida
+>
+> então, `pthread_cond_wait()` é uma forma de interromper e tirar, temporariamente, o controle de um(a) processo/thread com base em alguma flag, que geralmente é algum valor que é compartilhado por outros processos (que vão atualizá-lo até que o primeiro possa continuar)
 
 exemplo: produtores, consumidores e um buffer. um buffer tem N posições, os produtores devem escrever nele quando há espaço livre e consumidores devem ler dele quando há uma ou mais entradas
 
 produtor: se tiver espaço, escreve e acorda consumidor; senão, dorme\
 consumidor: se tiver entradas, consome e acorda produtor; senão, dorme
 
-risco: é possível que um produtor/consumidor (1) **satisfaça a condição** para entrar em sleep, **mas ainda não executa sleep**, enquanto seu complementar (2) pode executar sua ação e tentar acordar (1), que não resulta em nada. como consequência, o awake é perdido e (1) entra em hibernação, até (2) preencher/consumir todo o buffer e entrar em hibernação também indefinidamente: deadlock
+risco: é possível que um produtor/consumidor [1] **satisfaça a condição** para entrar em sleep, **mas ainda não executa sleep**, enquanto seu complementar [2] pode executar e tentar acordar [1], que não resulta em nada. como consequência, o awake é perdido e [1] entra em hibernação, até [2] preencher/consumir todo o buffer e entrar em hibernação também indefinidamente: deadlock
 
 assim, lidar com variáveis condição produz regiões críticas, que devem ser resolvidas por exclusão mútua por locks
 
-porém, é necessário que um sleep libere o lock correspondente à região crítica, pois se uma processo/thread fecha um lock e fica preso n
+porém, é necessário que a thread, ao dormir, libere o lock correspondente à região crítica, para que seu complementar possa executar e, eventualmente, acordar a thread de volta
 
 exemplo: [produtor_consumidor_condicao.c](./examples/produtor_consumidor_condicao.c)
 
@@ -550,3 +561,4 @@ com while:\
 
 com if:\
 ![cond_canibais_if](media/cond_canibais_if.png)
+
