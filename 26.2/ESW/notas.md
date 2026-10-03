@@ -1,7 +1,7 @@
 CIC0105 Engenharia de Software
 
 
-### Processo Unificado de Desenvolvimento Software (USDP ou UP)
+## Processo Unificado de Desenvolvimento Software (USDP ou UP)
 
 framework configurável de processo de desenvolvimento iterativo e incremental, guiado por casos de uso, centrado na arquitetura. enfatiza planejamento de processo
 
@@ -11,35 +11,35 @@ desenvolvimento de software é representado por ciclos, em que cada ciclo se pro
 
 cada ciclo é dividido em fases:
 
-#### Concepção
+### Concepção
 
 visão inicial, identificar stakeholders e objetivos, identificar principais riscos
 
 Entradas: \
 Saídas:
 
-#### Elaboração
+### Elaboração
 
 detalhar casos de uso, projetar e modelar arquitetura, especificar recursos e custos
 
 Entradas: \
 Saídas:
 
-#### Construção
+### Construção
 
 modificação da arquitetura, sucetível a defeitos, possível protótipo, consumo dos recursos
 
 Entradas: \
 Saídas:
 
-#### Transição
+### Transição
 
 teste de versão beta, identificação e correção de erros, pode incluir distribuição de versão pública e treinamento (transição de equipes)
 
 Entradas: \
 Saídas:
 
-#### Iteração
+### Iteração
 
 Cada fase, por sua vez, é divida em iterações com:
 - enfoque em determinados casos de uso \
@@ -50,7 +50,7 @@ Cada fase, por sua vez, é divida em iterações com:
 Cada iteração tem uma rotina inicial de planejamento da iteração e final de avaliação do trabalho produzido \
 Cada iteração produz um incremento no sistema
 
-#### Vantagens (do modelo iterativo)
+### Vantagens (do modelo iterativo)
 
 - facilitação da avaliação de risco
 - perdas contidas em iteração, menores danos
@@ -59,4 +59,66 @@ Cada iteração produz um incremento no sistema
 - permite melhor enfoque em cada iteração, visão menos abrangente
 - adaptável à mudança de requisitos
 
-### Processo de software aberto
+## Processo de software aberto
+
+### Processo de teste
+
+para cada nova iteração implantada, é definida uma janela de teste (geralmente curta) pra comunidade realizar teste de fumaça: se nada quebrar, é aprovada a iteração e ela entra pra versão distribuída
+
+#### Marca D'água
+
+
+## Métodos/arcabouços ágeis
+
+### XP
+
+técnicas de planejamento
+- iterações curtas, poucas semanas (sempre atualizando o planejamento)
+
+- priorização de histórias de usuário (custo, impacto)
+
+- contribuição entre cliente e desenvolvedores nas estimativas, priorização, 
+
+<br>
+
+técnicas de projeto e desenvolvimento
+
+- Class, Responsibilities, and Collaboration (CRC) \
+  modelagem de classes simples, pra projetar o sistema em reuniões, coletivamente. cada classe tem nome, (opcionalmente, super e sub-classes) suas responsabilidades e quais são suas colaboradoras
+
+  ![xp_crc](media/xp_crc.png)
+
+- simplicidade no projeto \
+  sem antecipações desnecessárias de funcionalidades (alto custo: atrasos, imprecisões levando a correções)
+
+- Test Driven Development (TDD)
+  - testes de unidade (confiança para os desenvolvedores)
+  - testes funcionais (confiança para cliente/stakeholders, demonstra incremento de valor do produto)
+
+- programação em pares
+
+- propriedade coletiva de código (decisão mais descentralizada, desenvolvedor como stakeholder)
+
+- refatoração frequente, buscando
+  - melhorar comunicação (concisão, clareza)
+  - remover código duplicado, funcionalidades não usadas
+  - facilitar manutenção
+
+- integração contínua e entrega frequente a clientes
+
+![xp_desenvolvimento](media/xp_desenvolvimento.png)
+
+### Scrum
+
+time boxing: delimitar durações a serem respeitados (duração de sprint, eventos de reunião, etc.)
+
+#### Eventos
+
+<!--
+seções
+- gerenciamento
+- desenvolvimento
+- avaliação e QA
+- testagem
+- 
+-->
