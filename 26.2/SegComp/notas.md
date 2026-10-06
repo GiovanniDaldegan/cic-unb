@@ -153,8 +153,12 @@ exemplo:
 
 $S(X):$ passar X na tabela de substituição \
 $F(R, K) = S(R \oplus K)$ \
+
 $LE_{i+1} = RE_i$ \
-$RE_{i+1} = LE_i \oplus F(R, K)$
+$RE_{i+1} = LE_i \oplus F(RE_i, K)$
+
+desenvolvendo: \
+$RE_{i+1} = LE_i \oplus S(RE_i \oplus K)$
 
 
 #### Data Encryption Standard (DES)
@@ -291,6 +295,9 @@ dado um $b = g^i \mod p$, $dlog_{g,p}(b) = i$, com $0 \le i \le p-1$
 
 por exemplo, $dlog_{g,p}(4) = 4$, $dlog_{g,p}(1) = 3$, como mostrado acima
 
+> [!note] obs:
+> é necessário que o número $g \in Z_q^*$ seja raiz primitiva do conjunto resto mod q, pois o conjunto gerado por qualquer $h \in Z_q^*$ pode ser muito menor que o conjunto resto, fazendo que seja bem menor o número de testes necessários por força bruta usando logarítmo discreto
+
 ##### Procedimento
 
 usuários A e B querem estabelecer uma chave simétrica num canal não seguro. para isso:
@@ -302,7 +309,7 @@ Geração da chave simétrica:
 2. A calcula um número $Y_A \in \Z_q^*$, e B, $Y_B \in \Z_q^*$
 3. ambos compartilham $Y_A$ e $Y_B$, que carregam propriedades matemáticas de $X_A$ e $X_B$
 4. ambos geram uma mesma chave $K$: \
-    para A, derivado de $X_A$ e $Y_B$; para B, $X_B$ e $Y_A$
+    para A, derivada de $X_A$ e $Y_B$; para B, de $X_B$ e $Y_A$
 
     $K_A = (Y_B)^{X_A} \mod q$ \
     $K_B = (Y_A)^{X_B} \mod q$
@@ -318,4 +325,113 @@ quaisquer dois interlocutores podem combinar um conjunto resto p e um gerador. �
 
 ![diffie_hellman_p_in_the_middle](media/diffie_hellman_p_in_the_middle.png)
 
-<!-- ### Elgamal -->
+### Elgamal
+
+DH pra criptografia geral
+
+chaves privadas efêmeras, pública pode ser fixa ou efêmera
+
+criptografia: $C = K * m \mod p$ \
+descriptografia: $m = C * K^{-1} \mod p = K * m * K^{-1} \mod p = m$
+
+### Curvas Elípticas
+
+operações em ${Z_p^*}^2$
+
+chave privada: escalar $n_A$ \
+chave pública: ponto gerador vzs escalar, $P_A = G * n_A$
+
+$K = P_A * n_B = P_B * n_A$
+
+$C = K + P_m$
+
+
+# Resumo P1
+
+## Cifra de César
+
+monoalfabética, chave é inteiro K \
+espaço de busca: 26 \
+suscetível a análise de frequência
+
+## Cifra de Vigenerè
+
+polialfabética, chave é uma palavra \
+espaço de busca: $26^{|tam\_chave|}$ \
+se a chave for pequena, pode ter repetição de letras -> permite análise de frequência
+
+## Cifra de bloco
+
+rede de feistel\
+tabela de substituição\
+conceitos de confusão e difusão (nos DES e AES por exemplo)
+
+obs: DES e AES não caem em detalhes de implementação
+
+descriptografia: \
+$R_1 = L_0 \oplus S(R_0, K_0)$ \
+$R1 \oplus S(R_0, K_0) = L_0$
+
+padding: mensagem não completa o tama -> adicionamos bits e depois indicamos quantos bits são de padding e devem ser descartados
+
+vetor de inicialização (IV): gera 8 bits aleatórios e faz XOR com o primeiro bloco da mensagem
+
+## Criptografia Assimétrica
+
+### RSA
+
+$
+p = 3, q = 11, e = 7, m = 5 \\
+n = p * q = 33
+$
+
+criptografia: (n, e) \
+$
+C = m^e \mod n \\
+C = 5^7 \mod 33 \\
+C = 14
+$
+
+descriptografia: (c, e) \
+$
+z = (p - 1) * (q - 1) = 20 \\
+e * d \mod z = 1 \\
+... \\
+d = 3 \\
+n = C^d \mod 33 \\
+n = 14^3 \mod 33 \\
+n = 5
+$
+
+### Diffie-Hellman
+
+estabelecer uma chave simétrica através de um canal inseguro \
+usada para criptografia de sessão
+
+compartilhar $p$ (pra combinar um $Z_p^*$) e uma raiz primitiva $g$
+
+chaves privadas: $X_A$ e $X_B$ \
+chaves públicas: $Y_A$ e $Y_B$
+
+chave efetiva (simétrica): $K = Y_A^{X_B} \mod p = Y_B^{X_A} \mod p$
+
+
+### Elgamal
+
+DH pra criptografia em geral
+
+chaves privadas efêmeras, pública pode ser fixa ou efêmera
+
+criptografia: $C = K * m \mod p$ \
+descriptografia: $m = C * K^{-1} \mod p = K * m * K^{-1} \mod p = m$
+
+### Curvas Elípticas
+
+operações de soma de pontos em ${Z_p^*}^2$
+
+chaves privada: escalar $n_A$, $n_B$ \
+chaves pública: ponto gerador vzs escalar, $P_A = G * n_A$, $P_B = G * n_B$
+
+$K = P_A * n_B = P_B * n_A$
+
+$C = K + P_m$
