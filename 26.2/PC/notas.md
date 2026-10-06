@@ -269,15 +269,15 @@ por algum motivo, as threads não repetem facilmente os ids passados incorretame
 talvez o WSL Ubuntu tenha alguma característica que acidentalmente sincroniza as threads. quando o prof testou, várias vezes havia 3 processos de id 0 e dois de id 2; quando outro colega testou, conseguiu todos as threads anunciando id 0
 
 
-## Condição de corrida
+# Condição de corrida
 
 há condição de corrida quando dois processos acessam dados compartilhados e o resultado final do processamento depende da ordem de execução deles
 
-### Exclusão Mútua
+## Exclusão Mútua
 
 garantir que não há dois ou mais processos competindo por recursos compartilhados. por exemplo, quando dados (necessariamente compartilhados) atualizados por dois processos na memória que precisam ser previsíveis e determinados em certo instante
 
-### Região Crítica
+## Região Crítica
 
 parte do código em que é feito o acesso ao recurso compartilhado, ou seja, que pode levar a condições de corrida
 
@@ -285,14 +285,14 @@ se há duas threads que acessam uma mesma variável, os trechos que comandam ess
 
 ![threads_regiao_critica](media/threads_regiao_critica.png)
 
-### Soluções para condições de corrida
+## Soluções para condições de corrida
 
 - dois ou mais processos não podem estar simultaneamente em regiões críticas correspondentes
 - nenhuma consideração pode ser feita sobre a velocidade relativa dos processos ou número de processadores disponíveis
 - nenhum processo fora de sua região crítica deve interferir na execução de outro processo
 - nenhum processo deve ser obrigado a esperar indefinidamente para entrar na sua região crítica
 
-## Locks (travas)
+# Locks (travas)
 
 mecanismo de sincronização pra que a execução de processos/threads concorrentes seja equivalente à sua execução serial (equivalência serial)
 
@@ -328,7 +328,7 @@ void* pthread_func(void* arg) {
 
 ```
 
-### Problema dos Escritores e Leitores
+## Problema dos Escritores e Leitores
 
 a escrita de um dado exige exclusão mútua, pois o dado é inconsistente/incompleto durante a escrita (mas podemos ter várias leituras independentes e paralelas)
 
@@ -434,7 +434,7 @@ pseudocódigo do fluxo das threads:
 > na execução de leitor, é possível destrancar turno logo depois de trancar, em 1.2. o que importa é que a thread de escritor possa garantir sua execução entre fluxos de leitores sem ter conflito de locks de sincronização entre leitores. escritor já não executa durante fluxo de leitores, e também leitores ficam bloqueados por lock de turno quando escritor tenta escrever
 
 
-### Problema dos macacos
+## Problema dos macacos
 
 há duas rochas, A e B, separadas por um penhasco e ligadas por uma corda
 
@@ -454,7 +454,7 @@ precisamos dos locks:
 3. cada macaco que vai em grupo tranca as atualizações do seu respectivo contador de macacos
 
 
-### Deadlocks
+## Deadlocks
 
 exercício com base em (questão duma prova 1 passada mas em pseudo-código): [leitores_escritores_deadlock.c](./examples/leitores_escritores_deadlock.c)
 
@@ -507,7 +507,7 @@ b) explique como é possível um escritor estar editanto o bd durante sua leitur
 | 6   |                   | linha 13 (lê) | linha 40 (escreve) |
 
 
-### Variáveis condição
+# Variáveis condição
 
 processos concorrentes interdependentes podem usar as primitivas "sleep" e "wakeup" para revezar seus papéis. em C, isso é feito usando as funções:
 
@@ -540,7 +540,7 @@ porém, é necessário que a thread, ao dormir, libere o lock correspondente à 
 
 exemplo: [produtor_consumidor_condicao.c](./examples/produtor_consumidor_condicao.c)
 
-#### problema dos canibais
+## problema dos canibais
 
 há N canibais e todos querem tomar ensopado de missionário, mas só podem comer se houver porções disponíveis. sempre que acabarem as porções, os canibais devem acordar o cozinheiro para cozinhar mais. quando ele termina de cozinhar, acorda todos os canibais. enquanto tiver porções, o cozinheiro dorme
 
@@ -562,7 +562,7 @@ com while:\
 com if:\
 ![cond_canibais_if](media/cond_canibais_if.png)
 
-### Locks recursivos
+# Locks recursivos
 
 imagine que queremos fazer um programa com várias funções diferentes que compartilham um mesmo lock, e ainda que algumas dessas funções possam chamar umas às outras. isso vai gerar um conflito: uma função pode fechar um lock, chamar outra que quer acessar um lock e ambas ficam presas num **deadlock da mesma thread!**
 
@@ -657,3 +657,53 @@ int rec_mutex_unlock(rec_mutex_t *rec_m) {
 > o lock é utilizado de fato para gerenciar as áreas críticas que querem usar o lock recursivo. o controle do uso do lock em uma mesma thread é na verdade controlado pelo contador e variável condição
 >
 > é esperado que uma mesma thread primeiro trave o lock (n vezes recursivamente) e depois o libere (n vezes, voltando a recursão); não deveria ser possível outra thread [2] tentar liberá-lo sendo que a thread [1] está em posse dele. por isso que essa tentativa deve emitir um erro
+
+# Semáforos
+
+controle baseado em uma variável "semáforo" que funciona como contador, com operações *down* e *up* (generalizando *sleep* e *wakeup*)
+
+quando um processo deseja acessar o recurso compartilhado, deve executar a função **DOWN**:
+- se semáforo > 0, semáforo é decrementado em 1 e o processo tem acesso exclusivo ao recurso
+- se semáforo == 0, o processo fica em espera até que semáforo > 0
+
+quando o processo termina de acessar o recurso, deve executar **UP**:
+- incrementa semáforo em 1 e libera acesso ao recurso
+
+em geral, semáforos geram as mesmas soluções que locks aliados a variáveis condição. mas não dispensam o uso de locks em vários casos de regiões críticas, mas facilitam o controle por variáveis
+
+a solução não é única entre diferentes SOs, mas é idêntica em Windows e UNIX
+
+biblioteca em C:
+```c
+#include <semaphore.h>
+
+sem_t semaforo;
+
+// inicialização: referência para o semáforo, flag (0 thread, 1 processo, valor inicial)
+sem_init(&semaforo, proc_ou_thread, inicial);
+
+// espera semáforo; quando é liberado, decresce em 1 e tem acesso (DOWN)
+sem_wait(&semaforo);
+
+// libera semáforo, acrescentando 1 (UP)
+sem_post(&semaforo);
+
+// escreve o valor atual do semáforo na variável passada
+sem_getvalue(&semaforo, &contador);
+```
+
+<br>
+
+## exemplo: produtores e consumidores
+
+produtores e consumidores devem trabalhar com um buffer. há 2 contadores, um para próxima posição a ser escrita, outro para a próxima ser consumida. o buffer é cíclico, então quando um produtor escreve na última posição, retorna para a primeira
+
+usamos 2 semáforos:
+- um de posições ocupadas, que é incrementado quando um produtor escreve no buffer (eles dão UP), e decrementado quando um consumidor consome do buffer (dão DOWN)
+- outro de posições livres, incrementado quando um consumidor consome (UP), decrementado quando um produtor escreve (DOWN)
+
+nessa implementação, é garantido que o contador do consumidor sempre está "atrás" do contador do produtor. sempre que eles se igualam:
+- ou todas as posições estão livres e o semáforo só permite produtores
+- out todas as posições estão ocupadas e o semáforo só permite consumidores
+
+assim, é tranquilo usar **locks separados para produtores e consumidores**, pois a **região crítica entre os dois tipos é resolvida pelo semáforo**. nunca um consumidor vai ler um dado sendo escrito por um produtor. apenas precisamos garantir que não teremos 2 produtores ou 2 consumidores executando ao mesmo tempo, pois eles compartilham um contador
