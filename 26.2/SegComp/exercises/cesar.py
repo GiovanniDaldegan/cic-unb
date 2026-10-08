@@ -1,8 +1,14 @@
-message = input("type message: ")
-k = int(input("type key: "))
-alpha_only = True if input("alpha only? [Y/N] ") == 'Y' else False
+encr_decrp = int(input("encrypt (0), decrypt (1): "))
 
-discrp = list()
+if not encr_decrp:
+    message = input("type message: ")
+else:
+    message = input("type chipher: ")
+
+k = int(input("type key: ")) * (-1 if encr_decrp else 1)
+alpha_only = True if input("alpha only? [Y/N]: ").lower() == 'y' else False
+
+decrp = list()
 
 print(message)
 
@@ -20,9 +26,9 @@ for i in range(len(message)):
 
         print(new_ascii)
 
-        discrp.append(chr(new_ascii))
+        decrp.append(chr(new_ascii))
     else:
-        discrp.append(message[i])
+        decrp.append(message[i])
 
 
-print("discrypted message: ", ''.join(discrp))
+print("decrypted message: ", ''.join(decrp))

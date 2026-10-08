@@ -278,7 +278,26 @@ relembrando, $b/\Z_b$ é fechado para $+$, $-$, $\times$, $\div$
 - $[(a \mod n) * (b \mod n)] \mod n = (a*b) \mod n$
 - $(a \mod n)^d \mod n = a^d \mod n$
 
+#### Procedimento
+
+1. escolhe primos grandes $p$ e $q$
+2. calcula $n = p * q$ e $z = (p - 1) * (q - 1)$ \
+   $z = \phi(n)$, número de divisores de $n$
+3. escolhe $e < n$ relativamente primo a $z$ (coprimos) \
+   $mdc(e, z) = 1$
+4. escolhe $d$ inverso modular de $e \pmod z$ \
+   $d*e \pmod z \equiv 1 \pmod z$
+5. chave pública $(n, e)$, privada $(n, d)$
+
+criptografia: \
+$c = m^e \pmod n$
+
+descriptografia: \
+$m = c^d \pmod n$
+
 ### Diffie-Hellman 
+
+DH é um método para combinar uma chave simétrica em um canal inseguro
 
 #### Raiz primitiva (gerador) e logarítmo discreto
 
@@ -286,7 +305,7 @@ Conjunto resto módulo $p$: $\Z_p^* = \{ 1, 2, 3, ..., p-1 \}$
 
 Para todo primo $p$, há um $g \in \Z_p^*$ gerador, ou raiz primitiva, tal que seja possível gerar todos os elementos de $\Z_p^*$ por potências de $g$
 
-$\Z_p^* = <g> = \{ g^i \mod p | i \in \{ 0, 1, ..., p-1\} \}$
+$\Z_p^* = \langle g \rangle = \{ g^i \mod p | i \in \{ 0, 1, ..., p-1\} \}$
 
 ![diffie_hellman_raiz](media/diffie_hellman_raiz.png)
 
@@ -298,7 +317,7 @@ por exemplo, $dlog_{g,p}(4) = 4$, $dlog_{g,p}(1) = 3$, como mostrado acima
 > [!note] obs:
 > é necessário que o número $g \in Z_q^*$ seja raiz primitiva do conjunto resto mod q, pois o conjunto gerado por qualquer $h \in Z_q^*$ pode ser muito menor que o conjunto resto, fazendo que seja bem menor o número de testes necessários por força bruta usando logarítmo discreto
 
-##### Procedimento
+#### Procedimento
 
 usuários A e B querem estabelecer uma chave simétrica num canal não seguro. para isso:
 - compartilham um primo $q$ (idealmente 2048b) e uma raiz primitiva $g$ de $\Z_q^*$
@@ -325,28 +344,121 @@ quaisquer dois interlocutores podem combinar um conjunto resto p e um gerador. �
 
 ![diffie_hellman_p_in_the_middle](media/diffie_hellman_p_in_the_middle.png)
 
-### Elgamal
+### ElGamal
 
-DH pra criptografia geral
+criptografia combinando chaves por DH (usado criptografia de sessão)
 
 chaves privadas efêmeras, pública pode ser fixa ou efêmera
+
+interlocutores compartilham $p$ ($\Z_q^*$), raiz primitiva $g$ e chaves públicas:\
+$Y_A = g^{X_A} \pmod p$\
+$Y_B = g^{X_B} \pmod p$
+
+a chave comum $K$ (simétrica) é calculável com a chave pública do outro e sua chave privada \
+$K = Y_A^{X_B} \pmod p = Y_B^{X_A} \pmod p$
+
+para criptografia, fazemos o produto modular da chave comum com a mensagem. para descriptografar, multiplicamos a cifra pelo inverso modular da chave comum
 
 criptografia: $C = K * m \mod p$ \
 descriptografia: $m = C * K^{-1} \mod p = K * m * K^{-1} \mod p = m$
 
 ### Curvas Elípticas
 
-operações em ${Z_p^*}^2$
+outra forma de combinar uma chave simétrica em um canal inseguro (estado da arte)
+
+o sistema de criptografia vai utilizar uma curva elíptica e para isso
+  - um primo $p$
+  - dois coeficientes inteiros $a$ e $b$
+  - um "ponto gerador" na curva
+
+<br>
+
+a curva elíptica é simétrica ao eixo x e permite secantes que tangenciam 3 pontos da curva (é o que queremos). a fórmula genérica da curva é a seguinte:
+
+$E(a, b): y^2 = x^3 + ax + b$
+
+basta então definir $a$ e $b$ para ter uma curva elíptica
+
+$E(1, 1): y^2 = x^3 + x + 1$
+
+![dhce_curva](media/dhce_curva.png)
+
+para não precisamos operar com pontos reais (imprecisão de ponto flutuante), escolhemos um primo $p$ para reduzir os pontos da curva a apenas os pontos que pertencem a $\Z_p^* \times \Z_p^*$
+
+então todos pontos que interessam são da forma $P = (x \pmod p, y \pmod p)$. como consequência, todos os pontos tem coordenadas positivas no intervalo $[ 0, p-1 [$ (além disso, os pontos simétricos em relação ao eixo x passam a ser simétricos em relação à reta $y = p / 2$)
+
+$E_p(a, b): y^2 \pmod p = x^3 + ax + b \pmod p$
+
+![dhce_plano_mod_p](media/dhce_plano_mod_p.png)
+
+#### operações em ${\Z_p^*}^2$
+
+$O$ é a origem do plano, elemento neutro da soma de pontos
+
+$P + O = P$ \
+$P + (-P) = O$ \
+$-P = (x_P, -y_P) \pmod p$
+
+tomando uma secante nos pontos $P$, $Q$ e $R$ de coeficiente angular $\lambda$, temos que:
+- $P + Q + R = O$ \
+  $P + Q = -R$ \
+  $R = -(P + Q)$
+
+- $\lambda = \begin{cases}
+    \frac{y_Q -   y_P}{x_Q - x_P}, & \text{se}\ P \ne Q \\
+    \frac{3x_P^2 + a}{2y_P}, & \text{se}\ P = Q
+  \end{cases}$
+
+  caso $P$ e $Q$ sejam pontos diferentes, calculamos $\lambda$ por $\frac{\Delta y}{\Delta x}$ \
+  caso $P$ e $Q$ sejam o mesmo ponto, derivamos a fórmula no ponto
+
+- pela fórmula:
+
+  $R = (x_R, y_R)$
+
+  $x_R = \lambda^2 - x_P - x_Q \pmod p$ \
+  $y_R = \lambda (x_P - x_)$
+
+- $kP = P + P + ... + P$ (k vezes)
+
+#### logarítmo discreto em curvas elípticas
+
+se temos $E_p(a, b)$, $P$:
+- dado $k$, é fácil calcular $kP$
+- dado $kP$, é muito difícil calcular $k$
+
+a dificuldade de calcular $\text{logdEC} (P, kP)$ é a força da criptografia por curvas elípticas
+
+#### Procedimento
+
+1. dois interlocutores combinam $p$, $a$ e $b$ para a curva $E_p(a, b)$ e um ponto gerador $G$
+2. cada um escolhe um escalar $n$ (chave privada)
+3. cada um obtém um ponto $P_X = n G$ (chave pública)
+4. obtém um ponto da mensagem $P_m$
+5. criptografa a mensagem somando $P_m$ com sua chave pública $P_X$
+6. descriptografa a cifra subtraindo sua chave pública
 
 chave privada: escalar $n_A$ \
 chave pública: ponto gerador vzs escalar, $P_A = G * n_A$
 
-$K = P_A * n_B = P_B * n_A$
+$C = (n_A G, P_m + n_A P_B)$, de A para B \
+$P_m = (P_m + n_A P_B) - n_B(n_A G)$ \
+$P_m = P_m + n_A (n_B G) - n_B(n_A G)$
 
+$K = P_A * n_B = P_B * n_A$ \
 $C = K + P_m$
 
+$P_m = (m, y)$, com $y$ sendo obtido pela fórmula de $E_p(a, b)$
 
-# Resumo P1
+> [!note] obs: Método de Koblitz
+> é possível que a função para gerar $m \in \Z_p^*$ dê um ponto $(m, y)$ da curva com $y \notin \Z_p^*$ não respeitando as restrições de $\Z_p^* \times \Z_p^*$
+> 
+> por isso, surge o **método de Koblitz**: testamos um $\alpha$ até que seja abscissa de um ponto válido ($y \in \Z_p^*$)
+>
+> $P = (\alpha, y)$ \
+> $\alpha = m * \kappa + i$, variando $\kappa \in \{10, 100, 1000, ...\}$ e $0 \lt i \lt \kappa - 1$
+
+## Resumo - Prova 1
 
 ## Cifra de César
 
@@ -354,11 +466,11 @@ monoalfabética, chave é inteiro K \
 espaço de busca: 26 \
 suscetível a análise de frequência
 
-## Cifra de Vigenerè
+## Cifra de Vigenère
 
 polialfabética, chave é uma palavra \
-espaço de busca: $26^{|tam\_chave|}$ \
-se a chave for pequena, pode ter repetição de letras -> permite análise de frequência
+espaço de busca: $26^{|\text{chave}|}$ \
+se a chave for pequena, pode ter repetição de letras -> permite análise de frequência, indice de frequência
 
 ## Cifra de bloco
 
@@ -405,10 +517,9 @@ $
 
 ### Diffie-Hellman
 
-estabelecer uma chave simétrica através de um canal inseguro \
-usada para criptografia de sessão
+método para estabelecer uma chave simétrica através de um canal inseguro
 
-compartilhar $p$ (pra combinar um $Z_p^*$) e uma raiz primitiva $g$
+compartilhar $p$ (pra combinar um $\Z_p^*$) e uma raiz primitiva $g$
 
 chaves privadas: $X_A$ e $X_B$ \
 chaves públicas: $Y_A$ e $Y_B$
@@ -416,9 +527,9 @@ chaves públicas: $Y_A$ e $Y_B$
 chave efetiva (simétrica): $K = Y_A^{X_B} \mod p = Y_B^{X_A} \mod p$
 
 
-### Elgamal
+### ElGamal
 
-DH pra criptografia em geral
+criptografia usando chaves combinadas por DH
 
 chaves privadas efêmeras, pública pode ser fixa ou efêmera
 
@@ -427,11 +538,11 @@ descriptografia: $m = C * K^{-1} \mod p = K * m * K^{-1} \mod p = m$
 
 ### Curvas Elípticas
 
-operações de soma de pontos em ${Z_p^*}^2$
+operações de soma de pontos em ${\Z_p^*}^2$
 
 chaves privada: escalar $n_A$, $n_B$ \
 chaves pública: ponto gerador vzs escalar, $P_A = G * n_A$, $P_B = G * n_B$
 
 $K = P_A * n_B = P_B * n_A$
 
-$C = K + P_m$
+criptografia: $C = K + P_m$
