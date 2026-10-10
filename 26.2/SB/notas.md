@@ -252,18 +252,15 @@ passagem 0 ou passagem de pré-processamento: consideração de todas as diretiv
   <variáveis>
   ```
 
-- `[SIMB] EQU X` ("equate"): cria um sinônimo para um símbolo, semelhante a uma macro
-- `IF [FLAG]` (*conditional assembly*): determina se uma instrução do código deve ser montada ou ignorada a partir do valor de uma flag
+- `[SIMB] EQU X` ("equate"): cria um sinônimo para um símbolo, todas suas ocorrências do sinônimo são substituídas pelo símbolo
+- `IF [FLAG]` (*conditional assembly*): determina se **uma** instrução do código deve ser montada ou ignorada a partir do valor de uma flag
   ```
-  FLAG EQU 1
+  <FLAG> EQU 1  # definição
   . . .
 
-  IF FLAG
-  JMP XXX     # se FLAG não é satisfeita, descarta a linha seguinte
+  IF <FLAG>
+  JMP XXX     # se <FLAG> não é satisfeita, descarta a linha seguinte
   ```
-
-  > [!note] obs:
-  > a diretiva age apenas sobre a instrução logo abaixo
 
 ## MACROs
 
@@ -365,7 +362,9 @@ para otimizar esse acesso, precisamos ordernar esses recursos em estruturas de d
 
 para programas maiores, por conveniência, podemos montá-los e armazená-los em partes, para que sejam ligadas posteriormente, antes da execução
 
-após a montagem, podemos indicar quais valores em são absolutos e quais são relativos (referenciam endereços que dependem de onde começa o programa)
+após a montagem, podemos indicar quais valores (endereços) são absolutos e quais são relativos (referenciam posições que relativas ao início do programa, em geral rótulos). no código, um valor relativo pode ser $x$, mas no momento que o programa for carregado a partir do endereço $y$, deve passar a apontar para o endereço $x+y$
+
+isso é útil tanto para o ligador quanto para o carregador. essa informação fica em um cabeçalho do código objeto
 
 abaixo, os valores com sufixo `a` são absolutos e com `r` são relativos (devem ser somados ao endereço inicial do programa)
 
@@ -373,5 +372,99 @@ abaixo, os valores com sufixo `a` são absolutos e com `r` são relativos (devem
 
 ![carregador_valor_abs_rel1](media/carregador_valor_abs_rel1.png)
 
-# Carregador
 
+## Montagem de códigos 
+
+um programa pode ser dividido em módulos (seja por organização, separação de rotinas independentes, etc.)
+
+um montador completo pode montar vários módulos separadamente, gerando um arquivo objeto para cada código fonte
+
+assim, para permitir a integração entre módulos, é possível que cada um exporte e importe símbolos para uso compartilhado.
+
+cross-reference / referência cruzada: referência a uma declaração (rótulo) presente em outro módulo
+
+![ligador_modulo_carga](media/ligador_modulo_carga.png)
+
+a tarefa de um ligador é:
+- juntar vários arquivos objetos em um único executável
+- resolver referências cruzadas entre objetos
+
+
+![ligador_biblioteca](media/ligador_biblioteca.png)
+
+
+### Diretivas
+
+`PUBLIC`: declara símbolo exportado pelo módulo \
+`EXTERN`: indica um símbolo externo utilizado no módulo
+
+
+### Resolução de símbolos externos
+
+**Tabela de uso**: indicam símbolos externos usados no módulo \
+**Tabela de definição**: indica símbolos públicos e seus atributos (fração da TS)
+
+<!-- #TODO: regras de atualizações das tebelas -->
+
+#### Exemplo de módulos
+```
+;Código fonte do módulo A:
+MOD_A: BEGIN
+Y: EXTERN
+MOD_B: EXTERN
+PUBLIC VAL
+PUBLIC L1
+INPUT Y
+LOAD VAL
+ADD Y
+STORE Y + 2
+JMPP MOD_B
+L1: STOP
+VAL: CONST 5
+END
+```
+```
+;Código fonte do módulo B:
+MOD_B: BEGIN
+VAL: EXTERN
+L1: EXTERN
+PUBLIC Y
+PUBLIC MOD_B
+OUTPUT Y
+OUTPUT VAL
+OUTPUT Y + 2
+JMP L1
+Y: SPACE 3
+END
+```
+
+![ligador_montagem_tab_simbolos](media/ligador_montagem_tab_simbolos.png)
+
+![ligador_montagem_tab_uso_def](media/ligador_montagem_tab_uso_def.png)
+
+
+> [!warning] atenção:
+> quando o ligador deve resolver uma referência cruzada a um símbolo de outro módulo (externo), ele não substitui o valor do símbolo nos endereços marcados, ele **soma** seu valor aos endereços que o referenciam no código objeto. por exemplo, pra resolver a referência `Y + 2`, com `Y` sendo externo, ele deve primeiro guardar 2 como valor temporário, para então obter o endereço de Y pós ligação, soma Y ao valor temporário guardado
+
+> [!note] obs:
+> nessa aborgadem clássica de geração de códigos objetos, cada um tem sua tabela de uso e definições. é possível gerar uma tabela única para vários módulos (por exemplo a tabela completa de uma biblioteca), mas quando um deles for ligado, vai tomar o espaço da tabela geral de todos os outros módulos agrupados com ele em memória RAM
+
+# Ligador
+
+na hora de ligar módulos, o produto final será um módulo carga (hoje, batizado como "executável") com a sequência de todos os códigos objetos ligados. em geral, é necessário que o **primeiro trecho seja a rotina *main***, para que o programa possa ser executado a partir do seu início em memória
+
+assim, cada módulo alinhado em sequência deve ter um **fator de correção** de seus endereços, para que considerem o deslocamento de cada módulo para seu endereço de início na sequência
+
+no final do processo de ligação, deve somar o fator de correção a **todos os endereços relativos não alterados nas etapas anteriores** de montagem e ligação (assim que entendi)
+
+
+> [!note] obs:
+> poderíamos criar um código objeto com toda a tabela de símbolos, não apenas a tabela de definição. isso ofereceria uma versão do programa em "modo debug", pois podemos consultar todas os símbolos e valores durante execução de forma centralizada (é o que entendi), mas toma mais espaço em memória
+
+#### Algoritmo
+
+<!-- #TODO: descrever algoritmo de resolução de símbolos externos -->
+
+cabeçalho do programa
+- indicação de quais endereços do programa são relativos
+- tabela de definições 
