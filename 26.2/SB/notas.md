@@ -373,13 +373,11 @@ abaixo, os valores com sufixo `a` são absolutos e com `r` são relativos (devem
 ![carregador_valor_abs_rel1](media/carregador_valor_abs_rel1.png)
 
 
-## Montagem de códigos 
+## Montagem e Ligação
 
-um programa pode ser dividido em módulos (seja por organização, separação de rotinas independentes, etc.)
+um programa pode ser dividido em módulos (seja por organização, separação de rotinas independentes, etc.), que podem ser ligados posteriormente
 
-um montador completo pode montar vários módulos separadamente, gerando um arquivo objeto para cada código fonte
-
-assim, para permitir a integração entre módulos, é possível que cada um exporte e importe símbolos para uso compartilhado.
+um montador completo permite montar vários módulos separadamente, gerando um arquivo objeto para cada código fonte. assim, para permitir a integração entre módulos, é possível que cada um exporte e importe símbolos para uso compartilhado.
 
 cross-reference / referência cruzada: referência a uma declaração (rótulo) presente em outro módulo
 
@@ -393,78 +391,143 @@ a tarefa de um ligador é:
 ![ligador_biblioteca](media/ligador_biblioteca.png)
 
 
+## Resolução de símbolos externos
+
+**Tabela de uso**: indicam símbolos externos usados no módulo; contém:
+- nome do símbolo
+- endereços que o referenciam
+
+**Tabela de definição**: indica símbolos públicos e seus atributos (fração da TS); contém:
+- nome do símbolo
+- endereço de sua declaração
+- flag externo/público
+
+<!-- #TODO: regras de atualizações das tabelas -->
+
+### Primeira passagem
+
+todo novo símbolo externo é inserido na TS inicialmente com valor "zero absoluto"
+
+todo novo símbolo público é inserido na tabela de definições inicialmente com valor zero e flag "externo"
+
+ao fim da primeira passagemm, copia os valores da TS para a tabela de definições
+
+### Segunda passagem
+
+toda referênica a símbolo externo é registrada na tabela de uso. é anotado nome e posição com referência externa (endereço) que deve ser resolvida na ligação
+
+
 ### Diretivas
 
-`PUBLIC`: declara símbolo exportado pelo módulo \
-`EXTERN`: indica um símbolo externo utilizado no módulo
+| diretiva | descrição                                  | ação                                             |
+| -------- | ------------------------------------------ | ------------------------------------------------ |
+| `EXTERN` | indica símbolo externo utilizado no módulo | insere rótulo na TS com valor "zero absoluto"    |
+| `PUBLIC` | declara símbolo exportado pelo módulo      | insere símbolo na tabela de definições sem valor |
+| `BEGIN`  | define o início de módulo                  |                                                  |
+| `END`    | define fim de módulo                       |                                                  |
 
 
-### Resolução de símbolos externos
 
-**Tabela de uso**: indicam símbolos externos usados no módulo \
-**Tabela de definição**: indica símbolos públicos e seus atributos (fração da TS)
-
-<!-- #TODO: regras de atualizações das tebelas -->
-
-#### Exemplo de módulos
+### Exemplo de módulos
 ```
-;Código fonte do módulo A:
-MOD_A: BEGIN
-Y: EXTERN
-MOD_B: EXTERN
-PUBLIC VAL
-PUBLIC L1
-INPUT Y
-LOAD VAL
-ADD Y
-STORE Y + 2
-JMPP MOD_B
-L1: STOP
-VAL: CONST 5
-END
+; Código fonte do módulo A:
+; <endereço relativo pós-montagem> <rótulo>: <instrução> <operadores>
+
+00  MOD_A:  BEGIN
+00  Y:      EXTERN          ; cabeçalho de símbolos
+00  MOD_B:  EXTERN
+00          PUBLIC  VAL
+00          PUBLIC  L1      ; fim do cabeçalho
+00          INPUT   Y
+02          LOAD    VAL
+04          ADD     Y
+06          STORE   Y + 2
+08          JMPP    MOD_B
+0A  L1:     STOP
+0B  VAL:    CONST 5
+0D          END
+0D
 ```
 ```
-;Código fonte do módulo B:
-MOD_B: BEGIN
-VAL: EXTERN
-L1: EXTERN
-PUBLIC Y
-PUBLIC MOD_B
-OUTPUT Y
-OUTPUT VAL
-OUTPUT Y + 2
-JMP L1
-Y: SPACE 3
-END
+; Código fonte do módulo B:
+
+00  MOD_B:  BEGIN
+00  VAL:    EXTERN
+00  L1:     EXTERN
+00          PUBLIC Y
+00          PUBLIC MOD_B
+00          OUTPUT Y
+02          OUTPUT VAL
+04          OUTPUT Y + 2
+06          JMP L1
+08  Y:      SPACE 3
+0B          END
+0B
 ```
 
-![ligador_montagem_tab_simbolos](media/ligador_montagem_tab_simbolos.png)
+![montagem_ligacao_mod_A_TS](media/montagem_ligacao_mod_A_TS.png)
 
-![ligador_montagem_tab_uso_def](media/ligador_montagem_tab_uso_def.png)
+![montagem_ligacao_mod_A_tab_def_uso](media/montagem_ligacao_mod_A_tab_def_uso.png)
 
+![montagem_ligacao_mod_B](media/montagem_ligacao_mod_B.png)
 
 > [!warning] atenção:
 > quando o ligador deve resolver uma referência cruzada a um símbolo de outro módulo (externo), ele não substitui o valor do símbolo nos endereços marcados, ele **soma** seu valor aos endereços que o referenciam no código objeto. por exemplo, pra resolver a referência `Y + 2`, com `Y` sendo externo, ele deve primeiro guardar 2 como valor temporário, para então obter o endereço de Y pós ligação, soma Y ao valor temporário guardado
 
+resultado final dos códigos objetos montados:
+
+![montagem_ligacao_mod_A_B_objetos](media/montagem_ligacao_mod_A_B_objetos.png)
+
 > [!note] obs:
-> nessa aborgadem clássica de geração de códigos objetos, cada um tem sua tabela de uso e definições. é possível gerar uma tabela única para vários módulos (por exemplo a tabela completa de uma biblioteca), mas quando um deles for ligado, vai tomar o espaço da tabela geral de todos os outros módulos agrupados com ele em memória RAM
+> nessa aborgadem clássica de geração de códigos objetos, cada um tem sua tabela de uso e definições. também é possível gerar uma tabela única para vários módulos (por exemplo a tabela completa de uma biblioteca), mas quando um deles for ligado, vai tomar o espaço da tabela geral de todos os outros módulos agrupados com ele em memória RAM (entendi isso)
+
 
 # Ligador
 
 na hora de ligar módulos, o produto final será um módulo carga (hoje, batizado como "executável") com a sequência de todos os códigos objetos ligados. em geral, é necessário que o **primeiro trecho seja a rotina *main***, para que o programa possa ser executado a partir do seu início em memória
 
-assim, cada módulo alinhado em sequência deve ter um **fator de correção** de seus endereços, para que considerem o deslocamento de cada módulo para seu endereço de início na sequência
+assim, o ligador deve calcular, para cada módulo alinhado em sequência, um **fator de correção** de seus endereços, para que suas referências a endereços considerem o deslocamento do endereço de início do seu respectivo módulo na sequência
 
 no final do processo de ligação, deve somar o fator de correção a **todos os endereços relativos não alterados nas etapas anteriores** de montagem e ligação (assim que entendi)
 
+além disso, é criada a **tabela global de definições**, que resolve todas as referências cruzadas durante a ligação
 
 > [!note] obs:
-> poderíamos criar um código objeto com toda a tabela de símbolos, não apenas a tabela de definição. isso ofereceria uma versão do programa em "modo debug", pois podemos consultar todas os símbolos e valores durante execução de forma centralizada (é o que entendi), mas toma mais espaço em memória
+> poderíamos criar um código objeto com toda a tabela de símbolos (públicos e externos), não apenas a tabela de definição. isso ofereceria uma versão do programa em "modo debug", pois podemos consultar todas os símbolos e valores durante execução de forma centralizada (é o que entendi), mas toma mais espaço em memória
 
-#### Algoritmo
+## Algoritmo
 
 <!-- #TODO: descrever algoritmo de resolução de símbolos externos -->
 
+
+1. alinha códigos objetos
+2. monta tabela com fatores de correção
+3. monta tabela global de definições (considerando fator de correção)
+4. para cada objeto:
+   1. corrige referências registradas na tabela de uso usando a tabela global de definições
+   2. corrige endereços das instruções com fator de correção
+   3. corrige endereços relativos com fator de correção
+5. gera código executável
+
+<br>
+
+exemplo da ligação de módulos A e B:
+
+![montagem_ligacao_fator_correção](media/montagem_ligacao_fator_correção.png)
+
+![montagem_ligacao_ref_cruzadas](media/montagem_ligacao_ref_cruzadas.png)
+
+![montagem_ligacao_enderecos_relativos](media/montagem_ligacao_enderecos_relativos.png)
+
+![montagem_ligacao_end_rel_carregador](media/montagem_ligacao_end_rel_carregador.png)
+
+> [!note] obs:
+> mesmo após a ligação, o módulo carga tem endereços relativos ao início do programa - devem ser resolvidos pelo carregador
+
+
+
+
+<!-- #TODO: descrever os cabeçalhos de código objeto e módulo carga -->
 cabeçalho do programa
 - indicação de quais endereços do programa são relativos
 - tabela de definições 
