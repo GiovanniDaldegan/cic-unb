@@ -458,6 +458,84 @@ $P_m = (m, y)$, com $y$ sendo obtido pela fórmula de $E_p(a, b)$
 > $P = (\alpha, y)$ \
 > $\alpha = m * \kappa + i$, variando $\kappa \in \{10, 100, 1000, ...\}$ e $0 \lt i \lt \kappa - 1$
 
+## Hash Criptográfico - Integridade da mensagem
+
+para atestar a integridade de uma mensagem, precisamos:
+- saber que uma mensagem foi devidamente preservada
+- saber que o autor que "consta" na mensagem realmente a produziu
+
+uma forma seria passar a mensagem numa função de espalhamento/distribuição (função hash) combinada entre interlocutores, gerando um **resumo da mensagem**
+
+assim, o remetente anexa resumo da mensagem à mensagem e envia para o destinatário. ao receber a mensagem, o destinatário aplica a hash combinada no trecho da mensagem e compara com o resultado de hash recebido
+
+### Hash simples - XOR
+
+dividimos uma mensagem em grupos de tamanho $n$ e aplicamos XOR entre os grupos
+
+chance de colisão: $2^{-n}$ \
+se $n$ é suficientemente grande ($n = 128$ &rarr; probabilidade $2^{-128} \approx 2,939 * 10^{-39}$)
+
+problema: essa hash é boa para dados com distribuição uniforme (bits 0 ou 1 igualmente dispersos em todas posições do grupo); **conjuntos não uniformes produzem maiores índices de colisão**
+
+por exmeplo, uma mensagem de caracteres ASCII não tem distribuição uniforme, já que todo caractere tem primeiro bit 0 (além de que raramente vamos usar caracteres bem espalhados, vamos usar caracteres alfa-numéricos e especiais)
+
+**XOR com rotação**: inicializar com mensagem $000..0$; antes de cada operação XOR, aplica shift left rotativo no resultado
+
+resultado: é bom pra integridade dos dados (é possível ter baixa colisão), mas **não pra segurança** \
+isso porque é possível forjar uma mensagem que force uma colisão, passando na verificação de integridade
+
+dado um hash esperado, posso tomar **qualquer mensagem inventada** e inserir **novos blocos que eventualmente geram um hash idêntico**, passando no teste de integridade
+
+dois possíveis ataques seriam:
+- os hashs das senhas de usuários de um sistema são armazenadas num BD. se eu produzo outra mensagem que tem o mesmo hash, vou ser indevidamente autenticado no sistema
+- uma mensagem original capturada é "PAGAR 100 BOB". talvez seja possível gerar uma mensagem "pAGUE 900 BOB" com hash idêntico (as mudanças se equilibram), sendo verificada como requisição válida idêntica à primeira
+
+### Requisitos de uma Hash Criptográfica
+
+![hash_requisitos](media/hash_requisitos.png)
+
+foram abandonados: MD5, SHA-1, SHA-3, SHA-256, etc. \
+foram analisados e se descobriu formas de manipular mensagens para colidir hashs
+
+### Autenticidade: Assinatura Digital e Certificado Digital
+
+**autenticação**: combinamos um segredo na comunicação e operamos ele com a mensagem antes de aplicar a hash
+
+![hash_verificacao](media/hash_verificacao.png)
+
+daí, é também difícil induzir um resultado idêntico da hash, pois não basta forjar uma mensagem, precisa-se também de um segredo inventado
+
+<br>
+
+tentativa de autenticar apenas criptografia assimétrica: criptografar mensagem com chave privada do remetente, criptografar resultado com chave pública do destinatário
+
+problemas:
+- pouco flexível, há limitações para a mensagem (RSA, a mensagem deve satisfazer $m < n = p * q$)
+- baixo desempenho, realizar mais de uma criptografia por mensagem (hash e mensagem) é consideravelmente custoso
+
+
+efetivamente, o segredo combinado pode ser a chave pública do remetente \
+risco de man-in-the-middle: alguém divulga a própria chave privada fingindo que é de outra pessoa - já que segredo é chave do remetente, basta pensar que a chave pública está correta
+
+![hash_man_in_the_middle](media/hash_man_in_the_middle.png)
+
+<br>
+
+**assinatura digital real**: \
+criptografia com chave privada sobre o resumo (hash) da mensagem. aplicar a chave pública garante autenticidade, o resumo garante integridade
+
+![hash_assinatura_digital](media/hash_assinatura_digital.png)
+
+uma **autoridade certificadora** certifica se uma chave pública é válida ou não \
+toda chave pública deve ser criptografada com chave privada de uma autoridade certificadora. assim garantindo autenticidade da chave privada, dada **mediação da autoridade**
+
+hierarquia de autoridades certificadoras (previne falsas mensagens de autoridade íntegra)
+- há autoridades que permitem a entrada de outras na estrutura (algumas são superiores)
+- autoridades devem concordar; se não concordam, é identificada falsificação (participação horizontal, de certa forma)
+- navegadores já têm listas de autoridades certificadoras reais (com suas chaves públicas)
+
+![hash_certificacao](media/hash_certificacao.png)
+
 ## Resumo - Prova 1
 
 ## Cifra de César
