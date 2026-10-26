@@ -772,6 +772,160 @@ para executar uma chamada para ligação dinâmica, em C, fazemos:
    `dlclose(lib_handle)`
 
 
+# IA-32
+
+utilizaremos
+- compiladro **nasm** (originalmente, proprietário da Intel)
+- ligador **ld**
+
+compilação: `nasm -f elf -o hello.o hello.asm`
+- `-f elf` determina que o objeto deve ser elf de 32b (*executable and linkable format*) (tem elf64)
+- `-hello.o` indica o nome do arquivo objeto de saída
+- `-hello.asm` indica o arquivo fonte
+
+ligação: `ld -o hello hello.o` \
+se o OS Linux é nativo de 64 bits, a ligação deve ser: \
+`ld -m elf i386 -o hello hello.o`
+
+execução: `./hello`
+
+
+## Estrutura de um programa NASM
+
+```
+;brief title of program file name
+;       Objectives:
+;       Inputs:
+;       Outputs:
+
+; declarações de dados com valor inicial declarado no programa
+section .data
+        (initialized data go here)
+
+section .bss
+        (uninitialized data go here)
+
+; dados inicializados como zero
+section .text
+        (Directives and Instructions go here)
+```
+
+
+## Família de processadores IA-32
+
+Intel nasceu de uma incubadora de empresas de uma universidade americana
+
+| Processador     | Ano  | tamanho de word | memória | frequência | obs                                                                        |
+| --------------- | ---- | --------------- | ------- | ---------- | -------------------------------------------------------------------------- |
+| Intel 4004      | 1971 | 4               | 640 B   | 740 kHz    | ainda não comercial, projeto de aprendizado                                |
+| Intel 8008      | 1972 | 8               | 16 kB   | 800 kHz    |
+| Intel 8086      | 1978 | 16              | 1 MB    | 10 MHz     | o nome 86 é por causa da retro-compatibilidade com 8008                    |
+| Intel 80286     | 1982 | 16              | 16 MB   | 12.5 MHz   | PC extendido para 20 bits permitiu mem maior                               |
+| Intel 80386(DX) | 1985 | 32              | 4 Gb    |            | introduz MMU                                                               |
+| Intel 80486(DX) | 1989 | 32              | 4 Gb    |            | configurável para 100% ou 80% da vel. (queimava, surgiu a ideia de cooler) |
+
+com o fracasso nas vendas do Intel 80486, fizeram um re-branding dos próximos processadores para Pentium (depois da 4a geração, veio a 5a). vieram Pentium (1993), Pentium II, Pentium III, Pentium 4, Pentium M, Celeron, Core, Core2 (introduziram multicore), etc.
+
+também vinha a AMD como concorrente:
+- AMD IA-32 Processors: \
+  K5,K6,Duron, Athlon, Athlon XP
+- AMD AMD64 Processors: trouxe uma nova arquitetura de 64b, extendendo o 80386 \
+  Sempron, Athlon 64, Athlon 64 X2, Phenom, Turion, Phenom II, Athlon II, Opteron.
+
+a Intel decide desenvolver uma nova arquitetura de 64 bits, abandonando a cadeia de retro-compatibilidade com o Intel 8008. surge o IA-64, com processadores Itanium \
+porém, foi uma nova catástrofe, pois empresas de software, como a Microsoft, não quiseram fazer o mesmo esforço e reprogramar tudo para a nova arquitetura e, eventualmente, jogar fora os produtos antigos
+
+no fim das contas, o Itanium foi um dos processadores mais rápidos
+
+## Layout de memória em linux
+
+![linux_memory_layout.png](media/linux_memory_layout.png)
+
+![linux_memory_layout_init](media/linux_memory_layout_init.png)
+
+Text \
+Initialized Data Segment (.data) \
+Uninitialized Data Segment (.bss) \
+Stack \
+Heap \
+Shared/Dynamic Libraries
+
+![linux_stack](media/linux_stack.png)
+
+variáveis globais são carregadas no segmento de dados, os demais dados são empilhados na pilha do programa
+
+as bibliotecas dinâmicas/compartilhadas são alocadas entre duas estruturas heap
+
+Doug Lea introduziu o dlmalloc (Doug Lea's Mallloc), alocador de memória de propósito geral, que inspirou o ptmalloc usado na biblioteca GNU C
+
+## Modelo Computacional IA-32
+
+### Registradores
+
+![ia-32_regs](media/ia-32_regs.png)
+
+| regs | alias | nome                | função                                                        |
+| ---- | ----- | ------------------- | ------------------------------------------------------------- |
+| EAX  | GPR0  | accumulator         | acumulador, operandos e resultados de multiplicação e divisão |
+| ECX  | GPR1  | count               | contador de laços (contadores não deveriam ir na pilha)       |
+| EDX  | GPR2  | data                | operandos e resultados de mult. e divisão                     |
+| EBX  | GPR3  | base                | endereço base da estrutura de dados                           |
+| ESP  | GPR4  | stack pointer       | topo da pilha de dados                                        |
+| EBP  | GPR5  | base pointer        | base da pilha de dados                                        |
+| ESI  | GPR6  | source index        | ponteiro para fonte de uma cópia (string)                     |
+| EDI  | GPR7  | data index          | ponteiro para destino de uma cópia (string)                   |
+| EIP  |       | instruction pointer | ponteiro para próxima instrução                               |
+
+o prefixo `E` (como em `ESP`) é de *Extended*, pois todos eram versões extendidas dos registradores do Intel 80286 (16 bits compatível com 8 bits)
+
+#### Registradores de dados e ponteiros
+
+os registradores `EAX`, `ECX`, `EDX` e `EBX` (registradores de dados) são projetados pra manter retro-compatibilidade com a arquitetura 8086, que por sua vez é compatível com a arquitetura de 8 bits (8008). por exemplo, `EAX` engloba um registrador `AX` de 16b (menos significativos), que por sua vez pode ser dividido em duas metades `AH` e `AL` (*high* e *low*)
+
+o sufixo `X` é um *placeholder* pra representar tanto `H` quanto `L`
+
+Fonte: https://keleshev.com/eax-x86-register-meaning-and-history/
+
+![ia-32_regs_x](media/ia-32_regs_x.png)
+
+![ia-32_regs_pointers](media/ia-32_regs_pointers.png)
+
+registradores de segmento
+
+| regs       | nome                | função                                             |
+| ---------- | ------------------- | -------------------------------------------------- |
+| CS         | code segment        | ponteiro do segmento de código atual               |
+| SS         | stack segment       | ponteiro do segmento de pilha atual                |
+| DS         | data segment        | ponteiro para o segmento de dados atual            |
+| ES, FS, GS | extra data segments | adicionais para segmentos distantes (vídeo por ex) |
+
+#### Registradores de segmento (protegidos)
+
+![ia-32_regs_segmento](media/ia-32_regs_segmento.png)
+
+#### Registradores de flags (read only)
+
+status flags (**stat**): relacionadas a operações aritméticas \
+control flags (**ctrl**): mudam o comportamento do processador em determinadas instruções (std, cld) \
+system flags (**sys**): acessadas exclusivamente pelo kernel
+
+
+![ia-32_regs_flags](media/ia-32_regs_flags.png)
+
+![ia-32_regs_eflags](media/ia-32_regs_eflags.png)
+
+#### Registradores de ponto flutuante
+
+80 bits \
+somente acessado como pilha (não diretamente) \
+decomposição em $(\text{sign}) M * 10^e$
+
+![ia-32_regs_flutuante](media/ia-32_regs_flutuante.png)
+
+#### Registrador STW
+
+![ia-32_regs_stw](media/ia-32_regs_stw.png)
+
 
 <!-- #TODO: descrever os cabeçalhos de código objeto e módulo carga -->
 cabeçalho do programa
