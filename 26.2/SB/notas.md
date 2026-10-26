@@ -1,5 +1,8 @@
 Software Básico
 
+<!-- 
+#TODO: contextualização do software básico, mudança de BIOS para firmware
+-->
 # Fases de compilação
 
 ![compilacao_fases_traducao](media/compilacao_fases_traducao.png)
@@ -628,6 +631,37 @@ para não precisar incluir bibliotecas usadas por vários programas diferentes e
 é possível montar um módulo carga sem ligar as bibliotecas, apenas ligar 
 
 biblioteca dinâmica/compartilhada (Dynamic-Link Library, DLL) p
+
+# Bibliotecas
+
+Estáticas
+
+Dinâmicas
+
+
+Carregamento estático vs dinâmico \
+Ligação estática vs dinâmica (mediante chamada a elemento de biblioteca em execução)
+
+(dynamic linking) vários programas compartilham a mesma cópia de sub-rotina de biblioteca \
+vantagem em custo de memória, desvantagem em tempo de execução \
+facilita manutenção
+
+em C há bibliotecas e funções dedicadas para a ligação dinâmica: `dlfcn.h` \
+para executar uma chamada para ligação dinâmica, em C, fazemos:
+
+1. interrompemos o programa para referenciar a biblioteca \
+   usamos `lib_handle = dlopen(path, RTLD_LAZY)` para guardar um ponteiro para a biblioteca
+
+2. interrompemos o programa para referenciar a função a ser chamada \
+   usamos `fn = dlsym(lib_handle, func_name)` para guardar um ponteiro para a função \
+   ponteiro `fn` deve ser declarado de acordo com a função a ser chamada: deve ser de mesmo tipo e indicar os parâmetros exigidos pela função \
+   `tipo_retornado (*fn)(tipo_arg1, tipo_arg2)`
+
+3. chamamos a função pelo seu ponteiro \
+   `(*fn)(&arg1, &arg2, ...);`
+
+4. liberamos o ponteiro da biblioteca \
+   `dlclose(lib_handle)`
 
 
 
