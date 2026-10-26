@@ -208,7 +208,7 @@ rodada:
 - MixColumns: aplica uma multiplicação de matriz com a 
 - AddRoundKey: aplica XOR entre subchaves
 
-![bloco_aes_ops](media/bloco_aes_ops.png)
+![cifra_bloco_aes_ops](media/cifra_bloco_aes_ops.png)
 
 na primeira rodada: apenas AddRoundKey \
 na última: não fazemos MixColumns
@@ -223,7 +223,7 @@ obtenção da subchave (exemplo)
     - deslocamento circular à esquerda em w[i-1]
     - substituir o resultado através da s_box
 
-![bloco_aes_fluxo](media/bloco_aes_fluxo.png)
+![cifra_bloco_aes_fluxo](media/cifra_bloco_aes_fluxo.png)
 
 Rodada 0
 
