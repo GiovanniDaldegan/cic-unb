@@ -525,6 +525,110 @@ exemplo da ligação de módulos A e B:
 > mesmo após a ligação, o módulo carga tem endereços relativos ao início do programa - devem ser resolvidos pelo carregador
 
 
+# Carregador
+
+um carregador faz a leitura do código executável em disco e o prepara para execução em memória
+
+temos
+- Bootstrap Loader (boot loader): armazenado em ROM/memória não volátil \
+  é a BIOS ou firmware. carrega o carregador de sistema operacional, apenas arquivos de tamanho fixo
+
+- Absolute Loader: carrega executáveis apenas em posições definidas da memória \
+  carrega o SO em memória RAM
+
+- Relocating Loader: pode carregar executável em qualquer posição da memória \
+  implementado em SOs
+
+- Linking Loader: liga e carrega programa a bibliotecas dinâmicas
+
+tarefas do carregador:
+- verifica se programa a ser executado existe
+- lê o arquivo executável e obtém a quantidade de segmentos de memória necessários para execução
+- solicita alocação dos segmentos necessários
+- copia o código para a memória
+- iniciar variáveis designadas
+- 
+
+<!-- ## Progressão do software básico e memória secundária -->
+
+## Bootstrap Loader (boot loader)
+
+armazenado em memória ROM
+
+## BIOS (Basic Input/Output System)
+
+drive A: disquete 5 1/4 polegadas \
+drive B: disquete 3 1/2 polegadas \
+drive C: HD, e acabou a primeira unidade de memória reconhecida pelo sistema é a C
+
+> [!note] curiosidades:
+> disquetes são muito frágeis e sensíveis a interferência eletromagnética. os de 5 1/4" tinham 160 kB. os de 3 1/2" tinham 724 B.
+>
+> https://pt.wikipedia.org/wiki/Disquete
+>
+> como produzir um disco magnético de uma face ou dupla-face os discos magnéticos dos disquetes 3 1/2 passaram a ser sempre produzidos como dupla face, 
+
+## UEFI (Unified Extensible Firmware Interface)
+
+primária: registradores, RAM, cache \
+secundária: HD, flash drive, qualquer memória manualmente conectada \
+terciária: drive conectado por algum sistema automatizado
+
+sequencia de boot do Linux
+
+<br>
+
+![carregador_seq_boot](media/carregador_seq_boot.png)
+
+estrutura do MBR
+
+![carregador_hd_layout_1](media/carregador_hd_layout_1.png)
+
+
+até hoje, os unidades de memória secundárias simulam a organização de um disco magnético, com setores de 512 ou 1024 B
+
+HD: são vários discos magnetizados, de forma que a leitura nos discos é feita nas mesmas regiões de todos os discos simultaneamente, formando uma **coluna**
+
+![carregador_hd_layout_2](media/carregador_hd_layout_2.png)
+
+~20ms de deslocamento de um segmento a outro na mesma "angulação" do disco \
+~1024 RPM \
+todos setores têm a mesma capacidade de memória, para que sempre gire na mesma velocidade. se não tivesse capacidade uniforme por setor, teria que acelerar para a leitura de dados próximos do centro e 
+
+MBR é caregado no setor 0 (absoluto)
+
+no MBR, apenas uma partição podia ser a partição extendida (pode conter outras subpartições lógicas), e toda partição poderia ter até 2 TB
+
+com a necessidade de partições maiores que 2 TB (entre outras necessidades), o MBR foi deixado de lado para utilização do GPT. assim, com o abandono do MBR, se abandona também o POST e a BIOS, fazendo surgir a pilha de firmware, novos bootloaders e organização de memória e partições pelo GPT
+
+porém, ainda se usa convenções do MBR para os estágios iniciais do booting (só em modo legacy ?)
+
+## GUID Partition Table (GPT)
+
+
+## Carregador absoluto
+
+imagem de memória: cópia exata do sistema para a memória RAM
+
+## Carregador relocador
+
+modifica os endereços relativos de um módulo carga
+
+
+para não precisar incluir bibliotecas usadas por vários programas diferentes em todos seus módulos carga, gastanto bastante espaço em memória secundária (custando mais tempo para carregar todos os programas) e em memória primária (desperdiçando memória RAM*), podemos deixar pra ligar essas bibliotecas apenas quando carregadas (apenas quando necessário)
+
+> [!note] obs*:
+> ainda não sei se DLLs economizam memória primária, talvez elas sejam incluídas em cada programa carregado na RAM, tecnicamente ocupando o mesmo espaço
+>
+> não sei se chega a ser um problema semelhante com o de funções inline: é igualmente rápido um programa que precisa acessar uma definição de biblioteca na sua respectiva memória reservada em comparação com um que acessa outra região da memória reservada para uma DLL? \
+> talvez seja um tradeoff semelhante, custo de tempo e custo de memória
+>
+> esse possível custo de tempo talvez seja irrevelante em SSDs, já que acessar memória não é um processo mecânico
+
+é possível montar um módulo carga sem ligar as bibliotecas, apenas ligar 
+
+biblioteca dinâmica/compartilhada (Dynamic-Link Library, DLL) p
+
 
 
 <!-- #TODO: descrever os cabeçalhos de código objeto e módulo carga -->
