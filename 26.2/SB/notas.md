@@ -815,16 +815,16 @@ section .text
 
 Intel nasceu de uma incubadora de empresas de uma universidade americana
 
-| Processador     | Ano  | tamanho de word | memória | frequência | obs                                                                        |
-| --------------- | ---- | --------------- | ------- | ---------- | -------------------------------------------------------------------------- |
-| Intel 4004      | 1971 | 4               | 640 B   | 740 kHz    | ainda não comercial, projeto de aprendizado                                |
-| Intel 8008      | 1972 | 8               | 16 kB   | 800 kHz    |
-| Intel 8086      | 1978 | 16              | 1 MB    | 10 MHz     | o nome 86 é por causa da retro-compatibilidade com 8008                    |
-| Intel 80286     | 1982 | 16              | 16 MB   | 12.5 MHz   | PC extendido para 20 bits permitiu mem maior                               |
-| Intel 80386(DX) | 1985 | 32              | 4 Gb    |            | introduz MMU                                                               |
-| Intel 80486(DX) | 1989 | 32              | 4 Gb    |            | configurável para 100% ou 80% da vel. (queimava, surgiu a ideia de cooler) |
+| Processador     | Ano  | tam. word | memória | frequência | obs                                                                                  |
+| --------------- | ---- | --------- | ------- | ---------- | ------------------------------------------------------------------------------------ |
+| Intel 4004      | 1971 | 4 bits    | 640 B   | 740 kHz    | ainda não comercial, projeto de aprendizado                                          |
+| Intel 8008      | 1972 | 8 bits    | 16 kB   | 800 kHz    |                                                                                      |
+| Intel 8086      | 1978 | 16 bits   | 1 MB    | 10 MHz     | o nome 86 é porque é arq. 16-bit mas mantém retro-compatibilidade com 8008, de 8-bit |
+| Intel 80286     | 1982 | 16 bits   | 16 MB   | 12.5 MHz   | PC extendido para 20 bits permitiu mem maior                                         |
+| Intel 80386(DX) | 1985 | 32 bits   | 4 Gb    |            | introduz MMU                                                                         |
+| Intel 80486(DX) | 1989 | 32 bits   | 4 Gb    |            | configurável para 100% ou 80% da vel. (queimava, surgiu a ideia de cooler)           |
 
-com o fracasso nas vendas do Intel 80486, fizeram um re-branding dos próximos processadores para Pentium (depois da 4a geração, veio a 5a). vieram Pentium (1993), Pentium II, Pentium III, Pentium 4, Pentium M, Celeron, Core, Core2 (introduziram multicore), etc.
+com o fracasso nas vendas do Intel 80486 (queimava se deixasse no clock máximo), fizeram um re-branding dos próximos processadores para Pentium (depois da 4a geração, veio a 5a). vieram Pentium (1993), Pentium II, Pentium III, Pentium 4, Pentium M, Celeron, Core, Core2 (introduziram multicore), etc.
 
 também vinha a AMD como concorrente:
 - AMD IA-32 Processors: \
@@ -835,7 +835,8 @@ também vinha a AMD como concorrente:
 a Intel decide desenvolver uma nova arquitetura de 64 bits, abandonando a cadeia de retro-compatibilidade com o Intel 8008. surge o IA-64, com processadores Itanium \
 porém, foi uma nova catástrofe, pois empresas de software, como a Microsoft, não quiseram fazer o mesmo esforço e reprogramar tudo para a nova arquitetura e, eventualmente, jogar fora os produtos antigos
 
-no fim das contas, o Itanium foi um dos processadores mais rápidos
+no fim das contas, o Itanium continuou como um dos processadores mais rápidos existentes. ele ainda é usado em roteadores, por performance
+
 
 ## Layout de memória em linux
 
@@ -876,7 +877,7 @@ Doug Lea introduziu o dlmalloc (Doug Lea's Mallloc), alocador de memória de pro
 | EDI  | GPR7  | data index          | ponteiro para destino de uma cópia (string)                   |
 | EIP  |       | instruction pointer | ponteiro para próxima instrução                               |
 
-o prefixo `E` (como em `ESP`) é de *Extended*, pois todos eram versões extendidas dos registradores do Intel 80286 (16 bits compatível com 8 bits)
+o prefixo `E` (como em `ESP`) é de *Extended*, pois todos registradores são versões extendidas dos registradores do Intel 80286 (16 bits compatível com 8 bits)
 
 #### Registradores de dados e ponteiros
 
@@ -916,9 +917,16 @@ system flags (**sys**): acessadas exclusivamente pelo kernel
 
 #### Registradores de ponto flutuante
 
-80 bits \
-somente acessado como pilha (não diretamente) \
-decomposição em $(\text{sign}) M * 10^e$
+formato Extended Precision do x86, de 80 bits.
+- 1 bit de sinal
+- 15 bits de expoente (mesmo alcance de precisão quádrupla do IEE-754, de 128 bits) e 
+- 64 bits de mantissa/fração (com o detalhe de que o bit mais significativo é a parte inteira em base 2)
+
+![ia-32_regs_extended_precision_format](media/ia-32_regs_extended_precision_format.png)
+
+somente acessado como pilha (não diretamente) (imagino que tem uma pilha de ponto flutuante que indica qual registrador tá no topo, aí o programador escolhe se "empilha" um novo registrador ou se "desempilha" o atual)
+
+Fonte: https://en.wikipedia.org/wiki/Extended_precision#x86_extended-precision_format
 
 ![ia-32_regs_flutuante](media/ia-32_regs_flutuante.png)
 
@@ -927,7 +935,9 @@ decomposição em $(\text{sign}) M * 10^e$
 ![ia-32_regs_stw](media/ia-32_regs_stw.png)
 
 
-<!-- #TODO: descrever os cabeçalhos de código objeto e módulo carga -->
+<!--
+#TODO: descrever os cabeçalhos de código objeto e módulo carga
 cabeçalho do programa
 - indicação de quais endereços do programa são relativos
 - tabela de definições 
+-->
