@@ -3,7 +3,112 @@ Software Básico
 <!-- 
 #TODO: contextualização do software básico, mudança de BIOS para firmware
 -->
+# Introdução
+
+Software Básico/Softwate de Sistema é o conjunto de programas necessários para operar e controlar o hardware de um computador, além de providenciar uma plataforma para execução de aplicações.
+
+exemplos:
+- Sistema Operacinal, que administra programas e hardware
+- BIOS (Basic Input/Output System) testa e inicia os componentes de hardware do sistema. Chama  carregador do OS e implementa uma interface entre ele e o hardware (incluindo periféricos)
+- bootloader que carrega o OS
+- *drivers* específicos de hardware (HD, drivers usb, GPU, etc.). Converte instruções gerais de I/O do sistemas para mensagems adequadas para o dispositivo alvo
+- *firmware* em computadores e embarcados (nesse segundo, é o software que controla o sistema)
+
+![intro_software_basico](media/intro_software_basico.png)
+
+algumas classes de software de sistema:
+- *Assembler*/Montador converte instruções em assembly para linguagem de máquina
+- *Loader*/Carregador carrega o programa a ser executado em memória
+- *Linker*/Ligador combina múltiplos arquivos objeto e resolve as referências entre eles
+- Ferramentas de Desenvolvimento, como Compiladores e Debuggers
+- Utilitários como desfragmentador de disco e *system restore* (alguns não consideram software de sistema)
+
+## Estrutura de memória
+
+a memória principal de um computador é organizada em endereços, cada um possuindo a mesma capacidade de armazenamento. na maioria das arquiteturas (depende da CPU) os endereços possuem 8 bits / 1 byte
+
+considerando uma arquitetura Von Neumman, os programas ativos também devem ser carregados em memória
+
+![intro_memoria](media/intro_memoria.png)
+
+
+## CPU e Código de Máquina
+
+a Arquitetura de um processador indica qual é a linguagem de máquina que ele reconhece para operar. a ISA (*Instruction Set Architecture*) é o conjunto de instruções que um processador implementa, um modelo abstrado que representa a interface da CPU, definindo como o software opera o hardware
+
+a Organização de um processador é a implementação do processador, visando realizar as operações da ISA (estrutura física, conexões, unidades de memória, controladores, interfaces com hardware externo, etc.)
+
+![intro_organizacao](media/intro_organizacao.png)
+
+<br>
+
+as instruções de código/linguagem de máquina são números binários codificados com:
+- *opcode* e demais códigos: valores que identificam a operação a ser realizada
+- argumentos: registradores a ser lidos/escritos ou valores (imediatos ou endereços), que serão utilizados na operação
+- *flags* e outros valores: informações adicionais da instrução (prefixos em x86-64, )
+
+![intro_instrucao](media/intro_instrucao.png)
+
+<br>
+
+a CPU lê uma instrução por vez e a executa. ela precisa dos seguintes componentes para isso:
+
+- ***Program Counter*/Contador de Programa (PC)**: registrador que indica a posição na memória da próxima instrução
+
+- **Decodificador de Instrução**: identifica o significado de uma instrução em linguagem de máquina
+
+- **Barramento de Dados**: canal de comunicação entre memória e CPU para dados e instruções
+
+- **Registradores**: existem 2 tipos
+
+  - os de uso geral (General Purpose Registers) são utilizados na maioria das operações, com propósito genérico (guardam resultados de operação, endereços da memória de dados, etc.). são plenamente acessíveis pelo programa
+
+  - os de uso específico (Special-Purpose / Dedicated Registers) são reservados para funções de controle do processador (controle de fluxo,  pilha de dados, controle e status, etc.). podem ser de uso estritamente automático pela CPU; dependem da arquitetura e organização
+  
+- **Unidade Lógica e Aritmética (ALU)**: realiza as operações lógicas e aritméticas 
+
+## Baixo vs. Alto Nível
+
+![intro_nivel_abstracao](media/intro_nivel_abstracao.png)
+
+
+# Tradução
+
+## Interpretador
+
+facilitam debugging, permitindo monitoramento em alto nível
+
+facilitam a portabilidade do programa para sistemas. foco na compatibilidade da execução da linguagem intermediária (rotinas pré-compiladas)
+
+![traducao_interpretacao](media/traducao_interpretacao.png)
+
+## Compilador
+
+- análise sintática
+- alocação estática
+- ligação estática
+- otimização de código
+
+> [!note] obs:
+> um compilador pode tanto gerar um programa diretamente em linguagem de máquina quanto traduzir para um programa em assembly e chamar um montador para gerar o programa em linguagem de máquina
+
 # Fases de compilação
+
+estrutura de um tradutor:
+- Análise
+  - Analisador Léxico
+  - Analisador Sintático
+  - Analisador Semântico
+
+- Síntese
+  - Geração de código intermediário
+  - Otimização de código
+  - Geração de código objeto
+
+![compilacao_abstracao](media/compilacao_abstracao.png)
+
+![compilacao_fases](media/compilacao_fases.png)
+
 
 ![compilacao_fases_traducao](media/compilacao_fases_traducao.png)
 
@@ -81,7 +186,9 @@ dispõe de instruções:
     `goto _L`\
     `if x op y goto _L`
 
-a implementação do código deve ser uma tabela com 3 colunas, uma representando um endereço:\
+a implementação do código deve ser uma tabela com 3 colunas (desconsiderando o endereço da instrução)
+
+para as operações abaixo, poderíamos ter a tabela:\
 `a = b + c * d;`
 
 tabela 1:1
@@ -89,14 +196,14 @@ tabela 1:1
 | instr | operação | arg1 | arg2 | resultado |
 | ----- | -------- | ---- | ---- | --------- |
 | 1     | *        | c    | d    | _t1       |
-| 2     | +        | d    | _t1  | a         |
+| 2     | +        | b    | _t1  | a         |
 
 tabela em código de três endereços
 
 | instr | operação | arg1 | arg2 |
 | ----- | -------- | ---- | ---- |
 | 1     | *        | c    | d    |
-| 2     | +        | d    | (1)  |
+| 2     | +        | b    | (1)  |
 
 podemos omitir a coluna de resultados, pois o armazenamento e referenciação do resultado de cada instrução é responsabilidade do compilador. a instrução 2 utiliza o resultado (1) da instrução 1
 
@@ -118,15 +225,16 @@ obs: no início do desenvolvimento dos compiladores, não era possível otimizar
 
     então podemos executá-las antes do loop
 
-#### Máquina de Turing Hipotética
+# Montador
+
+## Assembly inventado
 
 ![maquina_instrucoes](media/maquina_instrucoes.png)
 
-obs: copy é a única instrução que não se implementa em assembly real, pois acessa duas
+> [!note] obs: 
+> `COPY` é a única instrução que não se implementa em assembly real, pois acessa dois endereços de memória ao mesmo tempo. na prática, é uma instrução de `load` lendo da memória e outra de `store` escrevendo na memória
 
 ![maquina_diretivas_0](media/maquina_diretivas_0.png)
-
-# Montador
 
 nosso montador deve gerar um código (intermediário ou objeto) para nosso assembly inventado, realizando as tarefas:
 - tradução de pseudo-instruções para opcodes e expansão de macros
