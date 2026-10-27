@@ -679,7 +679,7 @@ biblioteca em C:
 
 sem_t semaforo;
 
-// inicialização: referência para o semáforo, flag (0 thread, 1 processo, valor inicial)
+// inicialização: referência para o semáforo, flag (0 thread, 1 processo) e valor inicial
 sem_init(&semaforo, proc_ou_thread, inicial);
 
 // espera semáforo; quando é liberado, decresce em 1 e tem acesso (DOWN)
