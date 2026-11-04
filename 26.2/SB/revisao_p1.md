@@ -1,10 +1,10 @@
 # Tradução
 
 Análise:
-- erro léxico: token indevido. nomeação de variável indevida, palavras reservadas
-- erro sintático: erro estrutural na gramática em um comando. expressão
-- erro semântico: erro de lógica, incoerência entre comandos (linhas do programa).
-- árvore de derivação: árvore sintática de um comando
+- **erro léxico**: token indevido. nomeação de variável indevida, palavras reservadas
+- **erro sintático**: erro estrutural na gramática em um comando. expressão inválida, atribuição sem variável destino, comando mal-formado
+- **erro semântico**: erro de lógica, incoerência entre comandos (linhas do programa). operar tipos imcompatíveis, chamar função pra tipo errado, fluxo de controle incoerente, declaração repetida
+- **árvore de derivação**: árvore sintática de um comando
 
 
 scanner separa os tokens do programa (identificando tokens inválidos), parser monta a árvore de derivação (indentificando estruturas erradas, nós faltando)
@@ -17,7 +17,8 @@ Síntese:
 
 - otimização simples
   1. garantir que duas operações não fazem a mesma coisa (mesmos valores de operandos e operação)
-  2. garantir que não há operações independente de loop dentro de um loop
+  2. garantir que não há operações independentes de loop dentro de um loop
+      por exemplo, é desnecessário inserir `x = 1` em um loop, pode ser antes ou depois dele (se essa atribuição não impactar alguma outra instrução do loop ou resultados após ele)
 
 
 # Montador
@@ -28,8 +29,8 @@ a questão de programação em assembly pode ser algo como
 - receba dois números e indique qual dos dois é maior
 - receba base e altura de um triângulo, calcule a área, etc.
 
-montagem da tabela de símbolos: listar todos os rótulos e seu endereço de declaração \
-lista de pendências: lista de endereços que referenciam um **rótulo ainda não declarado**
+montagem da **tabela de símbolos**: listar todos os rótulos e seu endereço de declaração \
+**lista de pendências**: lista das posições dos endereços que referenciam um **rótulo ainda não declarado** (devem ser corrigidos no código)
 
 > [!note] obs:
 > todas as novas referências a um rótulo depois que ele já foi definido **não devem adicionar endereços na lista de pendências**
@@ -37,11 +38,11 @@ lista de pendências: lista de endereços que referenciam um **rótulo ainda nã
 <br>
 
 ```
-0  | FRONT:  INPUT   N1
-2  |         INPUT   N2
-4  |         LOAD    N1
-6  |         ADD     N2
-8  |         STORE   N3
+ 0 | FRONT:  INPUT   N1
+ 2 |         INPUT   N2
+ 4 |         LOAD    N1
+ 6 |         ADD     N2
+ 8 |         STORE   N3
 10 |         OUTPUT  N3
 12 |         STOP
 13 | N1:     SPACE
@@ -107,11 +108,23 @@ carregador dinâmico: carrega código relocável em qualquer endereço (precisa 
 
 # Bibliotecas
 
-ligador estático \
-ligador dinâmico \
-carregador estático \
-carregador dinâmico
+**carregador estático**: carrega um programa e todas as bibliotecas referenciadas nele
+- o processo é mais rápido
+- o executável é portável, contém todo o código necessário nele
 
+**carregador dinâmico**: carrega um programa e deixa pra carregar suas bibliotecas apenas quando chamadas
+- economiza memória (apenas código necessário/utilizado é carregado)
+- compartilhamento de bibliotecas
+
+**ligador estático**: liga todos os módulos referenciados
+- processo mais rápido e mais eficiente (mas pode ligar símbolos que não são utilizados)
+
+**ligador dinâmico**: liga os módulos apenas mediante chamada
+- economiza memória e trabalho desnecessário (apenas módulos e símbolos utilizados)
+- SO e programas mais complexos
+- compartilhamento de rotinas/bibliotecas
+- manutenção facilitada (apenas uma cópia da biblioteca precisa de manutenção, falha é centralizada e não distribuída)
+- permite carga e descarga durante execução
 
 # 3 mandamentos
 1. se virar professor, nunca dê uma prova fácil
