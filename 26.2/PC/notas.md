@@ -467,19 +467,19 @@ tabela de ações de leitores e escritores durante execução
 | 1   | linhas 7-12        |                 |                   |
 |     | leitores = 1       |                 |                   |
 |     | fechado: bd        |                 |                   |
-|     |                    |                 |                   |
+|-----|--------------------|-----------------|-------------------|
 | 2   | linha 13-14        | linha 7         |                   |
 |     | fechado: mutex     | fechado: turno  |                   |
-|     |                    |                 |                   |
+|-----|--------------------|-----------------|-------------------|
 | 3   |                    | linha 8         | linhas 37-38      |
 |     |                    | leitores = 2    | BLOQUEADO (turno) |
-|     |                    |                 |                   |
+|-----|--------------------|-----------------|-------------------|
 | 4   | linha 15           |                 |                   |
 |     | leitores           |                 |                   |
-|     |                    |                 |                   |
+|-----|--------------------|-----------------|-------------------|
 | 5   | linha 16-18        | linha 9-10      |                   |
 |     | abrir: mutex       | BLOEQUEADO (bd) |                   |
-|     |                    |                 |                   |
+|-----|--------------------|-----------------|-------------------|
 | 6   | linha 20,7;        |                 |                   |
 |     | BLOEQUEADO (turno) |                 |                   |
 
@@ -490,20 +490,20 @@ b) explique como é possível um escritor estar editanto o bd durante sua leitur
 | 1   | linhas 7-12       |               |                    |
 |     | leitores = 1      |               |                    |
 |     | fechado: bd       |               |                    |
-|     |                   |               |                    |
+|-----|-------------------|---------------|--------------------|
 | 2   | linhas 13-14 (lê) |               |                    |
 |     | fechado: mutex    |               |                    |
-|     |                   |               |                    |
+|-----|-------------------|---------------|--------------------|
 | 3   |                   | linhas 7-8,12 |                    |
 |     |                   | leitores = 2  |                    |
 |     |                   |               |                    |
 | 4   | linha 15,16-19    |               |                    |
 |     | leitores = 0      |               |                    |
 |     | aberto: bd        |               |                    |
-|     |                   |               |                    |
+|-----|-------------------|---------------|--------------------|
 | 5   |                   |               | linha 37-39        |
 |     |                   |               | fechado: turno, bd |
-|     |                   |               |                    |
+|-----|-------------------|---------------|--------------------|
 | 6   |                   | linha 13 (lê) | linha 40 (escreve) |
 
 
@@ -707,3 +707,31 @@ nessa implementação, é garantido que o contador do consumidor sempre está "a
 - out todas as posições estão ocupadas e o semáforo só permite consumidores
 
 assim, é tranquilo usar **locks separados para produtores e consumidores**, pois a **região crítica entre os dois tipos é resolvida pelo semáforo**. nunca um consumidor vai ler um dado sendo escrito por um produtor. apenas precisamos garantir que não teremos 2 produtores ou 2 consumidores executando ao mesmo tempo, pois eles compartilham um contador
+
+## Problema - Jantar dos Filósofos
+
+há 5 pratos em uma mesa redonda, intercalados por 5 talheres. há 5 filósofos que querem comer e, depois de comer parte do jantar, pensar
+
+para comer, um filósofo precisa dos dois talheres adjacentes ao seu prato. enquanto um filósofo come, seus vizinhos não podem comer, pois falta talher
+
+#### tentativa 1:
+vetor de semáforos, com um semáforo de 1 permissão para cada talher. cada filósofo, pra comer, pega primeiro o talher à sua direita e depois à esquerda
+
+problema: deadlock! todos os filósofos podem pegar apenas um talher e não sobra nenhum, de forma que todos têm apenas 1 talher e ficam esperando o seu vizinho à esquerda livrar o talher
+
+#### tentativa 2:
+as threads pegam um lock para pegar os dois semáforos
+
+problema: ineficiente, oferece baixa concorrência. tem chance de um filósofo pegar seus talheres e um vizinho tentar também, mas ficar esperando um semáforo em posse do lock, travando todos os demais filósofos que até poderiam estar comendo
+
+#### tentativa 3:
+o último a tentar comer troca a ordem que tenta pegar os talheres
+
+problema: também ineficiente. também é possível que tenham dois filósofos comendo ao mesmo tempo, mas tem chance de apenas um filósofo ter 2 talheres e os demais, 1, de forma que só um come por vez
+
+#### soluções
+
+coordenador centralizado dos talheres/recursos: filósofo come apenas com 2 talheres adjacentes livres \
+problema: o sistema depende da eficiência e disponibilidade do coordenador
+
+escalonamento
